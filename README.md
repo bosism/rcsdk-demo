@@ -22,13 +22,13 @@ SDK所需权限
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v0.1-aplha.aar
+rcsdk-v0.1-alpha.aar
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v0.1-aplha.aar")
+    implementation files("libs/rcsdk-v0.1-alpha.aar")
 ```
 
 - ### 修改 AndroidManifest.xml 文件
