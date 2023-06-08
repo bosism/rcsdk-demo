@@ -69,8 +69,10 @@ class HomeActivity: AppCompatActivity() {
                         KeyManager.listen(AirLinkKey.KeySignalQuality,keySignalQualityListener)
                     }
                 }
+                //创建通讯管道
                 pipeline = PipelineManager.createPipeline()
                 pipeline?.let {
+                    //设置监听
                     it.onCommListener = object : CommListener{
                         override fun onConnectSuccess() {
                             log("管道连接成功")
@@ -89,6 +91,7 @@ class HomeActivity: AppCompatActivity() {
                         }
 
                     }
+                    //连接通讯管道
                     PipelineManager.connectPipeline(it)
                 }
             }

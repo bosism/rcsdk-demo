@@ -103,6 +103,39 @@ KeyManager.listen(AirLinkKey.KeySignalQuality,keySignalQualityListener)
 //取消监听H12Pro信号强度
 KeyManager.cancelListen(keySignalQualityListener)
 ```
+- ### 与第三方设备(例如飞控)通讯
+```
+//创建通讯管道
+pipeline = PipelineManager.createPipeline()
+pipeline?.let {
+    //设置监听
+    it.onCommListener = object : CommListener{
+        override fun onConnectSuccess() {
+            log("管道连接成功")
+        }
+
+        override fun onConnectFail(e: SkyException?) {
+            log("管道连接失败${e}")
+        }
+
+        override fun onDisconnect() {
+            log("管道断开连接")
+        }
+
+        override fun onReadData(data: ByteArray?) {
+            //第三方设备发送的数据
+        }
+
+    }
+    //连接通讯管道
+    PipelineManager.connectPipeline(it)
+}
+
+//断开通讯管道
+pipeline?.let {
+    PipelineManager.disconnectPipeline(it)
+}
+```
 
 # Key:
 ### RemoteControllerKey
