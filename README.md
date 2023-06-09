@@ -22,13 +22,13 @@ SDK所需权限
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v0.2-alpha.aar
+rcsdk-v0.3-alpha.aar
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v0.2-alpha.aar")
+    implementation files("libs/rcsdk-v0.3-alpha.aar")
 ```
 
 - ### 修改 AndroidManifest.xml 文件
@@ -174,6 +174,7 @@ PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
         .canSet(true)
         .canGet(true)
 ```
+
 - ##### KeyH12ChannelSettings
 ```
     /**
@@ -186,6 +187,7 @@ PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
         .canSet(true)
         .canGet(true)
 ```
+
 - ##### KeyH12ProChannelSettings
 ```
     /**
@@ -198,6 +200,7 @@ PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
         .canSet(true)
         .canGet(true)
 ```
+
 - ##### KeyRequestPairing
 ```
     /**
@@ -207,6 +210,41 @@ PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
      */
     val KeyRequestPairing: KeyInfo<EmptyMsg> = KeyInfo.Builder<EmptyMsg>()
         .canAction(true)
+```
+
+- ##### KeySerialNumber
+```
+    /**
+     * 遥控器序列号
+     * 访问方式
+     * GET
+     */
+    val KeySerialNumber: KeyInfo<String> = KeyInfo.Builder<String>()
+        .canGet(true)
+```
+
+- ##### KeyChannels
+```
+    /**
+     * 遥控器通道值
+     * 访问方式
+     * GET
+     */
+    val KeyChannels: KeyInfo<IntArray> = KeyInfo.Builder<IntArray>()
+        .canGet(true)
+```
+
+- ##### KeyCoachMode
+```
+    /**
+     * 教练模式
+     * 访问方式
+     * SET GET
+     * 不支持H12
+     */
+    val KeyCoachMode: KeyInfo<CoachMode> = KeyInfo.Builder<CoachMode>()
+        .canSet(true)
+        .canGet(true)
 ```
 
 ### AirLinkKey
