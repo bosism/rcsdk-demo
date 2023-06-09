@@ -131,6 +131,11 @@ pipeline?.let {
     PipelineManager.connectPipeline(it)
 }
 
+//发送数据到第三方设备
+pipeline?.let {
+    it.writeData(bytes)
+}
+
 //断开通讯管道
 pipeline?.let {
     PipelineManager.disconnectPipeline(it)
