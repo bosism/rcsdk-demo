@@ -22,13 +22,13 @@ SDK所需权限
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v0.1-alpha.aar
+rcsdk-v0.2-alpha.aar
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v0.1-alpha.aar")
+    implementation files("libs/rcsdk-v0.2-alpha.aar")
 ```
 
 - ### 修改 AndroidManifest.xml 文件
@@ -150,6 +150,15 @@ pipeline?.let {
 pipeline?.let {
     PipelineManager.disconnectPipeline(it)
 }
+```
+
+自定义创建通讯管道方法
+```
+//根据遥控器类型创建通讯管道
+PipelineManager.createPipeline(DeviceType.H12Pro)
+
+//创建自定义串口通讯管道
+PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
 ```
 
 # Key
