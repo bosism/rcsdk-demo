@@ -60,15 +60,20 @@ RCSDKManager.initSDK(this,object :SDKManagerCallBack{
 RCSDKManager.connectToRC()
 ```
 
-- ### 设置遥控器控制模式
+# KeyManager
+遥控器参数设置、获取功能接口
+
+- ### SET
 ```
+//设置遥控器控制模式
 KeyManager.set(RemoteControllerKey.KeyControlMode, ControlMode.JP) { e -> 
                     log("设置摇杆模式完成：${e}") 
                 }
 ```
 
-- ### 获取遥控器控制模式
+- ### GET
 ```
+获取遥控器控制模式
 KeyManager.get(RemoteControllerKey.KeyControlMode,object :
                     CompletionCallbackWith<ControlMode> {
                     override fun onSuccess(result: ControlMode?) {
@@ -83,14 +88,15 @@ KeyManager.get(RemoteControllerKey.KeyControlMode,object :
                 })
 ```
 
-- ### 遥控器对频
+- ### ACTION
 ```
+遥控器对频
 KeyManager.action(RemoteControllerKey.KeyRequestPairing){
                 log("对频完成：${it}")
             }
 ```
 
-- ### 监听H12Pro信号强度
+- ### LISTEN
 ```
 var keySignalQualityListener = KeyListener<Int>{
         oldValue, newValue ->
@@ -103,6 +109,10 @@ KeyManager.listen(AirLinkKey.KeySignalQuality,keySignalQualityListener)
 //取消监听H12Pro信号强度
 KeyManager.cancelListen(keySignalQualityListener)
 ```
+
+# PipelineManager
+与第三方设备通讯接口
+
 - ### 与第三方设备(例如飞控)通讯
 ```
 //创建通讯管道
@@ -142,7 +152,7 @@ pipeline?.let {
 }
 ```
 
-# Key:
+# Key
 ### RemoteControllerKey
 - ##### KeyControlMode
 ```
