@@ -22,13 +22,13 @@ SDK所需权限
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v0.3-alpha.aar
+rcsdk-v0.5-alpha.aar
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v0.3-alpha.aar")
+    implementation files("libs/rcsdk-v0.5-alpha.aar")
 ```
 
 - ### 修改 AndroidManifest.xml 文件
@@ -159,6 +159,10 @@ PipelineManager.createPipeline(DeviceType.H12Pro)
 
 //创建自定义串口通讯管道
 PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
+
+//创建UDP通讯管道
+//参数1:本地端口号;参数2:远程接收端IP;参数3:远程接收端端口号
+PipelineManager.createUDPPipeline(14550,"192.168.144.10",14550)
 ```
 
 # Key
@@ -247,6 +251,18 @@ PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
         .canGet(true)
 ```
 
+- ##### KeyCustomData
+```
+    /**
+     * 自定义数据 200byte
+     * 访问方式
+     * GET SET
+     */
+    val KeyCustomData: KeyInfo<ByteArray> = KeyInfo.Builder<ByteArray>()
+        .canGet(true)
+        .canSet(true)
+```
+
 ### AirLinkKey
 - ##### KeyUart0BaudRate
 ```
@@ -292,5 +308,18 @@ PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
      * 仅H12可用
      */
     val KeyH12SignalQuality:KeyInfo<Int> = KeyInfo.Builder<Int>()
+        .canGet(true)
+```
+
+- ##### KeyReceiverOptions
+```
+    /**
+     * 接收机选项设置
+     * 访问方式
+     * SET,GET
+     * H12可用
+     */
+    val KeyReceiverOptions: KeyInfo<ReceiverOptions> = KeyInfo.Builder<ReceiverOptions>()
+        .canSet(true)
         .canGet(true)
 ```
