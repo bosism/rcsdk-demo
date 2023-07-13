@@ -40,7 +40,14 @@ class HomeActivity: AppCompatActivity() {
         setContentView(R.layout.activity_home)
         RCSDKManager.initSDK(this,object : SDKManagerCallBack{
             override fun onRcConnected() {
-                KeyManager.set(RemoteControllerKey.KeyControlMode, ControlMode.JP) { e -> log("设置摇杆模式完成：${e}") }
+                KeyManager.set(RemoteControllerKey.KeyControlMode, ControlMode.JP) {
+                        e ->
+                    if (e == null){
+                        log("设置摇杆模式成功")
+                    }else{
+                        log("设置摇杆模式失败：${e}") }
+                    }
+
 
                 KeyManager.get(RemoteControllerKey.KeyControlMode,object :
                     CompletionCallbackWith<ControlMode> {
@@ -67,6 +74,9 @@ class HomeActivity: AppCompatActivity() {
                     }
                     DeviceType.H12Pro -> {
                         KeyManager.listen(AirLinkKey.KeySignalQuality,keySignalQualityListener)
+                    }
+                    DeviceType.H16 -> {
+                        KeyManager.listen(AirLinkKey.KeyH16SignalQuality,keySignalQualityListener)
                     }
                 }
                 //创建通讯管道
@@ -107,7 +117,12 @@ class HomeActivity: AppCompatActivity() {
         RCSDKManager.connectToRC()
         findViewById<View>(R.id.btn_pairing).setOnClickListener{
             KeyManager.action(RemoteControllerKey.KeyRequestPairing){
-                log("对频完成：${it}")
+                e ->
+                if (e == null){
+                    log("对频成功")
+                }else{
+                    log("对频失败：${e}")
+                }
             }
         }
     }
@@ -120,6 +135,7 @@ class HomeActivity: AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         KeyManager.cancelListen(keySignalQualityListener)
+
         pipeline?.let {
             PipelineManager.disconnectPipeline(it)
         }
