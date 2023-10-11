@@ -14,6 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RCSDK_Demo">
+
+        <!--   Kotlin样例    -->
         <activity
             android:name=".HomeActivity"
             android:exported="true">
@@ -23,6 +25,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--   java样例，如需使用java样例，请打开下面的注释，并且注释掉上面的Kotlin样例    -->
+<!--        <activity-->
+<!--            android:name=".HomeActivityForJava"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
     </application>
 
 </manifest>

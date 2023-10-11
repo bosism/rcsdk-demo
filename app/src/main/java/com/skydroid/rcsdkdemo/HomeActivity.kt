@@ -38,6 +38,7 @@ class HomeActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        //初始化SDK
         RCSDKManager.initSDK(this,object : SDKManagerCallBack{
             override fun onRcConnected() {
                 KeyManager.set(RemoteControllerKey.KeyControlMode, ControlMode.JP) {
@@ -61,7 +62,7 @@ class HomeActivity: AppCompatActivity() {
                 })
 
                 when(RCSDKManager.getDeviceType()){
-                    DeviceType.H12 -> {
+                    DeviceType.H12 -> {//H12的信号强度为GET方式，需要主动请求，请求一次获取一次
                         KeyManager.get(AirLinkKey.KeyH12SignalQuality,object : CompletionCallbackWith<Int>{
                             override fun onSuccess(result: Int?) {
                                 log("H12信号强度：${result}")
@@ -72,14 +73,14 @@ class HomeActivity: AppCompatActivity() {
                             }
                         })
                     }
-                    DeviceType.H12Pro -> {
+                    DeviceType.H12Pro -> {//H12Pro的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
                         KeyManager.listen(AirLinkKey.KeySignalQuality,keySignalQualityListener)
                     }
-                    DeviceType.H16 -> {
+                    DeviceType.H16 -> {//H16的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
                         KeyManager.listen(AirLinkKey.KeyH16SignalQuality,keySignalQualityListener)
                     }
                 }
-                //创建通讯管道
+                //创建通讯管道(内部有断开重连机制，只需要调用一次连接即可)
                 pipeline = PipelineManager.createPipeline()
                 pipeline?.let {
                     //设置监听
