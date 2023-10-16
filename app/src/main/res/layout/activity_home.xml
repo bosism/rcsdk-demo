@@ -3,9 +3,45 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Button
-        android:id="@+id/btn_pairing"
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="对频"/>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+            <Button
+                android:id="@+id/btn_pairing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="对频"/>
+            <Button
+                android:id="@+id/btn_set_control_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置手型"/>
+            <Button
+                android:id="@+id/btn_get_control_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取手型"/>
+            <Button
+                android:id="@+id/btn_get_channels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取摇杆杆量值"/>
+            <Button
+                android:id="@+id/btn_get_signal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取遥控器信号"/>
+        </LinearLayout>
+    </ScrollView>
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="16dp"/>
 </LinearLayout>
