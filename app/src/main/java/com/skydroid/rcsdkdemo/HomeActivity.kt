@@ -177,6 +177,15 @@ class HomeActivity: AppCompatActivity() {
                         keySignalQualityListener
                     )
                 }
+                DeviceType.H30 -> {
+                    //防止反复监听
+                    KeyManager.cancelListen(keySignalQualityListener)
+                    //H16的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
+                    KeyManager.listen(
+                        AirLinkKey.KeyH30SignalQuality,
+                        keySignalQualityListener
+                    )
+                }
             }
         }
     }

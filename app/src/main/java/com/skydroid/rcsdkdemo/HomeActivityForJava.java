@@ -227,6 +227,12 @@ public class HomeActivityForJava extends AppCompatActivity {
                         //H16的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
                         KeyManager.INSTANCE.listen(AirLinkKey.INSTANCE.getKeyH16SignalQuality(),keySignalQualityListener);
                         break;
+                    case H30:
+                        //防止反复监听
+                        KeyManager.INSTANCE.cancelListen(keySignalQualityListener);
+                        //H16的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
+                        KeyManager.INSTANCE.listen(AirLinkKey.INSTANCE.getKeyH30SignalQuality(),keySignalQualityListener);
+                        break;
                 }
 
             }
