@@ -1,3 +1,21 @@
+更新日志
+```
+v0.8.3
+1.新增云卓配件管理（C10、三体相机等）
+2.修复UDPPipeline连接状态错误问题
+3.新增Key:
+    AirLinkKey.KeyH16RawSignalQuality(获取H16原始信号值DBM)
+
+v0.7.1
+新增H30支持
+
+v0.6
+新增H16支持
+
+v0.1
+发布第一版
+```
+
 # Demo 工程
 
 下载或者克隆Git上的Android示例代码工程:https://gitee.com/skydroid/rcsdk-demo
@@ -12,6 +30,7 @@ H12、H12Pro、H16/H16Pro、H30
 - RCSDKManager： RCSDK工具包的入口类，管理RCSDK的初始化，反初始化，连接，以及监听硬件产品的连接事件。
 - KeyManager： RCSDK使用了以Key为基础元素的参数设置和参数获取功能接口
 - PipelineManager：与第三方设备数据传输的入口
+- PayloadManager：控制云卓相关配件(C10、三体相机等)的入口
 
 
 # 空白项目集成 SDK
@@ -24,18 +43,21 @@ SDK所需权限
 <uses-permission android:name="android.permission.INTERNET" />
 
 Kotlin版本为：1.6.10
+
+混淆
+-keep class com.skydroid.**{*;}
 ```
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v0.7.1-alpha.aar
+rcsdk-v0.8.3-alpha.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v0.7.1-alpha.aar")
+    implementation files("libs/rcsdk-v0.8.3-alpha.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -415,6 +437,18 @@ PipelineManager.createPipeline(Uart.UART1)
         .canListen(true)
 ```
 
+- ##### KeyH16RawSignalQuality
+```
+    /**
+     * H16图传接收机信号质量(原始数据)
+     * 访问方式
+     * LISTEN
+     * 仅支持H16
+     */
+    val KeyH16RawSignalQuality:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canListen(true)
+```
+
 - ##### KeyH30SignalQuality
 ```
     /**
@@ -438,4 +472,103 @@ PipelineManager.createPipeline(Uart.UART1)
     val KeyH30UartBaudRate:KeyInfo<H30UartBaudRate> = KeyInfo.Builder<H30UartBaudRate>()
         .canSet(true)
         .canGet(true)
+```
+
+# PayloadManager
+云卓相关配件通讯接口
+```
+//C10相机控制
+val c10 = PayloadManager.getTCPPayload(PayloadType.C10, "192.168.144.108", 5000) as C10?
+//内部已经实现重连机制，无需再实现
+if (c10 != null) {
+    c10.setCommListener(object : CommListener {
+        override fun onConnectSuccess() {
+             log("C10连接成功")
+        }
+
+        override fun onConnectFail(e: SkyException) {
+
+        }
+
+        override fun onDisconnect() {
+            log("C10断开连接")
+        }
+
+        override fun onReadData(bytes: ByteArray) {
+
+        }
+    })
+    
+    //连接C10相机
+    PayloadManager.connectPayload(c10)
+}
+
+//控制C10一键回中
+c10.akey(AKey.MID)
+
+//断开C10相机连接
+PayloadManager.disconnectPayload(c10)
+```
+
+### 三体相机(串口版)控制
+```
+//获取三体相机(串口版)
+//获取实例后需要调用连接方法才能控制
+val threeBodyCamera = PayloadManager.getSerialPortPayload(PayloadType.THREE_BODY_CAMERA, "/dev/ttyHS0", 4000000) as ThreeBodyCamera?
+ 
+//拍照
+threeBodyCamera?.snapshot()
+
+//开始录像
+threeBodyCamera?.toggleReCord(true)
+
+//结束录像
+threeBodyCamera?.toggleReCord(false)
+
+//切换LED
+threeBodyCamera?.toggleLED()
+
+//同步时间（要在收到帧数据后再调用才有效）
+threeBodyCamera?.setTime(System.currentTimeMillis())
+```
+
+### 三体相机(网口版)控制
+```
+//获取三体相机(网口版)
+//获取实例后需要调用连接方法才能控制
+val threeBodyCamera2 = PayloadManager.getTCPPayload(PayloadType.THREE_BODY_CAMERA2, "192.168.144.108", 5001) as ThreeBodyCamera2?
+
+//切换LED
+threeBodyCamera2?.toggleLED()
+```
+
+### C10相机控制
+```
+//获取C10相机
+//获取实例后需要调用连接方法才能控制
+val c10 = PayloadManager.getTCPPayload(PayloadType.C10, "192.168.144.108", 5000) as C10?
+
+//一键控制
+//向下
+c10?.akey(AKey.DOWN)
+//回中
+c10?.akey(AKey.MID)
+//向上
+c10?.akey(AKey.TOP)
+        
+//拍照
+c10?.takePicture()
+
+//开始录像
+c10?.startRecordVideo()
+        
+//停止录像
+c10?.stopRecordVideo()
+
+//控制偏航，-127 ~ +127，负数向左，正数向右
+c10?.controlYaw(50)
+        
+//控制俯仰，-127 ~ +127，负数向下，正数向上
+c10?.controlPitch(-50)
+
 ```

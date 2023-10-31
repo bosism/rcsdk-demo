@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.skydroid.rcsdk.KeyManager;
+import com.skydroid.rcsdk.PayloadManager;
 import com.skydroid.rcsdk.PipelineManager;
 import com.skydroid.rcsdk.RCSDKManager;
 import com.skydroid.rcsdk.SDKManagerCallBack;
@@ -21,6 +22,11 @@ import com.skydroid.rcsdk.common.callback.CompletionCallback;
 import com.skydroid.rcsdk.common.callback.CompletionCallbackWith;
 import com.skydroid.rcsdk.common.callback.KeyListener;
 import com.skydroid.rcsdk.common.error.SkyException;
+import com.skydroid.rcsdk.common.payload.AKey;
+import com.skydroid.rcsdk.common.payload.C10;
+import com.skydroid.rcsdk.common.payload.PayloadType;
+import com.skydroid.rcsdk.common.payload.ThreeBodyCamera;
+import com.skydroid.rcsdk.common.payload.ThreeBodyCamera2;
 import com.skydroid.rcsdk.common.pipeline.Pipeline;
 import com.skydroid.rcsdk.common.remotecontroller.ControlMode;
 import com.skydroid.rcsdk.key.AirLinkKey;
@@ -60,6 +66,9 @@ public class HomeActivityForJava extends AppCompatActivity {
     private String strOtherValue = "";
 
     private Pipeline pipeline = null;
+
+    private C10 c10 = null;
+    private int btn_akey_click_count = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,6 +125,40 @@ public class HomeActivityForJava extends AppCompatActivity {
         });
         //连接到遥控器
         RCSDKManager.INSTANCE.connectToRC();
+
+        //三体相机网口版
+//        ThreeBodyCamera2 threeBodyCamera2 = (ThreeBodyCamera2)PayloadManager.INSTANCE.getTCPPayload(PayloadType.THREE_BODY_CAMERA2, "192.168.144.108", 5001);
+        //三体相机串口版
+//        ThreeBodyCamera threeBodyCamera = (ThreeBodyCamera)PayloadManager.INSTANCE.getSerialPortPayload(PayloadType.THREE_BODY_CAMERA, "/dev/ttyHS0", 4000000);
+
+        //C10相机控制
+        C10 c10 = (C10) PayloadManager.INSTANCE.getTCPPayload(PayloadType.C10,"192.168.144.108",5000);
+        //内部已经实现重连机制，无需再实现
+        if (c10 != null){
+            c10.setCommListener(new CommListener() {
+                @Override
+                public void onConnectSuccess() {
+                    log("C10连接成功");
+                }
+
+                @Override
+                public void onConnectFail(SkyException e) {
+
+                }
+
+                @Override
+                public void onDisconnect() {
+                    log("C10断开连接");
+                }
+
+                @Override
+                public void onReadData(byte[] bytes) {
+
+                }
+            });
+            PayloadManager.INSTANCE.connectPayload(c10);
+        }
+        this.c10 = c10;
         initTestView();
     }
 
@@ -230,11 +273,32 @@ public class HomeActivityForJava extends AppCompatActivity {
                     case H30:
                         //防止反复监听
                         KeyManager.INSTANCE.cancelListen(keySignalQualityListener);
-                        //H16的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
+                        //H30的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
                         KeyManager.INSTANCE.listen(AirLinkKey.INSTANCE.getKeyH30SignalQuality(),keySignalQualityListener);
                         break;
                 }
 
+            }
+        });
+
+        findViewById(R.id.btn_akey).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                C10 localC10 =c10;
+                if (localC10 != null){
+                    btn_akey_click_count++;
+                    switch (btn_akey_click_count % 3){
+                        case 0:
+                            localC10.akey(AKey.DOWN);
+                            break;
+                        case 1:
+                            localC10.akey(AKey.MID);
+                            break;
+                        case 2:
+                            localC10.akey(AKey.TOP);
+                            break;
+                    }
+                }
             }
         });
     }
@@ -288,6 +352,10 @@ public class HomeActivityForJava extends AppCompatActivity {
         Pipeline p = this.pipeline;
         if (p != null){
             PipelineManager.INSTANCE.disconnectPipeline(p);
+        }
+        C10 localC10 = this.c10;
+        if (localC10 != null){
+            PayloadManager.INSTANCE.disconnectPayload(localC10);
         }
     }
 
