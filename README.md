@@ -1,5 +1,9 @@
 更新日志
 ```
+v0.8.5
+1.修复同时多个TCP连接时阻塞问题
+2.修复PipelineManager,PayloadManager连接不上时无法关闭问题
+
 v0.8.3
 1.新增云卓配件管理（C10、三体相机等）
 2.修复UDPPipeline连接状态错误问题
@@ -50,14 +54,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v0.8.3-alpha.aar
+rcsdk-v0.8.5-alpha.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v0.8.3-alpha.aar")
+    implementation files("libs/rcsdk-v0.8.5-alpha.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
