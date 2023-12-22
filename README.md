@@ -1,5 +1,8 @@
 更新日志
 ```
+v0.9.7
+新增C20支持
+
 v0.8.5
 1.修复同时多个TCP连接时阻塞问题
 2.修复PipelineManager,PayloadManager连接不上时无法关闭问题
@@ -54,14 +57,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v0.8.5-alpha.aar
+rcsdk-v0.9.7-alpha.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v0.8.5-alpha.aar")
+    implementation files("libs/rcsdk-v0.9.7-alpha.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -546,9 +549,9 @@ val threeBodyCamera2 = PayloadManager.getTCPPayload(PayloadType.THREE_BODY_CAMER
 threeBodyCamera2?.toggleLED()
 ```
 
-### C10相机控制
+### C10云台相机控制
 ```
-//获取C10相机
+//获取C10云台相机
 //获取实例后需要调用连接方法才能控制
 val c10 = PayloadManager.getTCPPayload(PayloadType.C10, "192.168.144.108", 5000) as C10?
 
@@ -574,5 +577,67 @@ c10?.controlYaw(50)
         
 //控制俯仰，-127 ~ +127，负数向下，正数向上
 c10?.controlPitch(-50)
+
+```
+
+### C20相机控制
+```
+//获取C20相机
+//获取实例后需要调用连接方法才能控制
+val c20Camera = PayloadManager.getTCPPayload(PayloadType.C20_CAMERA, "192.168.144.108", 8100) as C20Camera?
+
+//拍照
+c20Camera?.takePicture()
+//开始录像
+c20Camera?.startRecordVideo()
+//停止录像
+c20Camera?.stopRecordVideo()
+
+//变倍变焦
+//开始变倍
+c20Camera?.startZoomIn()
+c20Camera?.startZoomOut()
+//开始变焦
+c20Camera?.startFucusFar()
+c20Camera?.startFucusNear()
+//停止变倍变焦
+c20Camera?.stopZoomOrFucus()
+
+//日夜模式
+//设置
+c20Camera?.setDayNightMode()
+//查询
+c20Camera?.getDayNightMode()
+
+//翻转
+//设置
+c20Camera?.setFlip()
+//查询
+c20Camera?.setFlip()
+
+更多接口详情查看
+com.skydroid.rcsdk.common.payload.C20Camera
+
+```
+
+### C20云台控制
+```
+//获取C20云台
+//获取实例后需要调用连接方法才能控制
+val c20Gimbal = PayloadManager.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000) as C20Gimbal?
+
+//一键控制
+//向下
+c20Gimbal?.akey(AKey.DOWN)
+//回中
+c20Gimbal?.akey(AKey.MID)
+//向上
+c20Gimbal?.akey(AKey.TOP)
+
+//控制偏航，-127 ~ +127，负数向左，正数向右
+c20Gimbal?.controlYaw(50)
+        
+//控制俯仰，-127 ~ +127，负数向下，正数向上
+c20Gimbal?.controlPitch(-50)
 
 ```

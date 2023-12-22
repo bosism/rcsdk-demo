@@ -24,6 +24,8 @@ import com.skydroid.rcsdk.common.callback.KeyListener;
 import com.skydroid.rcsdk.common.error.SkyException;
 import com.skydroid.rcsdk.common.payload.AKey;
 import com.skydroid.rcsdk.common.payload.C10;
+import com.skydroid.rcsdk.common.payload.C20Camera;
+import com.skydroid.rcsdk.common.payload.C20Gimbal;
 import com.skydroid.rcsdk.common.payload.PayloadType;
 import com.skydroid.rcsdk.common.payload.ThreeBodyCamera;
 import com.skydroid.rcsdk.common.payload.ThreeBodyCamera2;
@@ -130,6 +132,10 @@ public class HomeActivityForJava extends AppCompatActivity {
 //        ThreeBodyCamera2 threeBodyCamera2 = (ThreeBodyCamera2)PayloadManager.INSTANCE.getTCPPayload(PayloadType.THREE_BODY_CAMERA2, "192.168.144.108", 5001);
         //三体相机串口版
 //        ThreeBodyCamera threeBodyCamera = (ThreeBodyCamera)PayloadManager.INSTANCE.getSerialPortPayload(PayloadType.THREE_BODY_CAMERA, "/dev/ttyHS0", 4000000);
+        //C20相机
+//        C20Camera c20Camera = (C20Camera)PayloadManager.INSTANCE.getTCPPayload(PayloadType.C20_CAMERA, "192.168.144.108", 8100);
+        //C20云台
+//        C20Gimbal c20Gimbal = (C20Gimbal)PayloadManager.INSTANCE.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000);
 
         //C10相机控制
         C10 c10 = (C10) PayloadManager.INSTANCE.getTCPPayload(PayloadType.C10,"192.168.144.108",5000);
