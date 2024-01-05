@@ -1,7 +1,10 @@
 更新日志
 ```
+v1.1.0
+支持H20遥控器
+
 v0.9.7
-新增C20支持
+支持C20云台相机
 
 v0.8.5
 1.修复同时多个TCP连接时阻塞问题
@@ -14,10 +17,10 @@ v0.8.3
     AirLinkKey.KeyH16RawSignalQuality(获取H16原始信号值DBM)
 
 v0.7.1
-新增H30支持
+支持H30遥控器
 
 v0.6
-新增H16支持
+支持H16遥控器
 
 v0.1
 发布第一版
@@ -28,7 +31,7 @@ v0.1
 下载或者克隆Git上的Android示例代码工程:https://gitee.com/skydroid/rcsdk-demo
 
 # RCSDK目前支持的遥控器产品
-H12、H12Pro、H16/H16Pro、H30
+H12、H12Pro、H16/H16Pro、H30、H20
 
 # RCSDK架构体系概述
 移动应用程序一般通过下图所示的几个主要类来访问RCSDK：
@@ -57,14 +60,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v0.9.7-alpha.aar
+rcsdk-v1.1.0.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v0.9.7-alpha.aar")
+    implementation files("libs/rcsdk-v1.1.0.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -260,7 +263,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 通道设置
      * 访问方式
      * SET,GET
-     * 支持H12Pro/H16/H30
+     * 支持H12Pro/H16/H30/H20
      */
     val KeyChannelSettings: KeyInfo<ChannelSettings> = KeyInfo.Builder<ChannelSettings>()
         .canSet(true)
@@ -273,7 +276,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 遥控器对频
      * 访问方式
      * ACTION
-     * 支持ALL
+     * 支持ALL(暂不支持H20)
      */
     val KeyRequestPairing: KeyInfo<EmptyMsg> = KeyInfo.Builder<EmptyMsg>()
         .canAction(true)
@@ -297,7 +300,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 遥控器通道值
      * 访问方式
      * GET
-     * 支持H12/H12Pro/H30
+     * 支持H12/H12Pro/H30/H20
      */
     val KeyChannels: KeyInfo<IntArray> = KeyInfo.Builder<IntArray>()
         .canGet(true)
@@ -375,7 +378,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 图传接收机信号质量
      * 访问方式
      * LISTEN
-     * 支持H12Pro
+     * 支持H12Pro/H16/H30/H20
      */
     val KeySignalQuality:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canListen(true)
@@ -433,6 +436,7 @@ PipelineManager.createPipeline(Uart.UART1)
 ```
 
 - ##### KeyH16SignalQuality
+从1.1.0版本起，推荐使用KeySignalQuality
 ```
     /**
      * H16图传接收机信号质量
@@ -457,6 +461,7 @@ PipelineManager.createPipeline(Uart.UART1)
 ```
 
 - ##### KeyH30SignalQuality
+从1.1.0版本起，推荐使用KeySignalQuality
 ```
     /**
      * H30图传接收机信号质量
@@ -477,6 +482,32 @@ PipelineManager.createPipeline(Uart.UART1)
      * 仅支持H30
      */
     val KeyH30UartBaudRate:KeyInfo<H30UartBaudRate> = KeyInfo.Builder<H30UartBaudRate>()
+        .canSet(true)
+        .canGet(true)
+```
+
+- ##### KeyH20Uart0BaudRate
+```
+    /**
+     * H20图传接收机串口0波特率
+     * 访问方式
+     * SET,GET
+     * 仅支持H20
+     */
+    val KeyH20Uart0BaudRate:KeyInfo<H20UartBaudRate> = KeyInfo.Builder<H20UartBaudRate>()
+        .canSet(true)
+        .canGet(true)
+```
+
+- ##### KeyH20Uart1BaudRate
+```
+    /**
+     * H20图传接收机串口1波特率
+     * 访问方式
+     * SET,GET
+     * 仅支持H20
+     */
+    val KeyH20Uart1BaudRate:KeyInfo<H20UartBaudRate> = KeyInfo.Builder<H20UartBaudRate>()
         .canSet(true)
         .canGet(true)
 ```

@@ -193,30 +193,12 @@ class HomeActivity: AppCompatActivity() {
                                 printInfo(InfoKey.Other, "H12信号强度获取失败：$e")
                             }
                         })
-                DeviceType.H12Pro -> {
+                DeviceType.H12Pro,DeviceType.H16,DeviceType.H30,DeviceType.H20 -> {
                     //防止反复监听
                     KeyManager.cancelListen(keySignalQualityListener)
-                    //H12Pro的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
+                    //H12Pro/H16/H30/H20的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
                     KeyManager.listen(
                         AirLinkKey.KeySignalQuality,
-                        keySignalQualityListener
-                    )
-                }
-                DeviceType.H16 -> {
-                    //防止反复监听
-                    KeyManager.cancelListen(keySignalQualityListener)
-                    //H16的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
-                    KeyManager.listen(
-                        AirLinkKey.KeyH16SignalQuality,
-                        keySignalQualityListener
-                    )
-                }
-                DeviceType.H30 -> {
-                    //防止反复监听
-                    KeyManager.cancelListen(keySignalQualityListener)
-                    //H30的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
-                    KeyManager.listen(
-                        AirLinkKey.KeyH30SignalQuality,
                         keySignalQualityListener
                     )
                 }
