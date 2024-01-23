@@ -1,5 +1,11 @@
 更新日志
 ```
+v1.2.1
+1.修复H20信号强度错误问题
+2.C10/C10Pro/C20云台控制新增角度控制方法
+3.调整C10/C10Pro/C20云台速度控制参数(请参考文档C10/C10Pro/C20云台控制章节)
+4.支持串口双轴云台相机控制
+
 v1.1.0
 支持H20遥控器
 
@@ -67,7 +73,7 @@ h16_airlink.aar //H16图传模块 minSdk 24
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.1.0.aar")
+    implementation files("libs/rcsdk-v1.2.1.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -570,6 +576,28 @@ threeBodyCamera?.toggleLED()
 threeBodyCamera?.setTime(System.currentTimeMillis())
 ```
 
+### 双轴云台相机(串口版)控制
+```
+ val dualAxisGimbalCamera = PayloadManager.getSerialPortPayload(PayloadType.DUAL_AXIS_GIMBAL_CAMERA,"/dev/ttyHS0",4000000) as DualAxisGimbalCamera
+
+//一键控制
+//向下
+dualAxisGimbalCamera?.akey(AKey.DOWN)
+//回中
+dualAxisGimbalCamera?.akey(AKey.MID)
+//向上
+dualAxisGimbalCamera?.akey(AKey.TOP)
+
+//控制俯仰
+//向上
+dualAxisGimbalCamera?.controlPitch(true)
+//向下
+dualAxisGimbalCamera?.controlPitch(false)
+
+//同步时间（要在收到帧数据后再调用才有效）
+dualAxisGimbalCamera?.setTime(System.currentTimeMillis())
+```
+
 ### 三体相机(网口版)控制
 ```
 //获取三体相机(网口版)
@@ -603,12 +631,17 @@ c10?.startRecordVideo()
 //停止录像
 c10?.stopRecordVideo()
 
-//控制偏航，-127 ~ +127，负数向左，正数向右
-c10?.controlYaw(50)
+//速度控制偏航，-9.9 ~ +9.9，单位°/s 负数向左，正数向右
+c10?.controlYaw(1f)
         
-//控制俯仰，-127 ~ +127，负数向下，正数向上
-c10?.controlPitch(-50)
+//速度控制俯仰，-9.9 ~ +9.9，单位°/s 负数向下，正数向上
+c10?.controlPitch(-1f)
 
+//控制偏航角度, -150.00 ~ +150.00，单位°
+c10?.gotoYaw(30f)
+
+//控制俯仰角度，-90.00 ~ +90.00，单位°
+c10?.gotoPitch(-90f)
 ```
 
 ### C20相机控制
@@ -665,10 +698,69 @@ c20Gimbal?.akey(AKey.MID)
 //向上
 c20Gimbal?.akey(AKey.TOP)
 
-//控制偏航，-127 ~ +127，负数向左，正数向右
-c20Gimbal?.controlYaw(50)
+//速度控制偏航，-9.9 ~ +9.9，单位°/s 负数向左，正数向右
+c20Gimbal?.controlYaw(1f)
         
-//控制俯仰，-127 ~ +127，负数向下，正数向上
-c20Gimbal?.controlPitch(-50)
+//速度控制俯仰，-9.9 ~ +9.9，单位°/s 负数向下，正数向上
+c20Gimbal?.controlPitch(-1f)
+
+//控制偏航角度, -150.00 ~ +150.00，单位°
+c20Gimbal?.gotoYaw(30f)
+
+//控制俯仰角度，-90.00 ~ +90.00，单位°
+c20Gimbal?.gotoPitch(-90f)
+
+```
+
+### C10Pro相机控制
+```
+//获取C10Pro相机
+//获取实例后需要调用连接方法才能控制
+val c10ProCamera = PayloadManager.getUDPPayload(PayloadType.C10PRO_CAMERA, "192.168.144.108", 12580) as C10ProCamera?
+
+//拍照
+c10ProCamera?.takePicture()
+//开始录像
+c10ProCamera?.startRecordVideo()
+//停止录像
+c10ProCamera?.stopRecordVideo()
+
+//同步时间
+c10ProCamera?.setTime()
+//获取版本号
+c10ProCamera?.getVersion()
+//设置LED
+c10ProCamera?.setLED()
+
+更多接口详情查看
+com.skydroid.rcsdk.common.payload.C10ProCamera
+
+```
+
+### C10Pro云台控制
+```
+//获取C10Pro云台
+//获取实例后需要调用连接方法才能控制
+val c10ProGimbal = PayloadManager.getUDPPayload(PayloadType.C10PRO_GIMBAL, "192.168.144.108", 5000) as C10ProGimbal?
+
+//一键控制
+//向下
+c10ProGimbal?.akey(AKey.DOWN)
+//回中
+c10ProGimbal?.akey(AKey.MID)
+//向上
+c10ProGimbal?.akey(AKey.TOP)
+
+//速度控制偏航，-9.9 ~ +9.9，单位°/s 负数向左，正数向右
+c10ProGimbal?.controlYaw(1f)
+        
+//速度控制俯仰，-9.9 ~ +9.9，单位°/s 负数向下，正数向上
+c10ProGimbal?.controlPitch(-1f)
+
+//控制偏航角度, -150.00 ~ +150.00，单位°
+c10ProGimbal?.gotoYaw(30f)
+
+//控制俯仰角度，-90.00 ~ +90.00，单位°
+c10ProGimbal?.gotoPitch(-90f)
 
 ```
