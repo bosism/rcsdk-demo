@@ -1,5 +1,13 @@
 更新日志
 ```
+v1.3.0
+1.新增Key：
+    RemoteControllerKey.KeyModel(获取遥控器固件型号)
+    RemoteControllerKey.KeyVersion(获取遥控器固件版本号)
+2.优化CPU占用
+3.优化UDP通讯过滤规则
+4.优化混淆规则,防止与其他第三方库冲突
+
 v1.2.1
 1.修复H20信号强度错误问题
 2.C10/C10Pro/C20云台控制新增角度控制方法
@@ -66,14 +74,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.1.0.aar
+rcsdk-v1.3.0.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.2.1.aar")
+    implementation files("libs/rcsdk-v1.3.0.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -237,7 +245,7 @@ PipelineManager.createPipeline(Uart.UART1)
 
 # Key
 ### RemoteControllerKey
-- ##### KeyControlMode
+- ##### 遥控器摇杆模式
 ```
     /**
      * 遥控器摇杆模式
@@ -250,7 +258,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyH12ChannelSettings
+- ##### H12通道
 ```
     /**
      * H12通道
@@ -263,7 +271,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyChannelSettings
+- ##### 通道设置
 ```
     /**
      * 通道设置
@@ -276,7 +284,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyRequestPairing
+- ##### 遥控器对频
 ```
     /**
      * 遥控器对频
@@ -288,7 +296,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canAction(true)
 ```
 
-- ##### KeySerialNumber
+- ##### 遥控器序列号
 ```
     /**
      * 遥控器序列号
@@ -300,7 +308,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyChannels
+- ##### 遥控器通道值
 ```
     /**
      * 遥控器通道值
@@ -312,7 +320,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyH16Channels
+- ##### H16遥控器通道值
 ```
     /**
      * H16遥控器通道值
@@ -324,7 +332,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canListen(true)
 ```
 
-- ##### KeyCoachMode
+- ##### 教练模式
 ```
     /**
      * 教练模式
@@ -337,7 +345,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyCustomData
+- ##### 自定义数据
 ```
     /**
      * 自定义数据 200byte
@@ -350,9 +358,33 @@ PipelineManager.createPipeline(Uart.UART1)
         .canSet(true)
 ```
 
+- ##### 遥控器型号
+```
+    /**
+     * 遥控器型号
+     * 访问方式
+     * GET
+     * 支持ALL
+     */
+    val KeyModel:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canGet(true)
+```
+
+- ##### 遥控器版本
+```
+    /**
+     * 遥控器版本
+     * 访问方式
+     * GET
+     * 支持ALL
+     */
+    val KeyVersion:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canGet(true)
+```
+
 ### AirLinkKey
 
-- ##### KeyUart0BaudRate
+- ##### H12Pro图传接收机串口0波特率
 ```
     /**
      * 图传接收机串口0波特率
@@ -365,7 +397,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyLostSBUSValues
+- ##### H12Pro图传接收机RC通道失控保护值
 ```
     /**
      * 图传接收机RC通道失控保护值
@@ -378,7 +410,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeySignalQuality
+- ##### 图传接收机信号质量
 ```
     /**
      * 图传接收机信号质量
@@ -390,7 +422,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canListen(true)
 ```
 
-- ##### KeyH12SignalQuality
+- ##### H12图传接收机信号质量
 ```
     /**
      * H12图传接收机信号质量
@@ -402,7 +434,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyReceiverOptions
+- ##### H12接收机选项设置
 ```
     /**
      * 接收机选项设置
@@ -415,7 +447,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyH16Uart0BaudRate
+- ##### H16图传接收机串口0波特率
 ```
     /**
      * H16图传接收机串口0波特率
@@ -428,7 +460,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyH16Uart1BaudRate
+- ##### H16图传接收机串口1波特率
 ```
     /**
      * H16图传接收机串口1波特率
@@ -441,7 +473,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyH16SignalQuality
+- ##### H16图传接收机信号质量
 从1.1.0版本起，推荐使用KeySignalQuality
 ```
     /**
@@ -454,7 +486,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canListen(true)
 ```
 
-- ##### KeyH16RawSignalQuality
+- ##### H16图传接收机信号质量(原始数据)
 ```
     /**
      * H16图传接收机信号质量(原始数据)
@@ -466,7 +498,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canListen(true)
 ```
 
-- ##### KeyH30SignalQuality
+- ##### H30图传接收机信号质量
 从1.1.0版本起，推荐使用KeySignalQuality
 ```
     /**
@@ -479,7 +511,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canListen(true)
 ```
 
-- ##### KeyH30UartBaudRate
+- ##### H30图传接收机串口波特率
 ```
     /**
      * H30图传接收机串口波特率
@@ -492,7 +524,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyH20Uart0BaudRate
+- ##### H20图传接收机串口0波特率
 ```
     /**
      * H20图传接收机串口0波特率
@@ -505,7 +537,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### KeyH20Uart1BaudRate
+- ##### H20图传接收机串口1波特率
 ```
     /**
      * H20图传接收机串口1波特率
