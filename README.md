@@ -1,5 +1,9 @@
 更新日志
 ```
+v1.3.1
+1.优化TCP通讯重连机制
+2.调整遥控器协议超时时间（100ms）
+
 v1.3.0
 1.新增Key：
     RemoteControllerKey.KeyModel(获取遥控器固件型号)
@@ -74,14 +78,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.3.0.aar
+rcsdk-v1.3.1.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.3.0.aar")
+    implementation files("libs/rcsdk-v1.3.1.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
