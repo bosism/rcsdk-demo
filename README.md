@@ -1,5 +1,8 @@
 更新日志
 ```
+v1.3.3
+1.EC10遥控器
+
 v1.3.2
 1.C20 LED开关
 
@@ -81,14 +84,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.3.2.aar
+rcsdk-v1.3.3.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.3.2.aar")
+    implementation files("libs/rcsdk-v1.3.3.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
