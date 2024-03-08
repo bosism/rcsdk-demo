@@ -1,5 +1,8 @@
 更新日志
 ```
+v1.3.2
+1.C20 LED开关
+
 v1.3.1
 1.优化TCP通讯重连机制
 2.调整遥控器协议超时时间（100ms）
@@ -78,14 +81,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.3.1.aar
+rcsdk-v1.3.2.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.3.1.aar")
+    implementation files("libs/rcsdk-v1.3.2.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -642,6 +645,8 @@ val threeBodyCamera2 = PayloadManager.getTCPPayload(PayloadType.THREE_BODY_CAMER
 
 //切换LED
 threeBodyCamera2?.toggleLED()
+threeBodyCamera2?.toggleLED(boolean)
+
 ```
 
 ### C10云台相机控制
@@ -746,13 +751,17 @@ c20Gimbal?.gotoYaw(30f)
 //控制俯仰角度，-90.00 ~ +90.00，单位°
 c20Gimbal?.gotoPitch(-90f)
 
+//切换LED
+c20Gimbal?.toggleLED()
+c20Gimbal?.toggleLED(boolean)
+
 ```
 
 ### C10Pro相机控制
 ```
 //获取C10Pro相机
 //获取实例后需要调用连接方法才能控制
-val c10ProCamera = PayloadManager.getUDPPayload(PayloadType.C10PRO_CAMERA, "192.168.144.108", 12580) as C10ProCamera?
+val c10ProCamera = PayloadManager.getUDPPayload(PayloadType.C10PRO_CAMERA,12580,"192.168.144.108",12580) as C10ProCamera?
 
 //拍照
 c10ProCamera?.takePicture()
@@ -777,7 +786,7 @@ com.skydroid.rcsdk.common.payload.C10ProCamera
 ```
 //获取C10Pro云台
 //获取实例后需要调用连接方法才能控制
-val c10ProGimbal = PayloadManager.getUDPPayload(PayloadType.C10PRO_GIMBAL, "192.168.144.108", 5000) as C10ProGimbal?
+val c10ProGimbal = PayloadManager.getUDPPayload(PayloadType.C10PRO_GIMBAL, 5000, "192.168.144.108", 5000) as C10ProGimbal?
 
 //一键控制
 //向下
