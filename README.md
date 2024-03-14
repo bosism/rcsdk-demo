@@ -1,5 +1,9 @@
 更新日志
 ```
+v1.3.4
+1.新增Key：
+    AirLinkKey.KeyH20Bandwidth(设置/获取H20遥控器带宽)
+
 v1.3.3
 1.EC10遥控器
 
@@ -84,14 +88,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.3.3.aar
+rcsdk-v1.3.4.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.3.3.aar")
+    implementation files("libs/rcsdk-v1.3.4.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -556,6 +560,21 @@ PipelineManager.createPipeline(Uart.UART1)
      * 仅支持H20
      */
     val KeyH20Uart1BaudRate:KeyInfo<H20UartBaudRate> = KeyInfo.Builder<H20UartBaudRate>()
+        .canSet(true)
+        .canGet(true)
+```
+
+- ##### H20图传接收机串口1波特率
+```
+    /**
+     * H20带宽设置
+     * 访问方式
+     * SET,GET
+     * 仅支持H20
+     * Bandwidth.ul：上行带宽
+     * Bandwidth.dl：下行带宽
+     */
+    val KeyH20Bandwidth:KeyInfo<Bandwidth> = KeyInfo.Builder<Bandwidth>()
         .canSet(true)
         .canGet(true)
 ```
