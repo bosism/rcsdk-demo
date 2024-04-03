@@ -1,5 +1,6 @@
 package com.skydroid.rcsdkdemo
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -50,7 +51,7 @@ class HomeActivity: AppCompatActivity() {
     private var strOtherValue = ""
 
     private var pipeline: Pipeline? = null
-    private var c10: C10? = null
+    private var c10p: C10Pro? = null
     private var btn_akey_click_count = 0
 
 
@@ -99,13 +100,13 @@ class HomeActivity: AppCompatActivity() {
         //C20云台
 //        val c20Gimbal = PayloadManager.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000) as C20Gimbal?
 
-        //C10相机控制
-        val c10 = PayloadManager.getTCPPayload(PayloadType.C10, "192.168.144.108", 5000) as C10?
+        //C10Pro相机控制
+        val c10p = PayloadManager.getUDPPayload(PayloadType.C10PRO, 5000,"192.168.144.108", 5000) as C10Pro?
         //内部已经实现重连机制，无需再实现
-        if (c10 != null) {
-            c10.setCommListener(object : CommListener {
+        if (c10p != null) {
+            c10p.setCommListener(object : CommListener {
                 override fun onConnectSuccess() {
-                    log("C10连接成功")
+                    log("C10Pro连接成功")
                 }
 
                 override fun onConnectFail(e: SkyException) {
@@ -113,16 +114,16 @@ class HomeActivity: AppCompatActivity() {
                 }
 
                 override fun onDisconnect() {
-                    log("C10断开连接")
+                    log("C10Pro断开连接")
                 }
 
                 override fun onReadData(bytes: ByteArray) {
 
                 }
             })
-            PayloadManager.connectPayload(c10)
+            PayloadManager.connectPayload(c10p)
         }
-        this.c10 = c10
+        this.c10p = c10p
 
         initTestView()
     }
@@ -206,15 +207,19 @@ class HomeActivity: AppCompatActivity() {
         }
 
         findViewById<View>(R.id.btn_akey).setOnClickListener {
-            val localC10 = c10
-            if (localC10 != null) {
+            val localC10p = c10p
+            if (localC10p != null) {
                 btn_akey_click_count++
                 when (btn_akey_click_count % 3) {
-                    0 -> localC10.akey(AKey.DOWN)
-                    1 -> localC10.akey(AKey.MID)
-                    2 -> localC10.akey(AKey.TOP)
+                    0 -> localC10p.akey(AKey.DOWN)
+                    1 -> localC10p.akey(AKey.MID)
+                    2 -> localC10p.akey(AKey.TOP)
                 }
             }
+        }
+
+        findViewById<View>(R.id.btn_rc_buttons).setOnClickListener {
+            startActivity(Intent(this,CustomRCButtonsActivity::class.java))
         }
     }
 
@@ -259,9 +264,9 @@ class HomeActivity: AppCompatActivity() {
         if (p != null) {
             PipelineManager.disconnectPipeline(p)
         }
-        val localC10 = c10
-        if (localC10 != null) {
-            PayloadManager.disconnectPayload(localC10)
+        val localC10p = c10p
+        if (localC10p != null) {
+            PayloadManager.disconnectPayload(localC10p)
         }
     }
 

@@ -1,5 +1,12 @@
 更新日志
 ```
+v1.4.5
+1.C12云台相机
+2.C10Pro云台相机（建议使用C10Pro类代替C10ProCamera类与C10ProGimbal类，C10Pro相机固件需要v0.2.6及以上才支持C10Pro类，v0.2.6以前使用C10ProCamera类与C10ProGimbal类）
+3.新增遥控器自定义按钮事件工具类（详细使用方法请查阅相关代码：CustomRCButtonsActivity）
+4.修复Bug
+    disconnectRC崩溃问题等
+
 v1.3.4
 1.新增Key：
     AirLinkKey.KeyH20Bandwidth(设置/获取H20遥控器带宽)
@@ -88,14 +95,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.3.4.aar
+rcsdk-v1.4.5.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.3.4.aar")
+    implementation files("libs/rcsdk-v1.4.5.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 

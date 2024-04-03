@@ -1,5 +1,6 @@
 package com.skydroid.rcsdkdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.skydroid.rcsdk.common.callback.KeyListener;
 import com.skydroid.rcsdk.common.error.SkyException;
 import com.skydroid.rcsdk.common.payload.AKey;
 import com.skydroid.rcsdk.common.payload.C10;
+import com.skydroid.rcsdk.common.payload.C10Pro;
 import com.skydroid.rcsdk.common.payload.C20Camera;
 import com.skydroid.rcsdk.common.payload.C20Gimbal;
 import com.skydroid.rcsdk.common.payload.PayloadType;
@@ -69,7 +71,7 @@ public class HomeActivityForJava extends AppCompatActivity {
 
     private Pipeline pipeline = null;
 
-    private C10 c10 = null;
+    private C10Pro c10p = null;
     private int btn_akey_click_count = 0;
 
     @Override
@@ -138,13 +140,13 @@ public class HomeActivityForJava extends AppCompatActivity {
 //        C20Gimbal c20Gimbal = (C20Gimbal)PayloadManager.INSTANCE.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000);
 
         //C10相机控制
-        C10 c10 = (C10) PayloadManager.INSTANCE.getTCPPayload(PayloadType.C10,"192.168.144.108",5000);
+        C10Pro c10p = (C10Pro) PayloadManager.INSTANCE.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000);
         //内部已经实现重连机制，无需再实现
-        if (c10 != null){
-            c10.setCommListener(new CommListener() {
+        if (c10p != null){
+            c10p.setCommListener(new CommListener() {
                 @Override
                 public void onConnectSuccess() {
-                    log("C10连接成功");
+                    log("C10Pro连接成功");
                 }
 
                 @Override
@@ -154,7 +156,7 @@ public class HomeActivityForJava extends AppCompatActivity {
 
                 @Override
                 public void onDisconnect() {
-                    log("C10断开连接");
+                    log("C10Pro断开连接");
                 }
 
                 @Override
@@ -162,9 +164,9 @@ public class HomeActivityForJava extends AppCompatActivity {
 
                 }
             });
-            PayloadManager.INSTANCE.connectPayload(c10);
+            PayloadManager.INSTANCE.connectPayload(c10p);
         }
-        this.c10 = c10;
+        this.c10p = c10p;
         initTestView();
     }
 
@@ -290,21 +292,28 @@ public class HomeActivityForJava extends AppCompatActivity {
         findViewById(R.id.btn_akey).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                C10 localC10 =c10;
-                if (localC10 != null){
+                C10Pro localC10p =c10p;
+                if (localC10p != null){
                     btn_akey_click_count++;
                     switch (btn_akey_click_count % 3){
                         case 0:
-                            localC10.akey(AKey.DOWN);
+                            localC10p.akey(AKey.DOWN);
                             break;
                         case 1:
-                            localC10.akey(AKey.MID);
+                            localC10p.akey(AKey.MID);
                             break;
                         case 2:
-                            localC10.akey(AKey.TOP);
+                            localC10p.akey(AKey.TOP);
                             break;
                     }
                 }
+            }
+        });
+
+        findViewById(R.id.btn_rc_buttons).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivityForJava.this,CustomRCButtonsActivity.class));
             }
         });
     }
@@ -359,9 +368,9 @@ public class HomeActivityForJava extends AppCompatActivity {
         if (p != null){
             PipelineManager.INSTANCE.disconnectPipeline(p);
         }
-        C10 localC10 = this.c10;
-        if (localC10 != null){
-            PayloadManager.INSTANCE.disconnectPayload(localC10);
+        C10Pro localC10p = this.c10p;
+        if (localC10p != null){
+            PayloadManager.INSTANCE.disconnectPayload(localC10p);
         }
     }
 
