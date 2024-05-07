@@ -46,36 +46,37 @@ class HomeActivity: AppCompatActivity() {
 
     private val infoLiveData = MutableLiveData<String>()
     private var tvInfo: TextView? = null
-    private var strSignalValue = ""
-    private var strH16ChannelsValue = ""
-    private var strOtherValue = ""
 
     private var pipeline: Pipeline? = null
     private var c10p: C10Pro? = null
     private var btn_akey_click_count = 0
 
-
+    // TODO 注意:
+    // TODO 使用时,请确保其他应用(包含助手、地面站)处于停止关闭状态,避免端口占用导致数据链路失败;
+    // TODO 获取摇杆杆量值,无法主动上报,请求一次获取一次,推荐至少100ms读取一次;
+    // TODO 数传管道,未连接 接收机 时,数传管道 连接失败;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         tvInfo = findViewById(R.id.tv_info)
         infoLiveData.observe(this) { str -> tvInfo?.text = str }
-        //初始化SDK
+        // TODO 初始化SDK,初始化一次即可;
         RCSDKManager.initSDK(this, object : SDKManagerCallBack {
             override fun onRcConnected() {
                 //创建通讯管道(内部有断开重连机制，只需要调用一次连接即可)
+                // 数传管道,未连接 接收机 时,数传管道 连接失败;
                 val pipeline = PipelineManager.createPipeline(Uart.UART0)
                 pipeline!!.onCommListener = object : CommListener {
                     override fun onConnectSuccess() {
-                        log("管道连接成功")
+                        log("数传管道 连接成功")
                     }
 
                     override fun onConnectFail(e: SkyException) {
-                        log("管道连接失败$e")
+                        log("数传管道 连接失败$e")
                     }
 
                     override fun onDisconnect() {
-                        log("管道断开连接")
+                        log("数传管道 断开连接")
                     }
 
                     override fun onReadData(bytes: ByteArray) {}
@@ -141,20 +142,20 @@ class HomeActivity: AppCompatActivity() {
         findViewById<View>(R.id.btn_set_control_mode).setOnClickListener {
             KeyManager.set(RemoteControllerKey.KeyControlMode, ControlMode.USA) { e ->
                 if (e == null) {
-                    printInfo(InfoKey.Other, "设置摇杆模式成功")
+                    printInfo(InfoKey.SetControlMode, "设置摇杆模式成功")
                 } else {
-                    printInfo(InfoKey.Other, "设置摇杆模式失败：$e")
+                    printInfo(InfoKey.SetControlMode, "设置摇杆模式失败：$e")
                 }
             }
         }
         findViewById<View>(R.id.btn_get_control_mode).setOnClickListener { //获取遥控器手型模式
             KeyManager.get(RemoteControllerKey.KeyControlMode, object : CompletionCallbackWith<ControlMode> {
                     override fun onSuccess(controlMode: ControlMode) {
-                        printInfo(InfoKey.Other, "获取摇杆模式：" + controlMode.name)
+                        printInfo(InfoKey.GetControlMode, "获取摇杆模式：" + controlMode.name)
                     }
 
                     override fun onFailure(e: SkyException) {
-                        printInfo(InfoKey.Other, "获取摇杆模式失败：$e")
+                        printInfo(InfoKey.GetControlMode, "获取摇杆模式失败：$e")
                     }
                 })
         }
@@ -171,17 +172,18 @@ class HomeActivity: AppCompatActivity() {
                 else ->{
                     KeyManager.get(RemoteControllerKey.KeyChannels,object : CompletionCallbackWith<IntArray> {
                         override fun onSuccess(value: IntArray?) {
-                            printInfo(InfoKey.Other, "获取摇杆杆量：" + Arrays.toString(value))
+                            printInfo(InfoKey.Channels, "获取摇杆杆量：" + Arrays.toString(value))
                         }
 
                         override fun onFailure(e: SkyException) {
-                            printInfo(InfoKey.Other, "获取摇杆失败：$e")
+                            printInfo(InfoKey.Channels, "获取摇杆失败：$e")
                         }
                     })
                 }
 
             }
         }
+        // 信号强度 取值范围: 0-100%
         findViewById<View>(R.id.btn_get_signal).setOnClickListener {
             when (RCSDKManager.getDeviceType()) {
                 DeviceType.H12 ->                         //H12的信号强度为GET方式，需要主动请求，请求一次获取一次
@@ -229,6 +231,9 @@ class HomeActivity: AppCompatActivity() {
         when (key) {
             InfoKey.Signal -> strSignalValue = obj.toString()
             InfoKey.H16Channels -> strH16ChannelsValue = obj.toString()
+            InfoKey.GetControlMode -> strGetControlMode = obj.toString()
+            InfoKey.SetControlMode -> strSetControlMode = obj.toString()
+            InfoKey.Channels -> strChannels = obj.toString()
             InfoKey.Other -> strOtherValue = obj.toString()
         }
         val sb = StringBuffer()
@@ -238,6 +243,18 @@ class HomeActivity: AppCompatActivity() {
         }
         if (!TextUtils.isEmpty(strH16ChannelsValue)) {
             sb.append(strH16ChannelsValue)
+            sb.append("\n")
+        }
+        if (!TextUtils.isEmpty(strGetControlMode)) {
+            sb.append(strGetControlMode)
+            sb.append("\n")
+        }
+        if (!TextUtils.isEmpty(strSetControlMode)) {
+            sb.append(strSetControlMode)
+            sb.append("\n")
+        }
+        if (!TextUtils.isEmpty(strChannels)) {
+            sb.append(strChannels)
             sb.append("\n")
         }
         if (!TextUtils.isEmpty(strOtherValue)) {
@@ -270,7 +287,14 @@ class HomeActivity: AppCompatActivity() {
         }
     }
 
+    private var strSignalValue = ""
+    private var strH16ChannelsValue = ""
+    private var strGetControlMode = ""
+    private var strSetControlMode = ""
+    private var strChannels = ""
+    private var strOtherValue = ""
+
     internal enum class InfoKey {
-        Signal, H16Channels, Other
+        Signal, H16Channels, GetControlMode, SetControlMode, Channels, Other
     }
 }

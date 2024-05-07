@@ -65,6 +65,13 @@ v0.1
 
 下载或者克隆Git上的Android示例代码工程:https://gitee.com/skydroid/rcsdk-demo
 
+<font color=blue>
+使用注意事项:<br>
+1.请确保其他应用(包含助手、地面站)处于停止关闭状态,避免端口占用导致数据链路失败;<br>
+2.获取摇杆杆量值,无法主动上报,请求一次获取一次,推荐至少100ms读取一次;<br>
+3.数传管道,未连接 接收机 时,数传管道 连接失败;<br>
+</font>
+
 # RCSDK目前支持的遥控器产品
 H12、H12Pro、H16/H16Pro、H30、H20
 
@@ -114,6 +121,9 @@ h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 初始化RCSDK
+在使用SDK各组件之前初始化context信息;  
+初始化一次即可;  
+推荐在Application中初始化;  
 ```
 RCSDKManager.initSDK(this,object :SDKManagerCallBack{
             override fun onRcConnectFail(e: SkyException?) {
@@ -193,7 +203,7 @@ var keySignalQualityListener = KeyListener<Int>{
         Log.e(TAG,"信号强度:${oldValue},${newValue}")
     }
     
-//监听H12Pro信号强度
+//监听H12Pro信号强度 (取值范围: 0-100%)
 KeyManager.listen(AirLinkKey.KeySignalQuality,keySignalQualityListener)
 
 //取消监听H12Pro信号强度
