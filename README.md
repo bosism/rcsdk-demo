@@ -1,8 +1,12 @@
 更新日志
 ```
+v1.4.7
+1.修复部分H16数传接收多次问题
+2.C10Pro OSD显示设置
+
 v1.4.5
 1.C12云台相机
-2.C10Pro云台相机（建议使用C10Pro类代替C10ProCamera类与C10ProGimbal类，C10Pro相机固件需要v0.2.6及以上才支持C10Pro类，v0.2.6以前使用C10ProCamera类与C10ProGimbal类）
+2.C10Pro云台相机（建议使用C10Pro类代替C10ProCamera类与C10ProGimbal类，C10Pro相机固件需要v0.2.7及以上才支持C10Pro类，v0.2.7以前使用C10ProCamera类与C10ProGimbal类）
 3.新增遥控器自定义按钮事件工具类（详细使用方法请查阅相关代码：CustomRCButtonsActivity）
 4.修复Bug
     disconnectRC崩溃问题等
@@ -95,14 +99,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.4.5.aar
+rcsdk-v1.4.7.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.4.5.aar")
+    implementation files("libs/rcsdk-v1.4.7.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -786,7 +790,7 @@ c20Gimbal?.toggleLED(boolean)
 
 ```
 
-### C10Pro相机控制
+### C10Pro相机控制（0.2.7以下固件）
 ```
 //获取C10Pro相机
 //获取实例后需要调用连接方法才能控制
@@ -803,7 +807,7 @@ c10ProCamera?.stopRecordVideo()
 c10ProCamera?.setTime()
 //获取版本号
 c10ProCamera?.getVersion()
-//设置LED
+//设置LED（针对新款三体相机有效）
 c10ProCamera?.setLED()
 
 更多接口详情查看
@@ -811,7 +815,7 @@ com.skydroid.rcsdk.common.payload.C10ProCamera
 
 ```
 
-### C10Pro云台控制
+### C10Pro云台控制（0.2.7以下固件）
 ```
 //获取C10Pro云台
 //获取实例后需要调用连接方法才能控制
@@ -836,5 +840,119 @@ c10ProGimbal?.gotoYaw(30f)
 
 //控制俯仰角度，-90.00 ~ +90.00，单位°
 c10ProGimbal?.gotoPitch(-90f)
+
+```
+
+### C10Pro云台相机控制（0.2.7及以上固件）
+```
+//获取C10Pro云台相机
+//获取实例后需要调用连接方法才能控制
+c10p = PayloadManager.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000) as C12?
+
+//一键控制
+//向下
+c10p?.akey(AKey.DOWN)
+//回中
+c10p?.akey(AKey.MID)
+//向上
+c10p?.akey(AKey.TOP)
+
+//速度控制偏航，-9.9 ~ +9.9，单位°/s 负数向左，正数向右
+c10p?.controlYaw(1f)
+        
+//速度控制俯仰，-9.9 ~ +9.9，单位°/s 负数向下，正数向上
+c10p?.controlPitch(-1f)
+
+//控制偏航角度, -150.00 ~ +150.00，单位°
+c10p?.gotoYaw(30f)
+
+//控制俯仰角度，-90.00 ~ +90.00，单位°
+c10p?.gotoPitch(-90f)
+
+//拍照
+c10p?.takePicture(callBack:CompletionCallback?)
+
+//开始录像
+c10p?.startRecordVideo(callBack:CompletionCallback?)
+
+//结束录像
+c10p?.stopRecordVideo(callBack:CompletionCallback?)
+
+//获取录像状态
+c10p?.getRecordVideoState(callBack: CompletionCallbackWith<Boolean>)
+
+//同步时间（需要在出图后设置才有效）
+c10p?.setTime(time:Long,callBack:CompletionCallback?)
+
+//设置osd显示/关闭
+c10p?.setOSD(boolean: Boolean,callBack: CompletionCallback?)
+
+//获取相机版本号
+c10p?.getCameraVersion(callBack: CompletionCallbackWith<String>)
+
+//LED开关（针对新款三体相机有效）
+c10p?.setLed(onOrOff:Boolean,callBack: CompletionCallback?)
+```
+
+### C12云台相机控制
+```
+//获取C12云台相机
+//获取实例后需要调用连接方法才能控制
+c12 = PayloadManager.getUDPPayload(PayloadType.C12,5000,"192.168.144.108",5000) as C12?
+
+//一键控制
+//向下
+c12?.akey(AKey.DOWN)
+//回中
+c12?.akey(AKey.MID)
+//向上
+c12?.akey(AKey.TOP)
+
+//速度控制偏航，-9.9 ~ +9.9，单位°/s 负数向左，正数向右
+c12?.controlYaw(1f)
+        
+//速度控制俯仰，-9.9 ~ +9.9，单位°/s 负数向下，正数向上
+c12?.controlPitch(-1f)
+
+//控制偏航角度, -150.00 ~ +150.00，单位°
+c12?.gotoYaw(30f)
+
+//控制俯仰角度，-90.00 ~ +90.00，单位°
+c12?.gotoPitch(-90f)
+
+//设置倍率 0-4  0:原图,1-4:变倍
+c12?.setZoomRatios(value:Int,callBack: CompletionCallback?)
+
+//设置伪彩
+//    WHITE_HOT,白热
+//    SEPIA,辉金
+//    IRONBOW,铁红
+//    RAINBOW,彩虹
+//    NIGHT,微光
+//    AURORA,极光
+//    RED_HOT,红热
+//    JUNGLE,从林
+//    MEDICAL,医疗
+//    BLACK_HOT,黑热
+//    GLORY_HOT;金红
+c12?.setThermalPalette(palette: ThermalPalette, callBack: CompletionCallback?)
+
+//拍照
+c12?.takePicture(callBack:CompletionCallback?)
+
+//开始录像
+c12?.startRecordVideo(callBack:CompletionCallback?)
+
+//结束录像
+c12?.stopRecordVideo(callBack:CompletionCallback?)
+
+//获取录像状态
+c12?.getRecordVideoState(callBack: CompletionCallbackWith<Boolean>)
+
+//同步时间（需要在出图后设置才有效）
+c12?.setTime(time:Long,callBack:CompletionCallback?)
+
+//获取相机版本号
+c12?.getCameraVersion(callBack: CompletionCallbackWith<String>)
 
 ```
