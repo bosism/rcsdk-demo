@@ -171,9 +171,15 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ReadRCButtonHelper readRCButtonHelper = this.readRCButtonHelper;
-        if (readRCButtonHelper != null){
-            readRCButtonHelper.stop();
+        if (readRCButtonHelper != null) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (readRCButtonHelper != null) {
+                        readRCButtonHelper.stop();
+                    }
+                }
+            }).start();
         }
         //遥控器自定义按钮工具类-关闭
         ButtonHelper c10pButtonHelper = this.c10pButtonHelper;
