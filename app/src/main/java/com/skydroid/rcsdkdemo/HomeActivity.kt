@@ -2,7 +2,6 @@ package com.skydroid.rcsdkdemo
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -20,6 +19,9 @@ import com.skydroid.rcsdk.common.pipeline.Pipeline
 import com.skydroid.rcsdk.common.remotecontroller.ControlMode
 import com.skydroid.rcsdk.key.AirLinkKey
 import com.skydroid.rcsdk.key.RemoteControllerKey
+import com.skydroid.rcsdkdemo.other.AppUtils
+import com.skydroid.rcsdkdemo.other.EnumInfoKey
+import com.skydroid.rcsdkdemo.other.ReceiveInfo
 import java.util.*
 
 /**
@@ -27,30 +29,29 @@ import java.util.*
  * @date 2023/5/31 14:24
  * @email 1501020210@qq.com
  * @describe
+ * <p>
+ * 加入C10Pro 新旧固件 相机控制;UI重新整理; by ljb on 2024.06.13.
  */
 class HomeActivity: AppCompatActivity() {
 
     val TAG = "HomeActivity"
-
+    private val mReceiveInfo = ReceiveInfo()
     private val keySignalQualityListener =
         KeyListener<Int> { oldValue, newValue ->
-            strSignalValue = "信号强度:$newValue"
-            printInfo(InfoKey.Signal, strSignalValue)
+            printInfo(EnumInfoKey.Signal, "信号强度:$newValue")
         }
 
     private val keyH16ChannelsListener: KeyListener<IntArray> =
         KeyListener { oldValue, newValue ->
-            strH16ChannelsValue = Arrays.toString(newValue)
-            printInfo(InfoKey.H16Channels, strH16ChannelsValue)
+            printInfo(EnumInfoKey.H16Channels, Arrays.toString(newValue))
         }
 
     private val infoLiveData = MutableLiveData<String>()
     private var tvInfo: TextView? = null
 
     private var pipeline: Pipeline? = null
-    private var c10p: C10Pro? = null
-    private var btn_akey_click_count = 0
-
+    private var c10Pro: C10Pro? = null// 适用于0.2.7及以上固件 相机控制 + 全版本的云台控制
+    private var c10ProCamera: C10ProCamera? = null// 适用于0.2.7以下固件 相机控制
     // TODO 注意:
     // TODO 使用时,请确保其他应用(包含助手、地面站)处于停止关闭状态,避免端口占用导致数据链路失败;
     // TODO 获取摇杆杆量值,无法主动上报,请求一次获取一次,推荐至少100ms读取一次;
@@ -66,21 +67,7 @@ class HomeActivity: AppCompatActivity() {
                 //创建通讯管道(内部有断开重连机制，只需要调用一次连接即可)
                 // 数传管道,未连接 接收机 时,数传管道 连接失败;
                 val pipeline = PipelineManager.createPipeline(Uart.UART0)
-                pipeline!!.onCommListener = object : CommListener {
-                    override fun onConnectSuccess() {
-                        log("数传管道 连接成功")
-                    }
-
-                    override fun onConnectFail(e: SkyException) {
-                        log("数传管道 连接失败$e")
-                    }
-
-                    override fun onDisconnect() {
-                        log("数传管道 断开连接")
-                    }
-
-                    override fun onReadData(bytes: ByteArray) {}
-                }
+                pipeline!!.onCommListener = getCommListener(0, "数传管道")
                 //连接通讯管道
                 PipelineManager.connectPipeline(pipeline)
                 this@HomeActivity.pipeline = pipeline
@@ -102,62 +89,64 @@ class HomeActivity: AppCompatActivity() {
 //        val c20Gimbal = PayloadManager.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000) as C20Gimbal?
 
         //C10Pro相机控制
-        val c10p = PayloadManager.getUDPPayload(PayloadType.C10PRO, 5000,"192.168.144.108", 5000) as C10Pro?
+        c10Pro = PayloadManager.getUDPPayload(PayloadType.C10PRO, 5000, "192.168.144.108", 5000) as C10Pro?
         //内部已经实现重连机制，无需再实现
-        if (c10p != null) {
-            c10p.setCommListener(object : CommListener {
-                override fun onConnectSuccess() {
-                    log("C10Pro连接成功")
-                }
-
-                override fun onConnectFail(e: SkyException) {
-
-                }
-
-                override fun onDisconnect() {
-                    log("C10Pro断开连接")
-                }
-
-                override fun onReadData(bytes: ByteArray) {
-
-                }
-            })
-            PayloadManager.connectPayload(c10p)
+        c10Pro?.let {
+            it.setCommListener(getCommListener(1, "C10Pro"))
+            PayloadManager.connectPayload(it)
         }
-        this.c10p = c10p
-
+        c10ProCamera = PayloadManager.getUDPPayload(PayloadType.C10PRO_CAMERA, 12580, "192.168.144.108", 12580) as C10ProCamera?
+        //内部已经实现重连机制，无需再实现
+        c10ProCamera?.let {
+            it.setCommListener(getCommListener(2, "C10pCamera"))
+            PayloadManager.connectPayload(it)
+        }
         initTestView()
+    }
+
+    private fun getCommListener(type: Int, tag: String): CommListener {
+        return object : CommListener {
+            override fun onConnectSuccess() {
+                log("$tag 连接成功")
+            }
+
+            override fun onConnectFail(e: SkyException) {
+                log("$tag  连接失败$e")
+            }
+
+            override fun onDisconnect() {
+                log("$tag 断开连接")
+            }
+
+            override fun onReadData(bytes: ByteArray) {
+                if(type == 0){
+                    log("$tag 收到长度${bytes.size},,, 数据 "+ String(bytes))
+                }
+            }
+        }
     }
 
     private fun initTestView() {
         findViewById<View>(R.id.btn_pairing).setOnClickListener {
             KeyManager.action(RemoteControllerKey.KeyRequestPairing) { e ->
-                if (e == null) {
-                    printInfo(InfoKey.Other, "对频成功")
-                } else {
-                    printInfo(InfoKey.Other, "对频失败：$e")
-                }
+                printInfo(EnumInfoKey.Other, AppUtils.getSkyExceptionInfo("对频", e, ""));
             }
         }
         findViewById<View>(R.id.btn_set_control_mode).setOnClickListener {
             KeyManager.set(RemoteControllerKey.KeyControlMode, ControlMode.USA) { e ->
-                if (e == null) {
-                    printInfo(InfoKey.SetControlMode, "设置摇杆模式成功")
-                } else {
-                    printInfo(InfoKey.SetControlMode, "设置摇杆模式失败：$e")
-                }
+                printInfo(EnumInfoKey.SetControlMode, AppUtils.getSkyExceptionInfo("设置摇杆模式", e, ""));
             }
         }
         findViewById<View>(R.id.btn_get_control_mode).setOnClickListener { //获取遥控器手型模式
             KeyManager.get(RemoteControllerKey.KeyControlMode, object : CompletionCallbackWith<ControlMode> {
-                    override fun onSuccess(controlMode: ControlMode) {
-                        printInfo(InfoKey.GetControlMode, "获取摇杆模式：" + controlMode.name)
-                    }
+                override fun onSuccess(controlMode: ControlMode) {
+                    printInfo(EnumInfoKey.GetControlMode, "获取摇杆模式：" + controlMode.name)
+                }
 
-                    override fun onFailure(e: SkyException) {
-                        printInfo(InfoKey.GetControlMode, "获取摇杆模式失败：$e")
-                    }
-                })
+                override fun onFailure(e: SkyException) {
+                    printInfo(EnumInfoKey.GetControlMode, "获取摇杆模式失败：$e")
+                }
+            })
         }
         findViewById<View>(R.id.btn_get_channels).setOnClickListener {
             //获取摇杆杆量
@@ -172,11 +161,11 @@ class HomeActivity: AppCompatActivity() {
                 else ->{
                     KeyManager.get(RemoteControllerKey.KeyChannels,object : CompletionCallbackWith<IntArray> {
                         override fun onSuccess(value: IntArray?) {
-                            printInfo(InfoKey.Channels, "获取摇杆杆量：" + Arrays.toString(value))
+                            printInfo(EnumInfoKey.Channels, "获取摇杆杆量：" + Arrays.toString(value))
                         }
 
                         override fun onFailure(e: SkyException) {
-                            printInfo(InfoKey.Channels, "获取摇杆失败：$e")
+                            printInfo(EnumInfoKey.Channels, "获取摇杆失败：$e")
                         }
                     })
                 }
@@ -188,80 +177,122 @@ class HomeActivity: AppCompatActivity() {
             when (RCSDKManager.getDeviceType()) {
                 DeviceType.H12 ->                         //H12的信号强度为GET方式，需要主动请求，请求一次获取一次
                     KeyManager.get(AirLinkKey.KeyH12SignalQuality, object : CompletionCallbackWith<Int> {
-                            override fun onSuccess(integer: Int) {
-                                printInfo(InfoKey.Other, "H12信号强度：$integer")
-                            }
+                        override fun onSuccess(integer: Int) {
+                            printInfo(EnumInfoKey.Signal, "H12信号强度：$integer")
+                        }
 
-                            override fun onFailure(e: SkyException) {
-                                printInfo(InfoKey.Other, "H12信号强度获取失败：$e")
-                            }
-                        })
+                        override fun onFailure(e: SkyException) {
+                            printInfo(EnumInfoKey.Signal, "H12信号强度获取失败：$e")
+                        }
+                    })
                 DeviceType.H12Pro,DeviceType.H16,DeviceType.H30,DeviceType.H20 -> {
                     //防止反复监听
                     KeyManager.cancelListen(keySignalQualityListener)
                     //H12Pro/H16/H30/H20的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
                     KeyManager.listen(
-                        AirLinkKey.KeySignalQuality,
-                        keySignalQualityListener
+                            AirLinkKey.KeySignalQuality,
+                            keySignalQualityListener
                     )
                 }
             }
         }
-
         findViewById<View>(R.id.btn_akey).setOnClickListener {
-            val localC10p = c10p
-            if (localC10p != null) {
-                btn_akey_click_count++
-                when (btn_akey_click_count % 3) {
-                    0 -> localC10p.akey(AKey.DOWN)
-                    1 -> localC10p.akey(AKey.MID)
-                    2 -> localC10p.akey(AKey.TOP)
+            c10pCameraControl(false)
+        }
+        findViewById<View>(R.id.btn_akey_027).setOnClickListener {
+            c10pCameraControl(true)
+        }
+        findViewById<View>(R.id.btn_rc_buttons).setOnClickListener {
+            startActivity(Intent(this,CustomRCButtonsActivity::class.java))
+        }
+        findViewById<View>(R.id.btn_clear).setOnClickListener {
+            mReceiveInfo.cleatInfo()
+            tvInfo?.text = ""
+        }
+    }
+
+    /**
+     * 云台控制_相机控制
+     */
+    private fun c10pCameraControl(isCameraVer027AndAbove: Boolean) {
+        AppUtils.showC10pCameraControlDialog(this@HomeActivity) { _, p1 ->
+            when (p1) {
+                0 -> {
+                    c10ProCamera?.getVersion(object : CompletionCallbackWith<String> {
+                        override fun onSuccess(version: String?) {
+                            printInfo(EnumInfoKey.CameraVersion, "获取到相机版本号:${version}")
+                        }
+
+                        override fun onFailure(p0: SkyException?) {
+                            printInfo(EnumInfoKey.CameraVersion, "获取到相机版本号:${p0}")
+                        }
+                    })
+                }
+                1 -> {
+                    c10Pro?.akey(AKey.DOWN)
+                }
+                2 -> {
+                    c10Pro?.akey(AKey.MID)
+                }
+                3 -> {
+                    c10Pro?.akey(AKey.TOP)
+                }
+                4 -> {
+                    if (isCameraVer027AndAbove) {
+                        c10Pro?.takePicture {
+                            printInfo(EnumInfoKey.TakePicture, AppUtils.getSkyExceptionInfo("拍照", it, "新固件"));
+                        }
+                    } else {
+                        c10ProCamera?.takePicture {
+                            printInfo(EnumInfoKey.TakePicture, AppUtils.getSkyExceptionInfo("拍照", it, "旧固件"));
+                        }
+                    }
+                }
+                5 -> {
+                    if (isCameraVer027AndAbove) {
+                        c10Pro?.startRecordVideo {
+                            printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("开始录像", it, "新固件"));
+                        }
+                    } else {
+                        c10ProCamera?.startRecordVideo {
+                            printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("开始录像", it, "旧固件"));
+                        }
+                    }
+                }
+                6 -> {
+                    if (isCameraVer027AndAbove) {
+                        c10Pro?.stopRecordVideo {
+                            printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("停止录像", it, "新固件"));
+                        }
+                    } else {
+                        c10ProCamera?.stopRecordVideo {
+                            printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("停止录像", it, "旧固件"));
+                        }
+                    }
+                }
+                7 -> {
+                    if (isCameraVer027AndAbove) {
+                        c10Pro?.setTime(System.currentTimeMillis()) {
+                            printInfo(EnumInfoKey.CameraTime, AppUtils.getSkyExceptionInfo("时间设置", it, "新固件"));
+                        }
+                    } else {
+                        c10ProCamera?.setTime(System.currentTimeMillis()) {
+                            printInfo(EnumInfoKey.CameraTime, AppUtils.getSkyExceptionInfo("时间设置", it, "旧固件"));
+                        }
+                    }
                 }
             }
         }
 
-        findViewById<View>(R.id.btn_rc_buttons).setOnClickListener {
-            startActivity(Intent(this,CustomRCButtonsActivity::class.java))
-        }
     }
 
-
-    private fun printInfo(key: InfoKey, obj: Any?) {
+    private fun printInfo(key: EnumInfoKey, obj: Any?) {
         obj ?: return
-        when (key) {
-            InfoKey.Signal -> strSignalValue = obj.toString()
-            InfoKey.H16Channels -> strH16ChannelsValue = obj.toString()
-            InfoKey.GetControlMode -> strGetControlMode = obj.toString()
-            InfoKey.SetControlMode -> strSetControlMode = obj.toString()
-            InfoKey.Channels -> strChannels = obj.toString()
-            InfoKey.Other -> strOtherValue = obj.toString()
+        val sb = mReceiveInfo.updateInfo(key, obj)
+        sb?.let {
+            infoLiveData.postValue(sb)
         }
-        val sb = StringBuffer()
-        if (!TextUtils.isEmpty(strSignalValue)) {
-            sb.append(strSignalValue)
-            sb.append("\n")
-        }
-        if (!TextUtils.isEmpty(strH16ChannelsValue)) {
-            sb.append(strH16ChannelsValue)
-            sb.append("\n")
-        }
-        if (!TextUtils.isEmpty(strGetControlMode)) {
-            sb.append(strGetControlMode)
-            sb.append("\n")
-        }
-        if (!TextUtils.isEmpty(strSetControlMode)) {
-            sb.append(strSetControlMode)
-            sb.append("\n")
-        }
-        if (!TextUtils.isEmpty(strChannels)) {
-            sb.append(strChannels)
-            sb.append("\n")
-        }
-        if (!TextUtils.isEmpty(strOtherValue)) {
-            sb.append(strOtherValue)
-        }
-        infoLiveData.postValue(sb.toString())
-        Log.e(TAG, obj.toString())
+        log("printInfo -------key $key,,,obj $obj")
     }
 
     private fun log(obj: Any?) {
@@ -281,20 +312,9 @@ class HomeActivity: AppCompatActivity() {
         if (p != null) {
             PipelineManager.disconnectPipeline(p)
         }
-        val localC10p = c10p
+        val localC10p = c10Pro
         if (localC10p != null) {
             PayloadManager.disconnectPayload(localC10p)
         }
-    }
-
-    private var strSignalValue = ""
-    private var strH16ChannelsValue = ""
-    private var strGetControlMode = ""
-    private var strSetControlMode = ""
-    private var strChannels = ""
-    private var strOtherValue = ""
-
-    internal enum class InfoKey {
-        Signal, H16Channels, GetControlMode, SetControlMode, Channels, Other
     }
 }

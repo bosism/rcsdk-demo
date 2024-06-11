@@ -133,7 +133,7 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
         //自定义按钮事件处理器
         ButtonHandler buttonHandler = new ButtonHandler() {
             @Override
-            public void onHandleButton(@NonNull ButtonAction buttonAction, int oldValue, int newValue, @NonNull CompletionCallback completionCallback) {
+            public void onHandleButton(@NonNull ButtonAction buttonAction, int oldValue, int newValue, @NonNull int[] ints, @NonNull CompletionCallback completionCallback) {
                 switch (buttonAction){
                     case CUSTOM_0:
                         runOnUiThread(new Runnable() {

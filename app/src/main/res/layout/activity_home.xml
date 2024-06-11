@@ -1,57 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-            <Button
-                android:id="@+id/btn_pairing"
+            android:padding="5dp">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="对频"/>
-            <Button
-                android:id="@+id/btn_set_control_mode"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_pairing"
+                    style="@style/smallButton"
+                    android:layout_marginEnd="10dp"
+                    android:text="对频" />
+
+                <Button
+                    android:id="@+id/btn_clear"
+                    style="@style/smallButton"
+                    android:text="清屏" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="设置手型"/>
-            <Button
-                android:id="@+id/btn_get_control_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="读取手型"/>
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:text="手型:"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_set_control_mode"
+                    style="@style/smallButton"
+                    android:layout_marginEnd="10dp"
+                    android:text="设置" />
+
+                <Button
+                    android:id="@+id/btn_get_control_mode"
+                    style="@style/smallButton"
+                    android:text="读取" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btn_get_channels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="获取摇杆杆量值"/>
+                style="@style/smallButton"
+                android:text="获取摇杆杆量值" />
+
             <Button
                 android:id="@+id/btn_get_signal"
+                style="@style/smallButton"
+                android:text="获取遥控器信号" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="获取遥控器信号"/>
-            <Button
-                android:id="@+id/btn_akey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="一键控制C10Pro云台" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:text="C10P:"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_akey"
+                    style="@style/smallButton"
+                    android:layout_marginEnd="10dp"
+                    android:text="旧固件" />
+
+                <Button
+                    android:id="@+id/btn_akey_027"
+                    style="@style/smallButton"
+                    android:text=">0.2.6固件" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btn_rc_buttons"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="自定义遥控器通道"/>
+                style="@style/smallButton"
+                android:text="自定义遥控器通道" />
         </LinearLayout>
     </ScrollView>
+
     <TextView
         android:id="@+id/tv_info"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_margin="16dp"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_weight="1" />
 </LinearLayout>

@@ -76,6 +76,14 @@ v0.1
 3.数传管道,未连接 接收机 时,数传管道 连接失败;<br>
 </font>
 
+<br>
+<br>
+如下是H12Pro+S1pro+C12Pro的测试效果图:
+
+![image](https://gitee.com/skydroid/rcsdk-demo/raw/master/image/rcsdk_demo_1.png)
+![image](https://gitee.com/skydroid/rcsdk-demo/raw/master/image/rcsdk_demo_2.png)
+
+
 # RCSDK目前支持的遥控器产品
 H12、H12Pro、H16/H16Pro、H30、H20
 
