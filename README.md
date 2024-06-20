@@ -1,8 +1,17 @@
 更新日志
 ```
+v1.5.0
+1.新增SDK工具类获取遥控器型号方法
+com.skydroid.rcsdk.utils.RCSDKUtils
+
+v1.4.9 
+1.修复部分情况下拍照阻塞的bug
+2.修复H20串口0、串口1相反问题
+3.H30数传通讯默认使用UDP通讯
+
 v1.4.7
 1.修复部分H16数传接收多次问题
-2.C10Pro OSD显示设置
+2.C10Pro OSD设置
 
 v1.4.5
 1.C12云台相机
@@ -114,14 +123,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.4.7.aar
+rcsdk-v1.5.0.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.4.7.aar")
+    implementation files("libs/rcsdk-v1.5.0.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -973,4 +982,18 @@ c12?.setTime(time:Long,callBack:CompletionCallback?)
 //获取相机版本号
 c12?.getCameraVersion(callBack: CompletionCallbackWith<String>)
 
+```
+
+# 工具类
+#### 自定义遥控器按钮
+com.skydroid.rcsdk.common.button.ButtonHelper
+```
+详细使用方法参考
+CustomRCButtonsActivity
+```
+
+#### RCSDKUitls
+com.skydroid.rcsdk.utils.RCSDKUitls
+```
+getDeviceType 获取遥控器型号
 ```
