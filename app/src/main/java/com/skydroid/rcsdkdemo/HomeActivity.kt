@@ -38,7 +38,7 @@ class HomeActivity: AppCompatActivity() {
     private val mReceiveInfo = ReceiveInfo()
     private val keySignalQualityListener =
         KeyListener<Int> { oldValue, newValue ->
-            printInfo(EnumInfoKey.Signal, "信号强度:$newValue")
+            printInfo(EnumInfoKey.Signal, "信号强度:$newValue %")
         }
 
     private val keyH16ChannelsListener: KeyListener<IntArray> =
@@ -178,7 +178,7 @@ class HomeActivity: AppCompatActivity() {
                 DeviceType.H12 ->                         //H12的信号强度为GET方式，需要主动请求，请求一次获取一次
                     KeyManager.get(AirLinkKey.KeyH12SignalQuality, object : CompletionCallbackWith<Int> {
                         override fun onSuccess(integer: Int) {
-                            printInfo(EnumInfoKey.Signal, "H12信号强度：$integer")
+                            printInfo(EnumInfoKey.Signal, "H12信号强度：$integer %")
                         }
 
                         override fun onFailure(e: SkyException) {

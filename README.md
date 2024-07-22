@@ -1,5 +1,13 @@
 更新日志
 ```
+v1.5.2
+1.C12无级变倍
+    C12::addZoomRatios
+    C12::subtractZoomRatios
+2.H20遥控器自定义按钮波轮控制默认反向
+3.C12云台控制新增接口
+    同时控制俯仰偏航：C12::controlYawPitch（需要云台固件0.5及以上）
+
 v1.5.0
 1.新增SDK工具类获取遥控器型号方法
 com.skydroid.rcsdk.utils.RCSDKUtils
@@ -123,14 +131,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.5.0.aar
+rcsdk-v1.5.2.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.5.0.aar")
+    implementation files("libs/rcsdk-v1.5.2.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -342,7 +350,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 遥控器对频
      * 访问方式
      * ACTION
-     * 支持ALL(暂不支持H20)
+     * 支持ALL
      */
     val KeyRequestPairing: KeyInfo<EmptyMsg> = KeyInfo.Builder<EmptyMsg>()
         .canAction(true)
