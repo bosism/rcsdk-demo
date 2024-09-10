@@ -1,5 +1,23 @@
 更新日志
 ```
+v1.6.2
+1.新增Key：
+    AirLinkKey.KeyRCVersion(遥控器端无线模块版本号,目前支持H20,H30)
+    AirLinkKey.KeySkyVersion(天空端端无线模块版本号,目前支持H20,H30)
+    AirLinkKey.KeySkyMCUVersion(天空端MUC版本号,目前支持H30)
+    AirLinkKey.KeyRawSignalQuality(原始信号数据,目前支持H16/H12Pro/H20/H30)
+2.SDK版本号获取
+3.修复H20波特率设置错误问题
+4.底层请求逻辑优化*
+
+v1.5.2
+1.C12无级变倍
+    C12::addZoomRatios
+    C12::subtractZoomRatios
+2.H20遥控器自定义按钮波轮控制默认反向
+3.C12云台控制新增接口
+    同时控制俯仰偏航：C12::controlYawPitch（需要云台固件0.5及以上）
+
 v1.5.2
 1.C12无级变倍
     C12::addZoomRatios
@@ -131,14 +149,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.5.2.aar
+rcsdk-v1.6.2.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.5.2.aar")
+    implementation files("libs/rcsdk-v1.6.2.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -152,7 +170,7 @@ h16_airlink.aar //H16图传模块 minSdk 24
 - ### 初始化RCSDK
 在使用SDK各组件之前初始化context信息;  
 初始化一次即可;  
-推荐在Application中初始化;  
+推荐在Application中初始化;
 ```
 RCSDKManager.initSDK(this,object :SDKManagerCallBack{
             override fun onRcConnectFail(e: SkyException?) {
@@ -318,7 +336,7 @@ PipelineManager.createPipeline(Uart.UART1)
         .canGet(true)
 ```
 
-- ##### H12通道
+- ##### H12通道设置
 ```
     /**
      * H12通道
@@ -468,6 +486,18 @@ PipelineManager.createPipeline(Uart.UART1)
     val KeyLostSBUSValues:KeyInfo<LostSBUSValues> = KeyInfo.Builder<LostSBUSValues>()
         .canSet(true)
         .canGet(true)
+```
+
+- ##### 图传接收机信号质量(原始数据)
+```
+    /**
+     * 图传接收机信号质量(原始数据)
+     * 访问方式
+     * LISTEN
+     * 支持H16/H12Pro/H20/H30
+     */
+    val KeyRawSignalQuality:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canListen(true)
 ```
 
 - ##### 图传接收机信号质量
@@ -622,6 +652,42 @@ PipelineManager.createPipeline(Uart.UART1)
      */
     val KeyH20Bandwidth:KeyInfo<Bandwidth> = KeyInfo.Builder<Bandwidth>()
         .canSet(true)
+        .canGet(true)
+```
+
+- ##### 遥控器无线模块版本
+```
+    /**
+     * 遥控器无线模块版本
+     * 访问方式
+     * GET
+     * 支持H30/H20
+     */
+    val KeyRCVersion:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canGet(true)
+```
+
+- ##### 天空端无线模块版本
+```
+    /**
+     * 天空端无线模块版本
+     * 访问方式
+     * GET
+     * 支持H30/H20
+     */
+    val KeySkyVersion:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canGet(true)
+```
+
+- ##### 天空端MCU版本
+```
+    /**
+     * 天空端MCU版本
+     * 访问方式
+     * GET
+     * 支持H30
+     */
+    val KeySkyMCUVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
 ```
 
@@ -1004,4 +1070,5 @@ CustomRCButtonsActivity
 com.skydroid.rcsdk.utils.RCSDKUitls
 ```
 getDeviceType 获取遥控器型号
+getVersion 获取SDK版本号
 ```
