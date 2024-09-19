@@ -119,9 +119,13 @@ public class ReadRCButtonHelper {
             super.start();
         }
 
-        public synchronized void close(){
-            isRun = false;
-            notify();
+        public void close(){
+            synchronized (this){
+                isRun = false;
+                try {
+                    notify();
+                }catch (Exception e){}
+            }
             try {
                 join();
             } catch (InterruptedException e) {

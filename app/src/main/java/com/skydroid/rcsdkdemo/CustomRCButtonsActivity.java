@@ -1,6 +1,7 @@
 package com.skydroid.rcsdkdemo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.skydroid.rcsdk.PayloadManager;
 import com.skydroid.rcsdk.RCSDKManager;
+import com.skydroid.rcsdk.comm.CommListener;
 import com.skydroid.rcsdk.common.button.ButtonAction;
 import com.skydroid.rcsdk.common.button.ButtonConfig;
 import com.skydroid.rcsdk.common.button.ButtonHandler;
@@ -18,6 +20,7 @@ import com.skydroid.rcsdk.common.button.ButtonHelper;
 import com.skydroid.rcsdk.common.button.HandleButtonMode;
 import com.skydroid.rcsdk.common.callback.CompletionCallback;
 import com.skydroid.rcsdk.common.error.ErrorException;
+import com.skydroid.rcsdk.common.error.SkyException;
 import com.skydroid.rcsdk.common.payload.C10Pro;
 import com.skydroid.rcsdk.common.payload.PayloadType;
 
@@ -99,6 +102,27 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
 
         //连接C10Pro
         C10Pro c10Pro = (C10Pro)PayloadManager.INSTANCE.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000);
+        c10Pro.setCommListener(new CommListener() {
+            @Override
+            public void onConnectSuccess() {
+                log("C10Pro 连接成功");
+            }
+
+            @Override
+            public void onConnectFail(SkyException e) {
+                log("C10Pro 连接失败:" + e);
+            }
+
+            @Override
+            public void onDisconnect() {
+                log("C10Pro 断开连接");
+            }
+
+            @Override
+            public void onReadData(byte[] bytes) {
+                log("C10Pro 读到数据:" + bytes);
+            }
+        });
         this.c10Pro = c10Pro;
         PayloadManager.INSTANCE.connectPayload(c10Pro);
         //配置按钮通道
@@ -172,14 +196,7 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (readRCButtonHelper != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (readRCButtonHelper != null) {
-                        readRCButtonHelper.stop();
-                    }
-                }
-            }).start();
+            readRCButtonHelper.stop();
         }
         //遥控器自定义按钮工具类-关闭
         ButtonHelper c10pButtonHelper = this.c10pButtonHelper;
@@ -197,5 +214,12 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
             PayloadManager.INSTANCE.disconnectPayload(c10Pro);
         }
 
+    }
+
+    private void log(Object obj) {
+        if (obj == null) {
+            return;
+        }
+        Log.e(CustomRCButtonsActivity.class.toString(), obj.toString());
     }
 }
