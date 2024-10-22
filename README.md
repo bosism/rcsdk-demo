@@ -1,5 +1,10 @@
 更新日志
 ```
+v1.6.4
+1.G12遥控器
+2.修复Bug
+    部分情况下KeyManager会阻塞300ms的问题
+    
 v1.6.3
 1.修复Bug
     获取遥控器通道指令
@@ -124,7 +129,7 @@ v0.1
 
 
 # RCSDK目前支持的遥控器产品
-H12、H12Pro、H16/H16Pro、H30、H20
+H12、H12Pro、H16/H16Pro、H30、H20、G12
 
 # RCSDK架构体系概述
 移动应用程序一般通过下图所示的几个主要类来访问RCSDK：
@@ -153,14 +158,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.6.3.aar
+rcsdk-v1.6.4.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.6.3.aar")
+    implementation files("libs/rcsdk-v1.6.4.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -323,6 +328,10 @@ PipelineManager.createPipeline(Uart.UART0)
 
 //创建串口1通讯管道
 PipelineManager.createPipeline(Uart.UART1)
+
+//创建AR8030通讯管道(适用于G12)
+PipelineManager.createAR8030Pipeline(0,1) //适用于G12的参数
+
 ```
 
 # Key
@@ -359,7 +368,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 通道设置
      * 访问方式
      * SET,GET
-     * 支持H12Pro/H16/H30/H20
+     * 支持H12Pro/H16/H30/H20/G12
      */
     val KeyChannelSettings: KeyInfo<ChannelSettings> = KeyInfo.Builder<ChannelSettings>()
         .canSet(true)
@@ -396,7 +405,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 遥控器通道值
      * 访问方式
      * GET
-     * 支持H12/H12Pro/H30/H20
+     * 支持H12/H12Pro/H30/H20/G12
      */
     val KeyChannels: KeyInfo<IntArray> = KeyInfo.Builder<IntArray>()
         .canGet(true)
@@ -665,7 +674,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 遥控器无线模块版本
      * 访问方式
      * GET
-     * 支持H30/H20
+     * 支持G12/H30/H20
      */
     val KeyRCVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
@@ -677,7 +686,7 @@ PipelineManager.createPipeline(Uart.UART1)
      * 天空端无线模块版本
      * 访问方式
      * GET
-     * 支持H30/H20
+     * 支持G12/H30/H20
      */
     val KeySkyVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
