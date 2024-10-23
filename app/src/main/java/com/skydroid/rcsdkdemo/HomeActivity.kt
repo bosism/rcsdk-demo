@@ -19,6 +19,7 @@ import com.skydroid.rcsdk.common.pipeline.Pipeline
 import com.skydroid.rcsdk.common.remotecontroller.ControlMode
 import com.skydroid.rcsdk.key.AirLinkKey
 import com.skydroid.rcsdk.key.RemoteControllerKey
+import com.skydroid.rcsdk.utils.RCSDKUtils
 import com.skydroid.rcsdkdemo.other.AppUtils
 import com.skydroid.rcsdkdemo.other.EnumInfoKey
 import com.skydroid.rcsdkdemo.other.ReceiveInfo
@@ -102,6 +103,7 @@ class HomeActivity: AppCompatActivity() {
             PayloadManager.connectPayload(it)
         }
         initTestView()
+        setTitle("RCSDK_Demo_V${RCSDKUtils.getVersion()}")
     }
 
     private fun getCommListener(type: Int, tag: String): CommListener {

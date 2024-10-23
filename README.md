@@ -1,5 +1,9 @@
 更新日志
 ```
+v1.6.5
+1.修复Bug
+    H20遥控器获取不到信号百分比问题
+
 v1.6.4
 1.G12遥控器
 2.修复Bug
@@ -158,14 +162,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.6.4.aar
+rcsdk-v1.6.5.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.6.4.aar")
+    implementation files("libs/rcsdk-v1.6.5.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
