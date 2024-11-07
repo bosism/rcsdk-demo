@@ -6,5 +6,5 @@ package com.skydroid.rcsdkdemo.other;
  * Created by ljb on 2024.06.13.
  */
 public enum EnumInfoKey {
-    Signal, H16Channels, GetControlMode, SetControlMode, Channels, CameraVersion, TakePicture, RecordVideo, CameraTime, Other
+    DataTransmission, Signal, H16Channels, GetControlMode, SetControlMode, Channels, CameraVersion, TakePicture, RecordVideo, CameraTime, Other
 }

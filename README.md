@@ -916,17 +916,26 @@ val c10ProCamera = PayloadManager.getUDPPayload(PayloadType.C10PRO_CAMERA,12580,
 
 //拍照
 c10ProCamera?.takePicture()
+命令示例:"AT+AZ -p2\r\n"
+
 //开始录像
 c10ProCamera?.startRecordVideo()
+命令示例:"AT+AZ -p0\r\n"
+
 //停止录像
 c10ProCamera?.stopRecordVideo()
+命令示例:"AT+AZ -p1\r\n"
 
 //同步时间
 c10ProCamera?.setTime()
+
 //获取版本号
 c10ProCamera?.getVersion()
+命令示例:"AT+INFO\r\n"
+
 //设置LED（针对新款三体相机有效）
 c10ProCamera?.setLED()
+命令示例:开 "AT+LED -e1\r\n";关 "AT+LED -e0\r\n"
 
 更多接口详情查看
 com.skydroid.rcsdk.common.payload.C10ProCamera
@@ -948,10 +957,16 @@ c10ProGimbal?.akey(AKey.MID)
 c10ProGimbal?.akey(AKey.TOP)
 
 //速度控制偏航，-9.9 ~ +9.9，单位°/s 负数向左，正数向右
-c10ProGimbal?.controlYaw(1f)
-        
+c10ProGimbal?.controlYaw(3f)
+命令示例:"#TPUG2wGSY1E75"
+c10ProGimbal?.controlYaw(-3f)
+命令示例:"#TPUG2wGSYE276"
+
 //速度控制俯仰，-9.9 ~ +9.9，单位°/s 负数向下，正数向上
-c10ProGimbal?.controlPitch(-1f)
+c10ProGimbal?.controlPitch(3f)
+命令示例:"#TPUG2wGSP1E6C"
+c10ProGimbal?.controlPitch(-3f)
+命令示例:"#TPUG2wGSPE26D"
 
 //控制偏航角度, -150.00 ~ +150.00，单位°
 c10ProGimbal?.gotoYaw(30f)
@@ -976,10 +991,16 @@ c10p?.akey(AKey.MID)
 c10p?.akey(AKey.TOP)
 
 //速度控制偏航，-9.9 ~ +9.9，单位°/s 负数向左，正数向右
-c10p?.controlYaw(1f)
-        
+c10p?.controlYaw(3f)
+命令示例:"#TPUG2wGSY1E75"
+c10p?.controlYaw(-3f)
+命令示例:"#TPUG2wGSYE276"
+  
 //速度控制俯仰，-9.9 ~ +9.9，单位°/s 负数向下，正数向上
-c10p?.controlPitch(-1f)
+c10p?.controlPitch(3f)
+命令示例:"#TPUG2wGSP1E6C"
+c10p?.controlPitch(-3f)
+命令示例:"#TPUG2wGSPE26D"
 
 //控制偏航角度, -150.00 ~ +150.00，单位°
 c10p?.gotoYaw(30f)
@@ -989,15 +1010,19 @@ c10p?.gotoPitch(-90f)
 
 //拍照
 c10p?.takePicture(callBack:CompletionCallback?)
+命令示例:"#TPUD2wCAP013E"
 
 //开始录像
 c10p?.startRecordVideo(callBack:CompletionCallback?)
+命令示例:"#TPUD2wREC0144"
 
 //结束录像
 c10p?.stopRecordVideo(callBack:CompletionCallback?)
+命令示例:"#TPUD2wREC0043"
 
 //获取录像状态
 c10p?.getRecordVideoState(callBack: CompletionCallbackWith<Boolean>)
+命令示例:"#TPUD2rREC003E"
 
 //同步时间（需要在出图后设置才有效）
 c10p?.setTime(time:Long,callBack:CompletionCallback?)
@@ -1007,6 +1032,7 @@ c10p?.setOSD(boolean: Boolean,callBack: CompletionCallback?)
 
 //获取相机版本号
 c10p?.getCameraVersion(callBack: CompletionCallbackWith<String>)
+命令示例:"#TPUD2rVER0051"
 
 //LED开关（针对新款三体相机有效）
 c10p?.setLed(onOrOff:Boolean,callBack: CompletionCallback?)
@@ -1076,7 +1102,7 @@ c12?.getCameraVersion(callBack: CompletionCallbackWith<String>)
 ```
 
 # 工具类
-#### 自定义遥控器按钮
+#### 自定义遥控器按钮(遥控器通道自定义/波轮控制/摇杆控制)
 com.skydroid.rcsdk.common.button.ButtonHelper
 ```
 详细使用方法参考

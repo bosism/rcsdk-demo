@@ -7,6 +7,7 @@ import android.text.TextUtils;
  * Created by ljb on 2024.06.13.
  */
 public class ReceiveInfo {
+    private String strDataTransmissionValue = "";
     private String strSignalValue = "";
     private String strH16ChannelsValue = "";
     private String strGetControlMode = "";
@@ -21,6 +22,7 @@ public class ReceiveInfo {
     private String strOtherValue = "";
 
     public void cleatInfo() {
+        strDataTransmissionValue = "";
         strSignalValue = "";
         strH16ChannelsValue = "";
         strGetControlMode = "";
@@ -40,6 +42,9 @@ public class ReceiveInfo {
             return null;
         }
         switch (key) {
+            case DataTransmission:
+                strDataTransmissionValue = AppUtils.getTimeStamp() + obj;
+                break;
             case Signal:
                 strSignalValue = AppUtils.getTimeStamp() + obj;
                 break;
@@ -72,6 +77,9 @@ public class ReceiveInfo {
                 break;
         }
         StringBuffer sb = new StringBuffer();
+        if (!TextUtils.isEmpty(strDataTransmissionValue)) {
+            sb.append(strDataTransmissionValue).append("\n");
+        }
         if (!TextUtils.isEmpty(strSignalValue)) {
             sb.append(strSignalValue).append("\n");
         }

@@ -2,9 +2,12 @@ package com.skydroid.rcsdkdemo
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.skydroid.rcsdk.*
@@ -49,6 +52,7 @@ class HomeActivity: AppCompatActivity() {
 
     private val infoLiveData = MutableLiveData<String>()
     private var tvInfo: TextView? = null
+    private var etData: EditText? = null
 
     private var pipeline: Pipeline? = null
     private var c10Pro: C10Pro? = null// 适用于0.2.7及以上固件 相机控制 + 全版本的云台控制
@@ -61,6 +65,7 @@ class HomeActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         tvInfo = findViewById(R.id.tv_info)
+        etData = findViewById(R.id.et_data)
         infoLiveData.observe(this) { str -> tvInfo?.text = str }
         // TODO 初始化SDK,初始化一次即可;
         RCSDKManager.initSDK(this, object : SDKManagerCallBack {
@@ -123,6 +128,8 @@ class HomeActivity: AppCompatActivity() {
             override fun onReadData(bytes: ByteArray) {
                 if(type == 0){
                     log("$tag 收到长度${bytes.size},,, 数据 "+ String(bytes))
+                    // 数传管道
+                    printInfo(EnumInfoKey.DataTransmission, "数传：111")
                 }
             }
         }
@@ -211,6 +218,15 @@ class HomeActivity: AppCompatActivity() {
             mReceiveInfo.cleatInfo()
             tvInfo?.text = ""
         }
+        findViewById<View>(R.id.btn_send).setOnClickListener {
+            val temp = etData?.text?.toString() ?: ""
+            if (TextUtils.isEmpty(temp)) {
+                Toast.makeText(applicationContext, "请输入要发送的字符!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            this@HomeActivity.pipeline?.writeData(temp.toByteArray())
+            Toast.makeText(applicationContext, "发送 $temp", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
@@ -220,6 +236,7 @@ class HomeActivity: AppCompatActivity() {
         AppUtils.showC10pCameraControlDialog(this@HomeActivity) { _, p1 ->
             when (p1) {
                 0 -> {
+                    // 方法一 接口
                     c10ProCamera?.getVersion(object : CompletionCallbackWith<String> {
                         override fun onSuccess(version: String?) {
                             printInfo(EnumInfoKey.CameraVersion, "获取到相机版本号:${version}")
@@ -229,6 +246,8 @@ class HomeActivity: AppCompatActivity() {
                             printInfo(EnumInfoKey.CameraVersion, "获取到相机版本号:${p0}")
                         }
                     })
+                    // 方法二 协议
+                    //c10ProCamera?.writeData("AT+INFO\r\n".toByteArray())
                 }
                 1 -> {
                     c10Pro?.akey(AKey.DOWN)
@@ -241,35 +260,53 @@ class HomeActivity: AppCompatActivity() {
                 }
                 4 -> {
                     if (isCameraVer027AndAbove) {
+                        // 方法一 接口
                         c10Pro?.takePicture {
                             printInfo(EnumInfoKey.TakePicture, AppUtils.getSkyExceptionInfo("拍照", it, "新固件"));
                         }
+                        // 方法二 协议
+                        //c10Pro?.writeData("#TPUD2wCAP013E".toByteArray())
                     } else {
+                        // 方法一 接口
                         c10ProCamera?.takePicture {
                             printInfo(EnumInfoKey.TakePicture, AppUtils.getSkyExceptionInfo("拍照", it, "旧固件"));
                         }
+                        // 方法二 协议
+                        //c10ProCamera?.writeData("AT+AZ -p2\r\n".toByteArray())
                     }
                 }
                 5 -> {
                     if (isCameraVer027AndAbove) {
+                        // 方法一 接口
                         c10Pro?.startRecordVideo {
                             printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("开始录像", it, "新固件"));
                         }
+                        // 方法二 协议
+                        // c10Pro?.writeData("#TPUD2wREC0144".toByteArray())
                     } else {
+                        // 方法一 接口
                         c10ProCamera?.startRecordVideo {
                             printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("开始录像", it, "旧固件"));
                         }
+                        // 方法二 协议
+                        // c10ProCamera?.writeData("AT+AZ -p0\r\n".toByteArray())
                     }
                 }
                 6 -> {
                     if (isCameraVer027AndAbove) {
+                        // 方法一 接口
                         c10Pro?.stopRecordVideo {
                             printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("停止录像", it, "新固件"));
                         }
+                        // 方法二 协议
+                        // c10Pro?.writeData("#TPUD2wREC0043".toByteArray())
                     } else {
+                        // 方法一 接口
                         c10ProCamera?.stopRecordVideo {
                             printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("停止录像", it, "旧固件"));
                         }
+                        // 方法二 协议
+                        // c10ProCamera?.writeData("AT+AZ -p1\r\n".toByteArray())
                     }
                 }
                 7 -> {
@@ -282,6 +319,27 @@ class HomeActivity: AppCompatActivity() {
                             printInfo(EnumInfoKey.CameraTime, AppUtils.getSkyExceptionInfo("时间设置", it, "旧固件"));
                         }
                     }
+                }
+                8 -> {// 航向命令，右，速度30
+                    // c10Pro?.controlYaw(3f)// 方法一 接口
+                    // c10Pro?.writeData("#TPUG2wGSY1E75".toByteArray())// 方法二 协议
+
+                    c10Pro?.writeData("#TPUG2wGSY6469".toByteArray())// 方法二 协议 速度 100
+                }
+                9 -> {// 航向命令，左，速度-30
+                    // c10Pro?.controlYaw(-3f)// 方法一 接口
+                    //  c10Pro?.writeData("#TPUG2wGSYE276".toByteArray())// 方法二 协议
+                    c10Pro?.writeData("#TPUG2wGSY9C7B".toByteArray())// 方法二 协议 速度 100
+                }
+                10 -> {// 俯仰命令，上，速度30
+                    // c10Pro?.controlPitch(3f)// 方法一 接口
+                    // c10Pro?.writeData("#TPUG2wGSP1E6C".toByteArray())// 方法二 协议
+                    c10Pro?.writeData("#TPUG2wGSP6460".toByteArray())// 方法二 协议 速度 100
+                }
+                11 -> {// 俯仰命令，下，速度-30
+                    // c10Pro?.controlPitch(-3f)// 方法一 接口
+                    // c10Pro?.writeData("#TPUG2wGSPE26D".toByteArray())// 方法二 协议
+                    c10Pro?.writeData("#TPUG2wGSP9C72".toByteArray())// 方法二 协议 速度 100
                 }
             }
         }

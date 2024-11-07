@@ -3,9 +3,12 @@ package com.skydroid.rcsdkdemo;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import com.skydroid.rcsdk.common.pipeline.Pipeline;
 import com.skydroid.rcsdk.common.remotecontroller.ControlMode;
 import com.skydroid.rcsdk.key.AirLinkKey;
 import com.skydroid.rcsdk.key.RemoteControllerKey;
+import com.skydroid.rcsdk.utils.RCSDKUtils;
 import com.skydroid.rcsdkdemo.other.AppUtils;
 import com.skydroid.rcsdkdemo.other.EnumInfoKey;
 import com.skydroid.rcsdkdemo.other.ReceiveInfo;
@@ -55,6 +59,7 @@ public class HomeActivityForJava extends AppCompatActivity {
 
     private final MutableLiveData<String> infoLiveData = new MutableLiveData<String>();
     private TextView tvInfo = null;
+    private EditText etData = null;
 
     private Pipeline pipeline = null;
     private C10Pro c10Pro = null;// 适用于0.2.7及以上固件 相机控制 + 全版本的云台控制
@@ -68,6 +73,7 @@ public class HomeActivityForJava extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         tvInfo = findViewById(R.id.tv_info);
+        etData = findViewById(R.id.et_data);
         infoLiveData.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String str) {
@@ -123,6 +129,7 @@ public class HomeActivityForJava extends AppCompatActivity {
             PayloadManager.INSTANCE.connectPayload(c10ProCamera);
         }
         initTestView();
+        setTitle("RCSDK_Demo_V" + RCSDKUtils.getVersion() + " java版");
     }
 
     private CommListener getCommListener(int type, String tag) {
@@ -146,6 +153,8 @@ public class HomeActivityForJava extends AppCompatActivity {
             public void onReadData(byte[] bytes) {
                 if (type == 0) {
                     log(tag + " 收到长度 " + bytes.length + " ,,, 数据 " + new String(bytes));
+                    // 数传管道
+                    printInfo(EnumInfoKey.DataTransmission, "数传：" + new String(bytes));
                 }
             }
         };
@@ -278,6 +287,21 @@ public class HomeActivityForJava extends AppCompatActivity {
                 tvInfo.setText("");
             }
         });
+        findViewById(R.id.btn_send).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etData == null) {
+                    return;
+                }
+                String temp = etData.getText().toString();
+                if (TextUtils.isEmpty(temp)) {
+                    Toast.makeText(getApplicationContext(), "请输入要发送的字符!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                HomeActivityForJava.this.pipeline.writeData(temp.getBytes());
+                Toast.makeText(getApplicationContext(), "发送 $temp", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -404,6 +428,30 @@ public class HomeActivityForJava extends AppCompatActivity {
                                     }
                                 });
                             }
+                        }
+                        break;
+                    case 8:// 航向命令，右，速度30
+                        if (c10Pro != null) {
+                            //c10Pro.controlYaw(3f);// 方法一 接口
+                            c10Pro.writeData("#TPUG2WGSY1E75".getBytes());// 方法二 协议
+                        }
+                        break;
+                    case 9:// 航向命令，左，速度-30
+                        if (c10Pro != null) {
+                            //c10Pro.controlYaw(-3f);// 方法一 接口
+                            c10Pro.writeData("#TPUG2wGSYE276".getBytes());// 方法二 协议
+                        }
+                        break;
+                    case 10:// 俯仰命令，上，速度30
+                        if (c10Pro != null) {
+                            //c10Pro.controlPitch(3f);// 方法一 接口
+                            c10Pro.writeData("#TPUG2WGSP1E6C".getBytes());// 方法二 协议
+                        }
+                        break;
+                    case 11:// 俯仰命令，下，速度-30
+                        if (c10Pro != null) {
+                            //c10Pro.controlPitch(-3f);// 方法一 接口
+                            c10Pro.writeData("#TPUG2WGSPE26D".getBytes());// 方法二 协议
                         }
                         break;
                 }

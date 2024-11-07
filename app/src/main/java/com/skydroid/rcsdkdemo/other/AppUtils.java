@@ -29,7 +29,7 @@ public class AppUtils {
 
     public static void showC10pCameraControlDialog(Context context, DialogInterface.OnClickListener listener) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
-        final String[] list = {"相机版本", "一键向下", "一键居中", "一键向上", "拍照", "开始录像", "停止录像", "时间设置"};
+        final String[] list = {"相机版本", "一键向下", "一键居中", "一键向上", "拍照", "开始录像", "停止录像", "时间设置", "右(航向)", "左(航向)", "上(俯仰)", "下(俯仰)"};
         arrayAdapter.addAll(list);
         new AlertDialog.Builder(context)
                 .setAdapter(arrayAdapter, listener)
