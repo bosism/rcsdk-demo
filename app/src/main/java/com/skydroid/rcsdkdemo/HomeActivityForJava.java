@@ -129,7 +129,7 @@ public class HomeActivityForJava extends AppCompatActivity {
             PayloadManager.INSTANCE.connectPayload(c10ProCamera);
         }
         initTestView();
-        setTitle("RCSDK_Demo_V" + RCSDKUtils.getVersion() + " java版");
+        setTitle("RCSDK_Demo_V" + RCSDKUtils.getVersion() + " java版  Device:" +RCSDKUtils.getDeviceType() );
     }
 
     private CommListener getCommListener(int type, String tag) {
@@ -248,13 +248,10 @@ public class HomeActivityForJava extends AppCompatActivity {
                         });
                         break;
 
-                    case H12Pro:
-                    case H16:
-                    case H30:
-                    case H20:
+                    default:
                         //防止反复监听
                         KeyManager.INSTANCE.cancelListen(keySignalQualityListener);
-                        //H12Pro/H16/H30/H20的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
+                        //除了H12,其他遥控器的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
                         KeyManager.INSTANCE.listen(AirLinkKey.INSTANCE.getKeySignalQuality(),keySignalQualityListener);
                         break;
                 }

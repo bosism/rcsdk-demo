@@ -1,5 +1,11 @@
 更新日志
 ```
+v1.6.6
+1.G20遥控器
+2.新增Key
+    AirLinkKey.KeyRCSetReTxCount(配置地面端重传次数,提升链路可靠性,支持G12、G20)
+    AirLinkKey.KeySkySetReTxCount(配置天空端重传次数,提升链路可靠性,支持G12、G20)
+
 v1.6.5
 1.修复Bug
     H20遥控器获取不到信号百分比问题
@@ -133,7 +139,7 @@ v0.1
 
 
 # RCSDK目前支持的遥控器产品
-H12、H12Pro、H16/H16Pro、H30、H20、G12
+H12、H12Pro、H16/H16Pro、H30、H20、G12、G20
 
 # RCSDK架构体系概述
 移动应用程序一般通过下图所示的几个主要类来访问RCSDK：
@@ -162,14 +168,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.6.5.aar
+rcsdk-v1.6.6.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.6.5.aar")
+    implementation files("libs/rcsdk-v1.6.6.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -333,8 +339,8 @@ PipelineManager.createPipeline(Uart.UART0)
 //创建串口1通讯管道
 PipelineManager.createPipeline(Uart.UART1)
 
-//创建AR8030通讯管道(适用于G12)
-PipelineManager.createAR8030Pipeline(0,1) //适用于G12的参数
+//创建G12G20通讯管道(适用于G12、G20)
+PipelineManager.createG12G20Pipeline()
 
 ```
 
@@ -372,7 +378,7 @@ PipelineManager.createAR8030Pipeline(0,1) //适用于G12的参数
      * 通道设置
      * 访问方式
      * SET,GET
-     * 支持H12Pro/H16/H30/H20/G12
+     * 支持H12Pro/H16/H30/H20/G12/G20
      */
     val KeyChannelSettings: KeyInfo<ChannelSettings> = KeyInfo.Builder<ChannelSettings>()
         .canSet(true)
@@ -409,7 +415,7 @@ PipelineManager.createAR8030Pipeline(0,1) //适用于G12的参数
      * 遥控器通道值
      * 访问方式
      * GET
-     * 支持H12/H12Pro/H30/H20/G12
+     * 支持H12/H12Pro/H30/H20/G12/G20
      */
     val KeyChannels: KeyInfo<IntArray> = KeyInfo.Builder<IntArray>()
         .canGet(true)
@@ -678,7 +684,7 @@ PipelineManager.createAR8030Pipeline(0,1) //适用于G12的参数
      * 遥控器无线模块版本
      * 访问方式
      * GET
-     * 支持G12/H30/H20
+     * 支持G12/G20/H30/H20
      */
     val KeyRCVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
@@ -690,7 +696,7 @@ PipelineManager.createAR8030Pipeline(0,1) //适用于G12的参数
      * 天空端无线模块版本
      * 访问方式
      * GET
-     * 支持G12/H30/H20
+     * 支持G12/G20/H30/H20
      */
     val KeySkyVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
@@ -706,6 +712,33 @@ PipelineManager.createAR8030Pipeline(0,1) //适用于G12的参数
      */
     val KeySkyMCUVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
+```
+
+- ##### 地面端重传次数
+```
+    /**
+     * 地面端设置重传次数,默认6次，重启后失效(恢复默认6次)
+     * 设置范围:0-500  0:表示重传到对,保证了链路的可靠性
+     * 访问方式
+     * SET
+     * 支持G12/G20
+     */
+    val KeyRCSetReTxCount:KeyInfo<Int> = KeyInfo.Builder<Int>()
+        .canSet(true)
+```
+
+
+- ##### 天空端重传次数
+```
+    /**
+     * 天空端设置重传次数,默认6次，重启后失效(恢复默认6次)
+     * 设置范围:0-500  0:表示重传到对,保证了链路的可靠性
+     * 访问方式
+     * SET
+     * 支持G12/G20
+     */
+    val KeySkySetReTxCount:KeyInfo<Int> = KeyInfo.Builder<Int>()
+        .canSet(true)
 ```
 
 # PayloadManager

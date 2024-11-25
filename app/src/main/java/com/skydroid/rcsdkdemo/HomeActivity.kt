@@ -108,7 +108,7 @@ class HomeActivity: AppCompatActivity() {
             PayloadManager.connectPayload(it)
         }
         initTestView()
-        setTitle("RCSDK_Demo_V${RCSDKUtils.getVersion()}")
+        setTitle("RCSDK_Demo_V${RCSDKUtils.getVersion()}  Device:${RCSDKUtils.getDeviceType()}")
     }
 
     private fun getCommListener(type: Int, tag: String): CommListener {
@@ -194,10 +194,10 @@ class HomeActivity: AppCompatActivity() {
                             printInfo(EnumInfoKey.Signal, "H12信号强度获取失败：$e")
                         }
                     })
-                DeviceType.H12Pro,DeviceType.H16,DeviceType.H30,DeviceType.H20 -> {
+                else -> {
                     //防止反复监听
                     KeyManager.cancelListen(keySignalQualityListener)
-                    //H12Pro/H16/H30/H20的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
+                    //除了H12,其他遥控器的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
                     KeyManager.listen(
                             AirLinkKey.KeySignalQuality,
                             keySignalQualityListener
