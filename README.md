@@ -1,10 +1,14 @@
 更新日志
 ```
+v1.6.8
+1.修复G12、G20数传管道内存泄漏问题
+
 v1.6.6
 1.G20遥控器
 2.新增Key
     AirLinkKey.KeyRCSetReTxCount(配置地面端重传次数,提升链路可靠性,支持G12、G20)
     AirLinkKey.KeySkySetReTxCount(配置天空端重传次数,提升链路可靠性,支持G12、G20)
+    AirLinkKey.KeySetAutoMCS(自适应MCS,可提升上行速度,支持G12、G20)
 
 v1.6.5
 1.修复Bug
@@ -168,14 +172,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.6.6.aar
+rcsdk-v1.6.8.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.6.6.aar")
+    implementation files("libs/rcsdk-v1.6.8.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -738,6 +742,20 @@ PipelineManager.createG12G20Pipeline()
      * 支持G12/G20
      */
     val KeySkySetReTxCount:KeyInfo<Int> = KeyInfo.Builder<Int>()
+        .canSet(true)
+```
+
+- ##### 自适应MCS
+```
+    /**
+     * 自适应MCS
+     * 开启后可提提升上行速度,重启后失效
+     * 适用于上传文件,上传前开启,上传完成关闭
+     * 访问方式
+     * SET
+     * 支持G12/G20
+     */
+    val KeySetAutoMCS:KeyInfo<Boolean> = KeyInfo.Builder<Boolean>()
         .canSet(true)
 ```
 
