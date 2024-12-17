@@ -1,5 +1,8 @@
 更新日志
 ```
+v1.7.1
+1.修复Bug
+
 v1.6.8
 1.修复G12、G20数传管道内存泄漏问题
 
@@ -172,14 +175,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.6.8.aar
+rcsdk-v1.7.1.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.6.8.aar")
+    implementation files("libs/rcsdk-v1.7.1.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -489,13 +492,13 @@ PipelineManager.createG12G20Pipeline()
 
 ### AirLinkKey
 
-- ##### H12Pro图传接收机串口0波特率
+- ##### 图传接收机串口0波特率
 ```
     /**
      * 图传接收机串口0波特率
      * 访问方式
      * SET,GET
-     * 支持H12Pro
+     * 支持H12Pro/G12/G20
      */
     val KeyUart0BaudRate:KeyInfo<UartBaudRate> = KeyInfo.Builder<UartBaudRate>()
         .canSet(true)
@@ -521,7 +524,7 @@ PipelineManager.createG12G20Pipeline()
      * 图传接收机信号质量(原始数据)
      * 访问方式
      * LISTEN
-     * 支持H16/H12Pro/H20/H30
+     * 支持H16/H12Pro/H20/H30/G12/G20
      */
     val KeyRawSignalQuality:KeyInfo<String> = KeyInfo.Builder<String>()
         .canListen(true)
@@ -533,7 +536,7 @@ PipelineManager.createG12G20Pipeline()
      * 图传接收机信号质量
      * 访问方式
      * LISTEN
-     * 支持H12Pro/H16/H30/H20
+     * 支持H12Pro/H16/H30/H20/G12/G20
      */
     val KeySignalQuality:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canListen(true)
