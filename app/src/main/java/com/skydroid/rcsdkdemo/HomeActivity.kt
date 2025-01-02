@@ -129,7 +129,7 @@ class HomeActivity: AppCompatActivity() {
                 if(type == 0){
                     log("$tag 收到长度${bytes.size},,, 数据 "+ String(bytes))
                     // 数传管道
-                    printInfo(EnumInfoKey.DataTransmission, "数传：111")
+                    printInfo(EnumInfoKey.DataTransmission, "数传：${String(bytes)}")
                 }
             }
         }

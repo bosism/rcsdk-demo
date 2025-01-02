@@ -1,5 +1,12 @@
 更新日志
 ```
+v1.7.2
+1.修复Bug
+    部分遥控器(H12Pro、G12、G20)偶尔信号显示错误问题
+2.新增Key
+    915模块使能(支持G20)
+    RemoteControllerKey.KeyModule915Enable
+    
 v1.7.1
 1.修复Bug
 
@@ -175,14 +182,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.7.1.aar
+rcsdk-v1.7.2.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.7.1.aar")
+    implementation files("libs/rcsdk-v1.7.2.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -366,7 +373,7 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### H12通道设置
+- ##### H12摇杆通道设置
 ```
     /**
      * H12通道
@@ -379,7 +386,7 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### 通道设置
+- ##### 摇杆通道设置
 ```
     /**
      * 通道设置
@@ -416,10 +423,10 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### 遥控器通道值
+- ##### 遥控器摇杆感量
 ```
     /**
-     * 遥控器通道值
+     * 遥控器摇杆感量
      * 访问方式
      * GET
      * 支持H12/H12Pro/H30/H20/G12/G20
@@ -428,10 +435,10 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### H16遥控器通道值
+- ##### H16遥控器摇杆感量
 ```
     /**
-     * H16遥控器通道值
+     * H16遥控器摇杆感量
      * 访问方式
      * LISTEN
      * 支持H16
@@ -487,6 +494,19 @@ PipelineManager.createG12G20Pipeline()
      * 支持ALL
      */
     val KeyVersion:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canGet(true)
+```
+
+- ##### 915模块使能
+```
+    /**
+     * 控制915模块使能
+     * 访问方式
+     * SET,GET
+     * 支持G20
+     */
+    val KeyModule915Enable:KeyInfo<Boolean> = KeyInfo.Builder<Boolean>()
+        .canSet(true)
         .canGet(true)
 ```
 
