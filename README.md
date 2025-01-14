@@ -1,5 +1,10 @@
 更新日志
 ```
+v1.7.3
+1.G12/G20数传管道修改为UDP（需要更新20250110及以后的Android系统版本）
+2.修复Bug
+    部分情况下自定义遥控按钮工具类可能引发阻塞问题
+    
 v1.7.2
 1.修复Bug
     部分遥控器(H12Pro、G12、G20)偶尔信号显示错误问题
@@ -182,14 +187,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.7.2.aar
+rcsdk-v1.7.3.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.7.2.aar")
+    implementation files("libs/rcsdk-v1.7.3.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
