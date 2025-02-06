@@ -18,6 +18,7 @@ public class ReceiveInfo {
     private String strTakePicture = "";
     private String strRecordVideo = "";
     private String strCameraTime = "";
+    private String strLEDTime = "";
 
     private String strOtherValue = "";
 
@@ -33,6 +34,7 @@ public class ReceiveInfo {
         strTakePicture = "";
         strRecordVideo = "";
         strCameraTime = "";
+        strLEDTime = "";
 
         strOtherValue = "";
     }
@@ -72,6 +74,9 @@ public class ReceiveInfo {
             case CameraTime:
                 strCameraTime = AppUtils.getTimeStamp() + obj;
                 break;
+            case LED:
+                strLEDTime = AppUtils.getTimeStamp() + obj;
+                break;
             case Other:
                 strOtherValue = AppUtils.getTimeStamp() + obj;
                 break;
@@ -106,6 +111,9 @@ public class ReceiveInfo {
         }
         if (!TextUtils.isEmpty(strCameraTime)) {
             sb.append(strCameraTime).append("\n");
+        }
+        if (!TextUtils.isEmpty(strLEDTime)) {
+            sb.append(strLEDTime).append("\n");
         }
         if (!TextUtils.isEmpty(strOtherValue)) {
             sb.append(strOtherValue).append("\n");

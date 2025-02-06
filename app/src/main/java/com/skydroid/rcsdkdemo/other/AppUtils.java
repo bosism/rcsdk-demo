@@ -36,4 +36,13 @@ public class AppUtils {
                 .create().show();
     }
 
+    public static void showLEDCameraControlDialog(Context context, DialogInterface.OnClickListener listener) {
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+        final String[] list = {"LED打开", "LED关闭",};
+        arrayAdapter.addAll(list);
+        new AlertDialog.Builder(context)
+                .setAdapter(arrayAdapter, listener)
+                .create().show();
+    }
+
 }

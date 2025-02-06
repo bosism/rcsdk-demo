@@ -82,19 +82,20 @@ class HomeActivity: AppCompatActivity() {
             override fun onRcConnectFail(e: SkyException?) {}
             override fun onRcDisconnect() {}
         })
+        RCSDKManager.setMainThreadCallBack(true) //设置在主线程回调
         //连接到遥控器
         RCSDKManager.connectToRC()
 
-        //三体相机网口版
+        //旧三体相机网口版
 //        val threeBodyCamera2 = PayloadManager.getTCPPayload(PayloadType.THREE_BODY_CAMERA2, "192.168.144.108", 5001) as ThreeBodyCamera2?
-        //三体相机串口版
+        //旧三体相机串口版
 //        val threeBodyCamera = PayloadManager.getSerialPortPayload(PayloadType.THREE_BODY_CAMERA, "/dev/ttyHS0", 4000000) as ThreeBodyCamera?
         //C20相机
         val c20Camera = PayloadManager.getTCPPayload(PayloadType.C20_CAMERA, "192.168.144.108", 8100) as C20Camera?
         //C20云台
 //        val c20Gimbal = PayloadManager.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000) as C20Gimbal?
 
-        //C10Pro相机控制
+        //C10Pro相机控制（或新三体相机网口版）
         c10Pro = PayloadManager.getUDPPayload(PayloadType.C10PRO, 5000, "192.168.144.108", 5000) as C10Pro?
         //内部已经实现重连机制，无需再实现
         c10Pro?.let {
@@ -226,6 +227,45 @@ class HomeActivity: AppCompatActivity() {
             }
             this@HomeActivity.pipeline?.writeData(temp.toByteArray())
             Toast.makeText(applicationContext, "发送 $temp", Toast.LENGTH_SHORT).show()
+        }
+        findViewById<View>(R.id.btn_led).setOnClickListener {
+            ledCameraControl(false)
+        }
+        findViewById<View>(R.id.btn_led_027).setOnClickListener {
+            ledCameraControl(true)
+        }
+    }
+
+    /**
+     * 新网口三体相机控制LED灯
+     */
+    private fun ledCameraControl(isCameraVer027AndAbove: Boolean){
+        AppUtils.showLEDCameraControlDialog(this){
+            _, p1 ->
+            when(p1){
+                0 -> {
+                    if (isCameraVer027AndAbove){
+                        c10Pro?.setLed(true){
+                            printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED开灯", it, "新固件"));
+                        }
+                    }else{
+                        c10ProCamera?.setLED(true){
+                            printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED开灯", it, "旧固件"));
+                        }
+                    }
+                }
+                1 -> {
+                    if (isCameraVer027AndAbove){
+                        c10Pro?.setLed(false){
+                            printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED关灯", it, "新固件"));
+                        }
+                    }else{
+                        c10ProCamera?.setLED(false){
+                            printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED关灯", it, "旧固件"));
+                        }
+                    }
+                }
+            }
         }
     }
 

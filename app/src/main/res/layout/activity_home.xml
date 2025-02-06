@@ -91,6 +91,30 @@
                     android:text=">0.2.6固件" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="新网口三体相机\n(UDP):"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_led"
+                    style="@style/smallButton"
+                    android:layout_marginEnd="10dp"
+                    android:text="旧固件" />
+
+                <Button
+                    android:id="@+id/btn_led_027"
+                    style="@style/smallButton"
+                    android:text=">0.2.6固件" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btn_rc_buttons"
                 style="@style/smallButton"

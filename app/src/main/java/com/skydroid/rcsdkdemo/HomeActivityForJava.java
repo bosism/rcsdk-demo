@@ -103,19 +103,20 @@ public class HomeActivityForJava extends AppCompatActivity {
 
             }
         });
+        RCSDKManager.INSTANCE.setMainThreadCallBack(true); //设置在主线程回调
         //连接到遥控器
         RCSDKManager.INSTANCE.connectToRC();
 
-        //三体相机网口版
+        //旧三体相机网口版
 //        ThreeBodyCamera2 threeBodyCamera2 = (ThreeBodyCamera2)PayloadManager.INSTANCE.getTCPPayload(PayloadType.THREE_BODY_CAMERA2, "192.168.144.108", 5001);
-        //三体相机串口版
+        //旧三体相机串口版
 //        ThreeBodyCamera threeBodyCamera = (ThreeBodyCamera)PayloadManager.INSTANCE.getSerialPortPayload(PayloadType.THREE_BODY_CAMERA, "/dev/ttyHS0", 4000000);
         //C20相机
 //        C20Camera c20Camera = (C20Camera)PayloadManager.INSTANCE.getTCPPayload(PayloadType.C20_CAMERA, "192.168.144.108", 8100);
         //C20云台
 //        C20Gimbal c20Gimbal = (C20Gimbal)PayloadManager.INSTANCE.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000);
 
-        //C10Pro相机控制
+        //C10Pro相机控制（或新三体相机网口版）
         c10Pro = (C10Pro) PayloadManager.INSTANCE.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000);
         //内部已经实现重连机制，无需再实现
         if (c10Pro != null){
@@ -297,6 +298,73 @@ public class HomeActivityForJava extends AppCompatActivity {
                 }
                 HomeActivityForJava.this.pipeline.writeData(temp.getBytes());
                 Toast.makeText(getApplicationContext(), "发送 $temp", Toast.LENGTH_SHORT).show();
+            }
+        });
+        findViewById(R.id.btn_led).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ledCameraControl(false);
+            }
+        });
+        findViewById(R.id.btn_led_027).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ledCameraControl(true);
+            }
+        });
+    }
+
+    /**
+     * 新网口三体相机控制LED灯
+     */
+    private void ledCameraControl(boolean isCameraVer027AndAbove){
+        AppUtils.showC10pCameraControlDialog(this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case 0:
+                        if (isCameraVer027AndAbove){
+                            if (c10Pro != null) {
+                                c10Pro.setLed(true, new CompletionCallback() {
+                                    @Override
+                                    public void onResult(SkyException e) {
+                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED开灯", e, "新固件"));
+                                    }
+                                });
+                            }
+                        }else {
+                            if (c10ProCamera != null){
+                                c10ProCamera.setLED(true, new CompletionCallback() {
+                                    @Override
+                                    public void onResult(SkyException e) {
+                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED开灯", e, "旧固件"));
+                                    }
+                                });
+                            }
+                        }
+                        break;
+                    case 1:
+                        if (isCameraVer027AndAbove){
+                            if (c10Pro != null) {
+                                c10Pro.setLed(false, new CompletionCallback() {
+                                    @Override
+                                    public void onResult(SkyException e) {
+                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED关灯", e, "新固件"));
+                                    }
+                                });
+                            }
+                        }else {
+                            if (c10ProCamera != null){
+                                c10ProCamera.setLED(false, new CompletionCallback() {
+                                    @Override
+                                    public void onResult(SkyException e) {
+                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED关灯", e, "旧固件"));
+                                    }
+                                });
+                            }
+                        }
+                        break;
+                }
             }
         });
     }
