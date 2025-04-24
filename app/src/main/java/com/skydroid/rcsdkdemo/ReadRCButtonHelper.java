@@ -83,6 +83,7 @@ public class ReadRCButtonHelper {
         if (!isStart){
             return;
         }
+        isStart = false;
         KeyManager.INSTANCE.cancelListen(channelKeyListener);
         if (lopperThread != null){
             lopperThread.close();

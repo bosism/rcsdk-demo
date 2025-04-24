@@ -1,5 +1,10 @@
 更新日志
 ```
+v1.7.6
+1.支持G系列射频固件20250402对频
+2.G系列接口稳定性
+3.TCP连接收到FIN时回调onDisconnect
+
 v1.7.4
 1.修复Bug
     *部分情况下在G系列遥控器中崩溃问题
@@ -191,14 +196,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.7.4.aar
+rcsdk-v1.7.6.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.7.4.aar")
+    implementation files("libs/rcsdk-v1.7.6.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
