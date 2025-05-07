@@ -3,11 +3,11 @@
 v1.7.7
 1.修复1.7.6部分场景下对频无响应问题
 2.新增Key
-    RemoteControllerKey.KeyButtonToneAndLongPress(按键音和长按设置，支持G系列遥控器MCU固件1.3及以上，设备助手2.9.5)
-    RemoteControllerKey.KeyButtonSaveValue(掉电保存按钮值，支持G系列遥控器MCU固件1.3及以上，设备助手2.9.5)
-    RemoteControllerKey.KeyRollerMode(滚轮模式，支持G系列遥控器MCU固件1.3及以上，设备助手2.9.5)
-    RemoteControllerKey.KeyMixedControlAndNoReturnCenter(混控和油门死区设置，支持G系列遥控器MCU固件1.3及以上，设备助手2.9.5)
-    RemoteControllerKey.KeyButtonLockMode(自锁模式，支持G系列遥控器MCU固件1.3及以上，设备助手2.9.5)
+    RemoteControllerKey.KeyButtonToneAndLongPress(按键音和长按设置，支持G系列遥控器MCU固件1.3及以上。可参考设备助手2.9.5)
+    RemoteControllerKey.KeyButtonSaveValue(掉电保存按钮值，支持G系列遥控器MCU固件1.3及以上。可参考设备助手2.9.5)
+    RemoteControllerKey.KeyRollerMode(滚轮模式，支持G系列遥控器MCU固件1.3及以上。可参考设备助手2.9.5)
+    RemoteControllerKey.KeyMixedControlAndNoReturnCenter(混控和油门死区设置。支持G系列遥控器MCU固件1.3及以上，可参考设备助手2.9.5)
+    RemoteControllerKey.KeyButtonLockMode(自锁模式，支持G系列遥控器MCU固件1.3及以上。可参考设备助手2.9.5)
 
 v1.7.6
 1.支持G系列射频固件20250402对频
