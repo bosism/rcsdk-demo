@@ -63,6 +63,12 @@
                 android:text="获取摇杆杆量值" />
 
             <Button
+                android:id="@+id/btn_get_channels_settings"
+                style="@style/smallButton"
+                android:text="获取摇杆通道设置" />
+
+
+            <Button
                 android:id="@+id/btn_get_signal"
                 style="@style/smallButton"
                 android:text="获取遥控器信号" />

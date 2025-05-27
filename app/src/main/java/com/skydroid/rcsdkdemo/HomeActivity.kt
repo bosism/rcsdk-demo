@@ -19,7 +19,9 @@ import com.skydroid.rcsdk.common.callback.KeyListener
 import com.skydroid.rcsdk.common.error.SkyException
 import com.skydroid.rcsdk.common.payload.*
 import com.skydroid.rcsdk.common.pipeline.Pipeline
+import com.skydroid.rcsdk.common.remotecontroller.ChannelSettings
 import com.skydroid.rcsdk.common.remotecontroller.ControlMode
+import com.skydroid.rcsdk.common.remotecontroller.H12ChannelSettings
 import com.skydroid.rcsdk.key.AirLinkKey
 import com.skydroid.rcsdk.key.RemoteControllerKey
 import com.skydroid.rcsdk.utils.RCSDKUtils
@@ -180,6 +182,32 @@ class HomeActivity: AppCompatActivity() {
                     })
                 }
 
+            }
+        }
+        findViewById<View>(R.id.btn_get_channels_settings).setOnClickListener {
+
+            when (RCSDKManager.getDeviceType()) {
+                DeviceType.H12 ->
+                    KeyManager.get(RemoteControllerKey.KeyH12ChannelSettings, object : CompletionCallbackWith<H12ChannelSettings> {
+                        override fun onSuccess(settings: H12ChannelSettings) {
+                            printInfo(EnumInfoKey.Other, "H12通道设置：${settings.channels.contentToString()}")
+                        }
+
+                        override fun onFailure(e: SkyException) {
+                            printInfo(EnumInfoKey.Other, "H12通道设置：$e")
+                        }
+                    })
+                else -> {
+                    KeyManager.get(RemoteControllerKey.KeyChannelSettings,object : CompletionCallbackWith<ChannelSettings> {
+                        override fun onSuccess(settings: ChannelSettings?) {
+                            printInfo(EnumInfoKey.Other, "通道设置：${settings?.channels.contentToString()}")
+                        }
+
+                        override fun onFailure(e: SkyException) {
+                            printInfo(EnumInfoKey.Other, "通道设置：$e")
+                        }
+                    })
+                }
             }
         }
         // 信号强度 取值范围: 0-100%
