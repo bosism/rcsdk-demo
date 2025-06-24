@@ -891,7 +891,7 @@ dualAxisGimbalCamera?.controlPitch(false)
 dualAxisGimbalCamera?.setTime(System.currentTimeMillis())
 ```
 
-### 三体相机(网口版)控制
+### 旧款三体相机(网口版)控制
 ```
 //获取三体相机(网口版)
 //获取实例后需要调用连接方法才能控制
@@ -1011,7 +1011,7 @@ c20Gimbal?.toggleLED(boolean)
 
 ```
 
-### C10Pro相机控制（0.2.7以下固件）
+### C10Pro相机/新款三体相机控制（0.2.7以下固件）
 ```
 //获取C10Pro相机
 //获取实例后需要调用连接方法才能控制
@@ -1079,11 +1079,11 @@ c10ProGimbal?.gotoPitch(-90f)
 
 ```
 
-### C10Pro云台相机控制（0.2.7及以上固件）
+### C10Pro云台相机/新款三体相机控制（0.2.7及以上固件）
 ```
 //获取C10Pro云台相机
 //获取实例后需要调用连接方法才能控制
-c10p = PayloadManager.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000) as C12?
+c10p = PayloadManager.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000) as C10Pro?
 
 //一键控制
 //向下
@@ -1136,6 +1136,10 @@ c10p?.setOSD(boolean: Boolean,callBack: CompletionCallback?)
 //获取相机版本号
 c10p?.getCameraVersion(callBack: CompletionCallbackWith<String>)
 命令示例:"#TPUD2rVER0051"
+
+//设置/读取视频输出参数
+c10p?.setVideoConfig()
+c10p?.getVideoConfig()
 
 //LED开关（针对新款三体相机有效）
 c10p?.setLed(onOrOff:Boolean,callBack: CompletionCallback?)
