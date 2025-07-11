@@ -1,5 +1,13 @@
 更新日志
 ```
+v1.7.9
+1.修复BUG
+    G系列获取信号强度偶尔数据卡死不刷新问题
+2.新增接口
+    AirLink.KeySkySetAutoMCSDuration:持续时间内自适应MCS(G系列)
+  通用云台相机控制接口
+    PayloadManager.getXXXPayload(PayloadType.COMMON,5000,"192.168.144.108",5000) as CommonPayload?
+    
 v1.7.8
 1.G系列对频时间改为30s
 2.新增G系列退出对频模式接口
@@ -211,14 +219,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.7.7.aar
+rcsdk-v1.7.9.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.7.7.aar")
+    implementation files("libs/rcsdk-v1.7.9.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -421,7 +429,7 @@ PipelineManager.createG12G20Pipeline()
      * 通道设置
      * 访问方式
      * SET,GET
-     * 支持H12Pro/H16/H30/H20/G12/G20
+     * 支持H12Pro/H16/H30/H20/G12/G20/G30
      */
     val KeyChannelSettings: KeyInfo<ChannelSettings> = KeyInfo.Builder<ChannelSettings>()
         .canSet(true)
@@ -458,7 +466,7 @@ PipelineManager.createG12G20Pipeline()
      * 遥控器摇杆感量
      * 访问方式
      * GET
-     * 支持H12/H12Pro/H30/H20/G12/G20
+     * 支持H12/H12Pro/H30/H20/G12/G20/G30
      */
     val KeyChannels: KeyInfo<IntArray> = KeyInfo.Builder<IntArray>()
         .canGet(true)
@@ -541,23 +549,23 @@ PipelineManager.createG12G20Pipeline()
 
 ### AirLinkKey
 
-- ##### 图传接收机串口0波特率
+- ##### 接收机串口0波特率
 ```
     /**
      * 图传接收机串口0波特率
      * 访问方式
      * SET,GET
-     * 支持H12Pro/G12/G20
+     * 支持H12Pro/G12/G20/G30
      */
     val KeyUart0BaudRate:KeyInfo<UartBaudRate> = KeyInfo.Builder<UartBaudRate>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H12Pro图传接收机RC通道失控保护值
+- ##### H12Pro接收机RC通道失控保护值
 ```
     /**
-     * 图传接收机RC通道失控保护值
+     * 接收机RC通道失控保护值
      * 访问方式
      * SET,GET
      * 支持H12Pro
@@ -567,22 +575,63 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### 图传接收机信号质量(原始数据)
+- ##### 接收机信号质量(原始数据)
 ```
     /**
-     * 图传接收机信号质量(原始数据)
+     * 接收机信号质量(原始数据)
      * 访问方式
      * LISTEN
-     * 支持H16/H12Pro/H20/H30/G12/G20
+     * 支持H16/H12Pro/H20/H30/G12/G20/G30
      */
     val KeyRawSignalQuality:KeyInfo<String> = KeyInfo.Builder<String>()
         .canListen(true)
+    获取的数据格式如下：
+        G系列
+            {
+                "dev_connect": false, //连接状态
+	            "ap_ldpc_err": "0", //遥控器-交织块中解码错误的LDPC块个数所占的比例
+	            "ap_ldpc_num": "0", //遥控器-解码错误的帧个数比例
+	            "ap_snr": "0", //遥控器-SNR
+	            "ap_gain_a": "0", //遥控器-A路天线接收信号强度
+	            "ap_gain_b": "0", //遥控器-B路天线接收信号强度
+	            "ap_tx_mcs": "0", //遥控器-发射MCS
+	            "ap_tx_power": "0", //遥控器-发送功率
+	            "ap_tx_chan": "0", //遥控器-发射信道
+	            "ap_tx_freq_khz": "0", //遥控器-发送频段
+	            "ap_lfs_2g_band_chan_snr": "0",
+	            "ap_lfs_2g_band_gain_a": "0",
+	            "ap_lfs_2g_band_gain_b": "0",
+	            "ap_lfs_5g_band_chan_snr": "0",
+	            "ap_lfs_5g_band_gain_a": "0",
+	            "ap_lfs_5g_band_gain_b": "0",
+	            "ap_main_loc": "0",
+	            "ap_sync_num": "0",
+	            "dev_ldpc_err": "0", //接收机-交织块中解码错误的LDPC块个数所占的比例
+	            "dev_ldpc_num": "0", //接收机-解码错误的帧个数比例
+	            "dev_snr": "0", //接收机-SNR
+	            "dev_gain_a": "0", //接收机-A路天线接收信号强度
+	            "dev_gain_b": "0", //接收机-B路天线接收信号强度
+	            "dev_tx_mcs": "0", //接收机-发射MCS
+	            "dev_tx_power": "0", //接收机-发送功率
+	            "dev_tx_chan": "0", //接收机-发射信道
+	            "dev_tx_freq_khz": "0", //接收机-发送频段
+	            "dev_lfs_2g_band_chan_snr": "0",
+	            "dev_lfs_2g_band_gain_a": "0",
+	            "dev_lfs_2g_band_gain_b": "0",
+	            "dev_lfs_5g_band_chan_snr": "0",
+	            "dev_lfs_5g_band_gain_a": "0",
+	            "dev_lfs_5g_band_gain_b": "0",
+	            "dev_sync_num": "0",
+	            "acs_chan": 0,
+	            "work_chan": 0,
+	            "signal": 0 //根据遥控器-SNR计算出来的用于参考的信号质量百分比（遥控器SNR<=0:信号质量为0；遥控器SNR>=18:信号质量为100）
+            }
 ```
 
-- ##### 图传接收机信号质量
+- ##### 接收机信号质量
 ```
     /**
-     * 图传接收机信号质量
+     * 接收机信号质量
      * 访问方式
      * LISTEN
      * 支持H12Pro/H16/H30/H20/G12/G20
@@ -591,10 +640,10 @@ PipelineManager.createG12G20Pipeline()
         .canListen(true)
 ```
 
-- ##### H12图传接收机信号质量
+- ##### H12接收机信号质量
 ```
     /**
-     * H12图传接收机信号质量
+     * H12接收机信号质量
      * 访问方式
      * GET
      * 仅支持H12
@@ -616,10 +665,10 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### H16图传接收机串口0波特率
+- ##### H16接收机串口0波特率
 ```
     /**
-     * H16图传接收机串口0波特率
+     * H16接收机串口0波特率
      * 访问方式
      * SET,GET
      * 仅支持H16
@@ -629,10 +678,10 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### H16图传接收机串口1波特率
+- ##### H16接收机串口1波特率
 ```
     /**
-     * H16图传接收机串口1波特率
+     * H16接收机串口1波特率
      * 访问方式
      * SET,GET
      * 仅支持H16
@@ -642,11 +691,11 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### H16图传接收机信号质量
+- ##### H16接收机信号质量
 从1.1.0版本起，推荐使用KeySignalQuality
 ```
     /**
-     * H16图传接收机信号质量
+     * H16接收机信号质量
      * 访问方式
      * LISTEN
      * 仅支持H16
@@ -655,10 +704,10 @@ PipelineManager.createG12G20Pipeline()
         .canListen(true)
 ```
 
-- ##### H16图传接收机信号质量(原始数据)
+- ##### H16接收机信号质量(原始数据)
 ```
     /**
-     * H16图传接收机信号质量(原始数据)
+     * H16接收机信号质量(原始数据)
      * 访问方式
      * LISTEN
      * 仅支持H16
@@ -667,11 +716,11 @@ PipelineManager.createG12G20Pipeline()
         .canListen(true)
 ```
 
-- ##### H30图传接收机信号质量
+- ##### H30接收机信号质量
 从1.1.0版本起，推荐使用KeySignalQuality
 ```
     /**
-     * H30图传接收机信号质量
+     * H30接收机信号质量
      * 访问方式
      * LISTEN
      * 仅支持H30
@@ -680,10 +729,10 @@ PipelineManager.createG12G20Pipeline()
         .canListen(true)
 ```
 
-- ##### H30图传接收机串口波特率
+- ##### H30接收机串口波特率
 ```
     /**
-     * H30图传接收机串口波特率
+     * H30接收机串口波特率
      * 访问方式
      * SET,GET
      * 仅支持H30
@@ -693,10 +742,10 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### H20图传接收机串口0波特率
+- ##### H20接收机串口0波特率
 ```
     /**
-     * H20图传接收机串口0波特率
+     * H20接收机串口0波特率
      * 访问方式
      * SET,GET
      * 仅支持H20
@@ -706,10 +755,10 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### H20图传接收机串口1波特率
+- ##### H20接收机串口1波特率
 ```
     /**
-     * H20图传接收机串口1波特率
+     * H20接收机串口1波特率
      * 访问方式
      * SET,GET
      * 仅支持H20
@@ -719,7 +768,7 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### H20图传接收机串口1波特率
+- ##### H20接收机串口1波特率
 ```
     /**
      * H20带宽设置
@@ -740,7 +789,7 @@ PipelineManager.createG12G20Pipeline()
      * 遥控器无线模块版本
      * 访问方式
      * GET
-     * 支持G12/G20/H30/H20
+     * 支持G12/G20/G30/H30/H20
      */
     val KeyRCVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
@@ -752,7 +801,7 @@ PipelineManager.createG12G20Pipeline()
      * 天空端无线模块版本
      * 访问方式
      * GET
-     * 支持G12/G20/H30/H20
+     * 支持G12/G20/G30/H30/H20
      */
     val KeySkyVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
@@ -770,44 +819,113 @@ PipelineManager.createG12G20Pipeline()
         .canGet(true)
 ```
 
-- ##### 地面端重传次数
+- ##### 地面端重传次数(G系列)
 ```
     /**
      * 地面端设置重传次数,默认6次，重启后失效(恢复默认6次)
      * 设置范围:0-500  0:表示重传到对,保证了链路的可靠性
      * 访问方式
      * SET
-     * 支持G12/G20
+     * 支持G12/G20/G30
      */
     val KeyRCSetReTxCount:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canSet(true)
 ```
 
 
-- ##### 天空端重传次数
+- ##### 天空端重传次数(G系列)
 ```
     /**
      * 天空端设置重传次数,默认6次，重启后失效(恢复默认6次)
      * 设置范围:0-500  0:表示重传到对,保证了链路的可靠性
      * 访问方式
      * SET
-     * 支持G12/G20
+     * 支持G12/G20/G30
      */
     val KeySkySetReTxCount:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canSet(true)
 ```
 
-- ##### 自适应MCS
+- ##### 自适应MCS(G系列)
 ```
     /**
+     * 注意* 该接口不要和KeySkySetAutoMCSDuration接口混合用
      * 自适应MCS
      * 开启后可提提升上行速度,重启后失效
      * 适用于上传文件,上传前开启,上传完成关闭
      * 访问方式
      * SET
-     * 支持G12/G20
+     * 支持G12/G20/G30
      */
     val KeySetAutoMCS:KeyInfo<Boolean> = KeyInfo.Builder<Boolean>()
+        .canSet(true)
+```
+
+- ##### 持续时间内自适应MCS(G系列)
+```
+    /**
+     * 注意* 该接口不要和KeySetAutoMCS接口混合用
+     * 持续时间内自适应MCS
+     * 开启后可提提升上行速度,持续时间内有效
+     * 适用于上传文件,上传前开启,上传完成关闭
+     * 访问方式
+     * SET
+     * 支持G12/G20/G30
+     * 使用说明：
+     * 当设置持续时间为6s,遥控器将进入自适应MCS持续6s，如果在第4s时，再次设置持续时间为6s。接收机将重新计时。
+     * 文件上传过程中可定时发送，文件上传完成后停止发送。该接口可防止程序不小心崩溃，遥控器还处于自适应MCS模式的情况。
+     */
+    val KeySkySetAutoMCSDuration:KeyInfo<SetAutoAndDuration> = KeyInfo.Builder<SetAutoAndDuration>()
+        .canSet(true)
+        
+```
+
+- ##### MAC地址(G系列)
+```
+    /**
+     * MAC地址
+     * 访问方式
+     * GET
+     * 支持G12/G20/G30
+     */
+    val KeyMAC:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canGet(true)   
+```
+
+- ##### 射频开关(G系列)
+```
+    /**
+     * 设置射频开关
+     * 访问方式
+     * SET,GET
+     * 支持G12/G20/G30
+     */
+    val KeyRCRFEnable:KeyInfo<Boolean> = KeyInfo.Builder<Boolean>()
+        .canSet(true)
+        .canGet(true)
+```
+
+- ##### 设置MAC的对频方式(G系列)
+```
+    /**
+     * 设置MAC的对频方式
+     * 访问方式
+     * SET
+     * 支持G12/G20/G30
+     */
+    val KeyRequestPairingAtSetMac:KeyInfo<String> = KeyInfo.Builder<String>()
+        .canSet(true)
+```
+
+- ##### 设置MAC的对频方式(G系列)
+```
+    /**
+     * 设置MAC的对频方式
+     * 访问方式
+     * SET
+     * 支持G12/G20/G30
+     */
+    val KeyRequestPairingAtSetMac:KeyInfo<String> = KeyInfo.Builder<String>()
         .canSet(true)
 ```
 
@@ -1173,6 +1291,70 @@ c12?.gotoPitch(-90f)
 
 //设置倍率 0-4  0:原图,1-4:变倍
 c12?.setZoomRatios(value:Int,callBack: CompletionCallback?)
+
+//设置伪彩
+//    WHITE_HOT,白热
+//    SEPIA,辉金
+//    IRONBOW,铁红
+//    RAINBOW,彩虹
+//    NIGHT,微光
+//    AURORA,极光
+//    RED_HOT,红热
+//    JUNGLE,从林
+//    MEDICAL,医疗
+//    BLACK_HOT,黑热
+//    GLORY_HOT;金红
+c12?.setThermalPalette(palette: ThermalPalette, callBack: CompletionCallback?)
+
+//拍照
+c12?.takePicture(callBack:CompletionCallback?)
+
+//开始录像
+c12?.startRecordVideo(callBack:CompletionCallback?)
+
+//结束录像
+c12?.stopRecordVideo(callBack:CompletionCallback?)
+
+//获取录像状态
+c12?.getRecordVideoState(callBack: CompletionCallbackWith<Boolean>)
+
+//同步时间（需要在出图后设置才有效）
+c12?.setTime(time:Long,callBack:CompletionCallback?)
+
+//获取相机版本号
+c12?.getCameraVersion(callBack: CompletionCallbackWith<String>)
+
+```
+
+### 通用云台相机控制
+```
+通用的相机/云台，包含了所有的控制协议，需要开发者自己判断是否支持控制
+支持：C10，C10Pro，C11，C12，C13，电子云台，三体网口相机，单双轴网口相机
+连接方式：根据相机类型自行判断
+
+以下使用C12进行测试
+//获取实例后需要调用连接方法才能控制
+val c12:CommonPayload? = PayloadManager.getUDPPayload(PayloadType.COMMON,5000,"192.168.144.108",5000) as CommonPayload?
+
+//一键控制
+//向下
+c12?.akey(AKey.DOWN)
+//回中
+c12?.akey(AKey.MID)
+//向上
+c12?.akey(AKey.TOP)
+
+//速度控制偏航，-9.9 ~ +9.9，单位°/s 负数向左，正数向右
+c12?.controlYaw(1f)
+        
+//速度控制俯仰，-9.9 ~ +9.9，单位°/s 负数向下，正数向上
+c12?.controlPitch(-1f)
+
+//控制偏航角度, -150.00 ~ +150.00，单位°
+c12?.gotoYaw(30f)
+
+//控制俯仰角度，-90.00 ~ +90.00，单位°
+c12?.gotoPitch(-90f)
 
 //设置伪彩
 //    WHITE_HOT,白热
