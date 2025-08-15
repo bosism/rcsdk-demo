@@ -1,5 +1,23 @@
 更新日志
 ```
+v1.8.0
+新增功能
+1.支持G30
+2.PayloadManager新增createXXXPayload方法
+3.物理按钮控制云台功能-新增选项:向下/回中/向上、向下/回中
+4.Debug打印开关--RCSDKManager.setDebug
+
+修复Bug
+1.C20自定义遥控器按钮LED控制
+2.串口通讯BUG（调用RCSDKManager.disconnectRC()，后重新连接遥控器会导致串口连接直接断开）
+
+优化
+1.Pipeline/Payload多次连接重复监听问题--目前修改为只会监听一次
+2.优化云台控制速度
+3.设置MAC的对频方式接口参数修改
+4.RCSDKManager.disconnectRC()调用后无法重新连接问题
+5.RCSDKManager.disconnectRC()关闭PayloadManager/PipelineManager中的连接--目前修改为不关闭PayloadManager/PipelineManager中的连接
+
 v1.7.9
 1.修复BUG
     G系列获取信号强度偶尔数据卡死不刷新问题
@@ -190,7 +208,7 @@ v0.1
 
 
 # RCSDK目前支持的遥控器产品
-H12、H12Pro、H16/H16Pro、H30、H20、G12、G20
+H12、H12Pro、H16/H16Pro、H30、H20、G12、G20、G30
 
 # RCSDK架构体系概述
 移动应用程序一般通过下图所示的几个主要类来访问RCSDK：
@@ -219,14 +237,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.7.9.aar
+rcsdk-v1.8.0.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.7.9.aar")
+    implementation files("libs/rcsdk-v1.8.0.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -1329,7 +1347,7 @@ c12?.getCameraVersion(callBack: CompletionCallbackWith<String>)
 ### 通用云台相机控制
 ```
 通用的相机/云台，包含了所有的控制协议，需要开发者自己判断是否支持控制
-支持：C10，C10Pro，C11，C12，C13，电子云台，三体网口相机，单双轴网口相机
+支持：C10，C10Pro，C11，C12，C13，电子云台(C01)，三体网口相机，单双轴网口相机
 连接方式：根据相机类型自行判断
 
 以下使用C12进行测试
