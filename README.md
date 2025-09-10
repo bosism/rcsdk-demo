@@ -1,5 +1,15 @@
 更新日志
 ```
+v1.8.1
+新增功能
+1.G系列新上传模式接口
+    AirLinkKey.KeyGLinkSpeedMode
+        GLinkSpeedMode.UPLOAD:上传模式
+        GLinkSpeedMode.NORMAL:关闭上传模式
+修复Bug     
+1.处理G系列对频失败时没有恢复原来的对频状态
+2.处理G系列连接状态错误问题
+
 v1.8.0
 新增功能
 1.支持G30
@@ -237,14 +247,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.8.0.aar
+rcsdk-v1.8.1.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.8.0.aar")
+    implementation files("libs/rcsdk-v1.8.1.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 

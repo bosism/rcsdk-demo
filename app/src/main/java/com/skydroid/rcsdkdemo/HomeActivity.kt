@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -59,6 +60,7 @@ class HomeActivity: AppCompatActivity() {
     private var pipeline: Pipeline? = null
     private var c10Pro: C10Pro? = null// 适用于0.2.7及以上固件 相机控制 + 全版本的云台控制
     private var c10ProCamera: C10ProCamera? = null// 适用于0.2.7以下固件 相机控制
+    private var isDataHex = false
     // TODO 注意:
     // TODO 使用时,请确保其他应用(包含助手、地面站)处于停止关闭状态,避免端口占用导致数据链路失败;
     // TODO 获取摇杆杆量值,无法主动上报,请求一次获取一次,推荐至少100ms读取一次;
@@ -112,6 +114,18 @@ class HomeActivity: AppCompatActivity() {
         }
         initTestView()
         setTitle("RCSDK_Demo_V${RCSDKUtils.getVersion()}  Device:${RCSDKUtils.getDeviceType()}")
+        val rg_data = findViewById<RadioGroup>(R.id.rg_data)
+        rg_data?.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.rb_data_txt -> {
+                    isDataHex = false
+                }
+                R.id.rb_data_hex -> {
+                    isDataHex = true
+                }
+            }
+        }
+        rg_data?.check(R.id.rb_data_txt)
     }
 
     private fun getCommListener(type: Int, tag: String): CommListener {
@@ -132,7 +146,7 @@ class HomeActivity: AppCompatActivity() {
                 if(type == 0){
                     log("$tag 收到长度${bytes.size},,, 数据 "+ String(bytes))
                     // 数传管道
-                    printInfo(EnumInfoKey.DataTransmission, "数传：${String(bytes)}")
+                    printInfo(EnumInfoKey.DataTransmission, "数传：${if (isDataHex) String2ByteArrayUtils.bytes2Hex(bytes) else String(bytes)}")
                 }
             }
         }
