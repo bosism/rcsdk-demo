@@ -1,5 +1,12 @@
 更新日志
 ```
+
+v1.8.3
+修复Bug     
+1.G系列获取版本号偶尔崩溃问题
+2.H12上获取感量报错问题
+3.其他Bug
+
 v1.8.1
 新增功能
 1.G系列新上传模式接口
@@ -247,14 +254,14 @@ Kotlin版本为：1.6.10
 - ### 导入SDK AAR包
 
 ```
-rcsdk-v1.8.1.aar
+rcsdk-v1.8.3.aar
 h16_airlink.aar //H16图传模块 minSdk 24
 ```
 
 - ### 修改build.gradle(app) 文件
 在 dependencies 项里添加SDK包
 ```
-    implementation files("libs/rcsdk-v1.8.1.aar")
+    implementation files("libs/rcsdk-v1.8.3.aar")
     implementation files('libs/h16_airlink.aar')//可选,H16遥控器图传模块,如果不是H16遥控器,无需导入,该模块minSdk为24
 ```
 
@@ -652,7 +659,7 @@ PipelineManager.createG12G20Pipeline()
 	            "dev_sync_num": "0",
 	            "acs_chan": 0,
 	            "work_chan": 0,
-	            "signal": 0 //根据遥控器-SNR计算出来的用于参考的信号质量百分比（遥控器SNR<=0:信号质量为0；遥控器SNR>=18:信号质量为100）
+	            "signal": 0 //根据遥控器-SNR计算出来的用于参考的信号质量百分比（遥控器SNR<=0:信号质量为0；遥控器SNR>=16:信号质量为100）
             }
 ```
 
@@ -945,16 +952,34 @@ PipelineManager.createG12G20Pipeline()
         .canSet(true)
 ```
 
-- ##### 设置MAC的对频方式(G系列)
+- ##### 上传模式(G系列)
 ```
     /**
-     * 设置MAC的对频方式
+     * G系列上传/下载模式
      * 访问方式
-     * SET
+     * GET/SET
      * 支持G12/G20/G30
      */
-    val KeyRequestPairingAtSetMac:KeyInfo<String> = KeyInfo.Builder<String>()
+    val KeyGLinkSpeedMode:KeyInfo<GLinkSpeedMode> = KeyInfo.Builder<GLinkSpeedMode>()
         .canSet(true)
+        .canGet(true)
+        
+    //打开上传模式
+    KeyManager.set(AirLinkKey.KeyGLinkSpeedMode,GLinkSpeedMode.UPLOAD){
+        if(it == null){
+            //成功
+        }else{
+            //失败
+        }
+    }
+    //关闭上传模式
+    KeyManager.set(AirLinkKey.KeyGLinkSpeedMode,GLinkSpeedMode.NORMAL){
+        if(it == null){
+            //成功
+        }else{
+            //失败
+        }
+    }
 ```
 
 # PayloadManager
