@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RCSDK_Demo">
 
-        <!--   Kotlin样例    -->
+        <!-- Kotlin sample -->
         <activity
             android:name=".HomeActivity"
             android:exported="true">
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
 
-        <!--   java样例，如需使用java样例，请打开下面的注释，并且注释掉上面的Kotlin样例    -->
+        <!-- Java sample, uncomment this and comment out Kotlin sample above to run the Java sample -->
 <!--        <activity-->
 <!--            android:name=".HomeActivityForJava"-->
 <!--            android:exported="true">-->

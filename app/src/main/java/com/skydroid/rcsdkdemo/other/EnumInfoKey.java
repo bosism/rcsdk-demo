@@ -2,7 +2,7 @@ package com.skydroid.rcsdkdemo.other;
 
 
 /**
- * 信息类型
+ * Info keys
  * Created by ljb on 2024.06.13.
  */
 public enum EnumInfoKey {

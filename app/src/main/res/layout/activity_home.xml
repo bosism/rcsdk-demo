@@ -24,18 +24,18 @@
                     android:id="@+id/btn_pairing"
                     style="@style/smallButton"
                     android:layout_marginEnd="10dp"
-                    android:text="对频" />
+                    android:text="Pairing" />
 
                 <Button
                     android:id="@+id/btn_clear"
                     style="@style/smallButton"
-                    android:text="清屏" />
+                    android:text="Clear Log" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="数传:"/>
+                    android:text="Telemetry:" />
                 <RadioGroup
                     android:id="@+id/rg_data"
                     android:layout_width="wrap_content"
@@ -66,36 +66,36 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
-                    android:text="手型:"
+                    android:text="Stick Mode:"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/btn_set_control_mode"
                     style="@style/smallButton"
                     android:layout_marginEnd="10dp"
-                    android:text="设置" />
+                    android:text="Set" />
 
                 <Button
                     android:id="@+id/btn_get_control_mode"
                     style="@style/smallButton"
-                    android:text="读取" />
+                    android:text="Get" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_get_channels"
-                style="@style/smallButton"
-                android:text="获取摇杆杆量值" />
+                <Button
+                    android:id="@+id/btn_get_channels"
+                    style="@style/smallButton"
+                    android:text="Get RC Channel Values" />
 
-            <Button
-                android:id="@+id/btn_get_channels_settings"
-                style="@style/smallButton"
-                android:text="获取摇杆通道设置" />
+                <Button
+                    android:id="@+id/btn_get_channels_settings"
+                    style="@style/smallButton"
+                    android:text="Get Channel Settings" />
 
 
-            <Button
-                android:id="@+id/btn_get_signal"
-                style="@style/smallButton"
-                android:text="获取遥控器信号" />
+                <Button
+                    android:id="@+id/btn_get_signal"
+                    style="@style/smallButton"
+                    android:text="Get RC Signal" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -113,12 +113,12 @@
                     android:id="@+id/btn_akey"
                     style="@style/smallButton"
                     android:layout_marginEnd="10dp"
-                    android:text="旧固件" />
+                    android:text="Legacy FW" />
 
                 <Button
                     android:id="@+id/btn_akey_027"
                     style="@style/smallButton"
-                    android:text=">0.2.6固件" />
+                    android:text=">0.2.6 FW" />
             </LinearLayout>
 
             <LinearLayout
@@ -130,25 +130,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginEnd="5dp"
-                    android:text="新网口三体相机\n(UDP):"
+                    android:text="New Ethernet C12 Camera\n(UDP):"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/btn_led"
                     style="@style/smallButton"
                     android:layout_marginEnd="10dp"
-                    android:text="旧固件" />
+                    android:text="Legacy FW" />
 
                 <Button
                     android:id="@+id/btn_led_027"
                     style="@style/smallButton"
-                    android:text=">0.2.6固件" />
+                    android:text=">0.2.6 FW" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_rc_buttons"
-                style="@style/smallButton"
-                android:text="自定义遥控器通道" />
+                <Button
+                    android:id="@+id/btn_rc_buttons"
+                    style="@style/smallButton"
+                    android:text="Custom RC Channels" />
         </LinearLayout>
     </ScrollView>
 
@@ -171,11 +171,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_send"
-                style="@style/smallButton"
-                android:minWidth="80dp"
-                android:text="发送" />
+                <Button
+                    android:id="@+id/btn_send"
+                    style="@style/smallButton"
+                    android:minWidth="80dp"
+                    android:text="Send" />
 
             <EditText
                 android:id="@+id/et_data"

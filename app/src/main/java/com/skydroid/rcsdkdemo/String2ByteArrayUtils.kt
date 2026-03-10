@@ -13,7 +13,7 @@ object String2ByteArrayUtils {
 
     fun hexString2ByteArray(arg: String): ByteArray? {
         if (!TextUtils.isEmpty(arg)) {
-            /* 1.先去除String中的' '，然后将String转换为char数组 */
+            /* 1. Remove spaces from the string, then convert the result to a char array */
             val newArray = CharArray(512)
             val array = arg.toCharArray()
             var length = 0
@@ -23,7 +23,7 @@ object String2ByteArrayUtils {
                     length++
                 }
             }
-            /* 将char数组中的值转成一个实际的十进制数组 */
+            /* Convert each char to its decimal value */
             val evenLength = if (length % 2 == 0) length else length + 1
             if (evenLength != 0) {
                 val data = IntArray(evenLength)
@@ -41,7 +41,7 @@ object String2ByteArrayUtils {
                         }
                     }
                 }
-                /* 将 每个char的值每两个组成一个16进制数据 */
+                /* Convert each pair of hex characters into one byte value */
                 val byteArray = ByteArray(evenLength / 2)
                 for (i in 0 until evenLength / 2) {
                     byteArray[i] = (data[i * 2] * 16 + data[i * 2 + 1]).toByte()
@@ -53,7 +53,7 @@ object String2ByteArrayUtils {
     }
 
     /**
-     * 16进制字符串转换为字符串
+     * Convert hex string to string
      *
      * @param s
      * @return
@@ -84,7 +84,7 @@ object String2ByteArrayUtils {
 
 
     /**
-     * byte数组 转换成 16进制大写字符串
+     * Convert byte array to uppercase hex string
      */
     fun bytes2Hex(bytes: ByteArray?): String? {
 
@@ -149,10 +149,10 @@ object String2ByteArrayUtils {
         var value = 0
         for (i in 0..3) {
             val shift = (4 - 1 - i) * 8
-            value += bytes[i].toInt() and 0x000000FF shl shift // 往高位游
+                value += bytes[i].toInt() and 0x000000FF shl shift // Shift to high-order bits
+            }
+            return value
         }
-        return value
-    }
 
     fun numToHex8(b: Int): String {
         return String.format("%04x", b) //2表示需要两个16进制数

@@ -33,12 +33,12 @@ import com.skydroid.rcsdkdemo.other.ReceiveInfo;
 import java.util.Arrays;
 
 /**
- * @author 咔一下
+ * @author skydroid
  * @date 2023/10/11 9:50
  * @email 1501020210@qq.com
  * @describe
  * <p>
- * 加入C10Pro 新旧固件 相机控制;UI重新整理; by ljb on 2024.06.13.
+ * 加入C10Pro 新Legacy FW 相机Control;UI重新整理; by ljb on 2024.06.13.
  */
 public class HomeActivityForJava extends AppCompatActivity {
     public static final String TAG = "HomeActivityForJava";
@@ -46,7 +46,7 @@ public class HomeActivityForJava extends AppCompatActivity {
     private final KeyListener<Integer> keySignalQualityListener = new KeyListener<Integer>() {
         @Override
         public void onValueChange(Integer oldValue, Integer newValue) {
-            printInfo(EnumInfoKey.Signal,"信号强度:" + newValue);
+            printInfo(EnumInfoKey.Signal,"Signal strength: " + newValue);
         }
     };
 
@@ -62,12 +62,12 @@ public class HomeActivityForJava extends AppCompatActivity {
     private EditText etData = null;
 
     private Pipeline pipeline = null;
-    private C10Pro c10Pro = null;// 适用于0.2.7及以上固件 相机控制 + 全版本的云台控制
-    private C10ProCamera c10ProCamera = null;// 适用于0.2.7以下固件 相机控制
+    private C10Pro c10Pro = null;// 适用于0.2.7及以上固件 相机Control + 全版本的云台Control
+    private C10ProCamera c10ProCamera = null;// 适用于0.2.7以下固件 相机Control
     // TODO 注意:
     // TODO 使用时,请确保其他应用(包含助手、地面站)处于停止关闭状态,避免端口占用导致数据链路失败;
-    // TODO 获取摇杆杆量值,无法主动上报,请求一次获取一次,推荐至少100ms读取一次;
-    // TODO 数传管道,未连接 接收机 时,数传管道 连接失败;
+    // TODO Get channel values值,No push updates; request each time, at least every 100ms;
+    // TODO Telemetry pipeline fails when receiver is not connected;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,11 +84,11 @@ public class HomeActivityForJava extends AppCompatActivity {
         RCSDKManager.INSTANCE.initSDK(this, new SDKManagerCallBack() {
             @Override
             public void onRcConnected() {
-                //创建通讯管道(内部有断开重连机制，只需要调用一次连接即可)
-                // 数传管道,未连接 接收机 时,数传管道 连接失败;
+                //Create communication pipeline(内部有断开重连机制，只需要调用一次Connect即可)
+                // Telemetry pipeline fails when receiver is not connected;
                 Pipeline pipeline = PipelineManager.INSTANCE.createPipeline(Uart.UART0);
-                pipeline.setOnCommListener(getCommListener(0, "数传管道"));
-                //连接通讯管道
+                pipeline.setOnCommListener(getCommListener(0, "Telemetry pipeline"));
+                //Connect communication pipeline
                 PipelineManager.INSTANCE.connectPipeline(pipeline);
                 HomeActivityForJava.this.pipeline = pipeline;
             }
@@ -103,28 +103,28 @@ public class HomeActivityForJava extends AppCompatActivity {
 
             }
         });
-        RCSDKManager.INSTANCE.setMainThreadCallBack(true); //设置在主线程回调
-        //连接到遥控器
+        RCSDKManager.INSTANCE.setMainThreadCallBack(true); //Set在主线程回调
+        //Connect to RC
         RCSDKManager.INSTANCE.connectToRC();
 
-        //旧三体相机网口版
+        // Legacy wired three-body camera
 //        ThreeBodyCamera2 threeBodyCamera2 = (ThreeBodyCamera2)PayloadManager.INSTANCE.getTCPPayload(PayloadType.THREE_BODY_CAMERA2, "192.168.144.108", 5001);
-        //旧三体相机串口版
+        // Legacy serial three-body camera
 //        ThreeBodyCamera threeBodyCamera = (ThreeBodyCamera)PayloadManager.INSTANCE.getSerialPortPayload(PayloadType.THREE_BODY_CAMERA, "/dev/ttyHS0", 4000000);
-        //C20相机
+        // C20 camera
 //        C20Camera c20Camera = (C20Camera)PayloadManager.INSTANCE.getTCPPayload(PayloadType.C20_CAMERA, "192.168.144.108", 8100);
-        //C20云台
+        // C20 gimbal
 //        C20Gimbal c20Gimbal = (C20Gimbal)PayloadManager.INSTANCE.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000);
 
-        //C10Pro相机控制（或新三体相机网口版）
+        //C10Pro相机Control（或新三体相机网口版）
         c10Pro = (C10Pro) PayloadManager.INSTANCE.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000);
-        //内部已经实现重连机制，无需再实现
+        // Internal reconnect is already handled
         if (c10Pro != null){
             c10Pro.setCommListener(getCommListener(1, "C10Pro"));
             PayloadManager.INSTANCE.connectPayload(c10Pro);
         }
         c10ProCamera = (C10ProCamera) PayloadManager.INSTANCE.getUDPPayload(PayloadType.C10PRO_CAMERA,12580,"192.168.144.108",12580);
-        //内部已经实现重连机制，无需再实现
+        // Internal reconnect is already handled
         if (c10ProCamera != null){
             c10ProCamera.setCommListener(getCommListener(2, "C10pCamera"));
             PayloadManager.INSTANCE.connectPayload(c10ProCamera);
@@ -137,24 +137,24 @@ public class HomeActivityForJava extends AppCompatActivity {
         return new CommListener() {
             @Override
             public void onConnectSuccess() {
-                log(tag + " 连接成功");
+                log(tag + " connected");
             }
 
             @Override
             public void onConnectFail(SkyException e) {
-                log(tag + " 连接失败" + e);
+                log(tag + " connect failed" + e);
             }
 
             @Override
             public void onDisconnect() {
-                log(tag + " 断开连接");
+                log(tag + " 断开Connect");
             }
 
             @Override
             public void onReadData(byte[] bytes) {
                 if (type == 0) {
                     log(tag + " 收到长度 " + bytes.length + " ,,, 数据 " + new String(bytes));
-                    // 数传管道
+                    // Telemetry pipeline
                     printInfo(EnumInfoKey.DataTransmission, "数传：" + new String(bytes));
                 }
             }
@@ -168,7 +168,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                 KeyManager.INSTANCE.action(RemoteControllerKey.INSTANCE.getKeyRequestPairing(), new CompletionCallback() {
                     @Override
                     public void onResult(SkyException e) {
-                        printInfo(EnumInfoKey.Other, AppUtils.getSkyExceptionInfo("对频", e, ""));
+                        printInfo(EnumInfoKey.Other, AppUtils.getSkyExceptionInfo("Pairing", e, ""));
                     }
                 });
             }
@@ -179,7 +179,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                 KeyManager.INSTANCE.set(RemoteControllerKey.INSTANCE.getKeyControlMode(), ControlMode.USA, new CompletionCallback() {
                     @Override
                     public void onResult(SkyException e) {
-                        printInfo(EnumInfoKey.SetControlMode, AppUtils.getSkyExceptionInfo("设置摇杆模式", e, ""));
+                        printInfo(EnumInfoKey.SetControlMode, AppUtils.getSkyExceptionInfo("Set stick mode", e, ""));
                     }
                 });
             }
@@ -187,16 +187,16 @@ public class HomeActivityForJava extends AppCompatActivity {
         findViewById(R.id.btn_get_control_mode).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //获取遥控器手型模式
+                //Get RC hand mode
                 KeyManager.INSTANCE.get(RemoteControllerKey.INSTANCE.getKeyControlMode(), new CompletionCallbackWith<ControlMode>() {
                     @Override
                     public void onSuccess(ControlMode controlMode) {
-                        printInfo(EnumInfoKey.GetControlMode,"获取摇杆模式：" + controlMode.name());
+                        printInfo(EnumInfoKey.GetControlMode,"Get stick mode：" + controlMode.name());
                     }
 
                     @Override
                     public void onFailure(SkyException e) {
-                        printInfo(EnumInfoKey.GetControlMode,"获取摇杆模式失败：" + e);
+                        printInfo(EnumInfoKey.GetControlMode,"Get stick mode失败：" + e);
                     }
                 });
             }
@@ -204,55 +204,55 @@ public class HomeActivityForJava extends AppCompatActivity {
         findViewById(R.id.btn_get_channels).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //获取摇杆杆量
+                //Get channel values
                 switch (RCSDKManager.INSTANCE.getDeviceType()){
                     case H16:
-                        //防止反复监听
+                        //Avoid repeated listener registration
                         KeyManager.INSTANCE.cancelListen(keyH16ChannelsListener);
-                        //H16/H16Pro的摇杆杆量为LISTEN方式,设置监听器后，会一直回调，直到取消监听
+                        //H16/H16Pro的channel values为LISTEN方式,Set监听器后，会一直回调，直到取消监听
                         KeyManager.INSTANCE.listen(RemoteControllerKey.INSTANCE.getKeyH16Channels(), keyH16ChannelsListener);
                         break;
                     default:
-                        //H12/H12Pro/H30摇杆杆量为GET方式，需要主动请求，请求一次获取一次
+                        //H12/H12Pro/H30channel values为GET方式，需要主动请求，Request once each time
                         KeyManager.INSTANCE.get(RemoteControllerKey.INSTANCE.getKeyChannels(), new CompletionCallbackWith<int[]>() {
                             @Override
                             public void onSuccess(int[] value) {
-                                printInfo(EnumInfoKey.Channels,"获取摇杆杆量：" + Arrays.toString(value));
+                                printInfo(EnumInfoKey.Channels,"Get channel values：" + Arrays.toString(value));
                             }
 
                             @Override
                             public void onFailure(SkyException e) {
-                                printInfo(EnumInfoKey.Channels,"获取摇杆失败：" + e);
+                                printInfo(EnumInfoKey.Channels,"Get stick values失败：" + e);
                             }
                         });
                         break;
                 }
             }
         });
-        // 信号强度 取值范围: 0-100%
+        // Signal Strength 取值范围: 0-100%
         findViewById(R.id.btn_get_signal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (RCSDKManager.INSTANCE.getDeviceType()){
                     case H12:
-                        //H12的信号强度为GET方式，需要主动请求，请求一次获取一次
+                        //H12的Signal Strength为GET方式，需要主动请求，Request once each time
                         KeyManager.INSTANCE.get(AirLinkKey.INSTANCE.getKeyH12SignalQuality(), new CompletionCallbackWith<Integer>() {
                             @Override
                             public void onSuccess(Integer integer) {
-                                printInfo(EnumInfoKey.Signal,"H12信号强度：" + integer);
+                                printInfo(EnumInfoKey.Signal,"H12 signal strength：" + integer);
                             }
 
                             @Override
                             public void onFailure(SkyException e) {
-                                printInfo(EnumInfoKey.Signal,"H12信号强度获取失败：" + e);
+                                printInfo(EnumInfoKey.Signal,"H12 signal strengthGet failed：" + e);
                             }
                         });
                         break;
 
                     default:
-                        //防止反复监听
+                        //Avoid repeated listener registration
                         KeyManager.INSTANCE.cancelListen(keySignalQualityListener);
-                        //除了H12,其他遥控器的信号强度为LISTEN方式,设置监听器后，会一直回调，直到取消监听
+                        //除了H12,其他Remote Controller的Signal Strength为LISTEN方式,Set监听器后，会一直回调，直到取消监听
                         KeyManager.INSTANCE.listen(AirLinkKey.INSTANCE.getKeySignalQuality(),keySignalQualityListener);
                         break;
                 }
@@ -293,11 +293,11 @@ public class HomeActivityForJava extends AppCompatActivity {
                 }
                 String temp = etData.getText().toString();
                 if (TextUtils.isEmpty(temp)) {
-                    Toast.makeText(getApplicationContext(), "请输入要发送的字符!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "请输入要Send的字符!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 HomeActivityForJava.this.pipeline.writeData(temp.getBytes());
-                Toast.makeText(getApplicationContext(), "发送 $temp", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Send $temp", Toast.LENGTH_SHORT).show();
             }
         });
         findViewById(R.id.btn_led).setOnClickListener(new View.OnClickListener() {
@@ -315,7 +315,7 @@ public class HomeActivityForJava extends AppCompatActivity {
     }
 
     /**
-     * 新网口三体相机控制LED灯
+     * New Ethernet C12 camera LED control
      */
     private void ledCameraControl(boolean isCameraVer027AndAbove){
         AppUtils.showC10pCameraControlDialog(this, new DialogInterface.OnClickListener() {
@@ -328,7 +328,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10Pro.setLed(true, new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED开灯", e, "新固件"));
+                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED on", e, "FW 0.2.7+"));
                                     }
                                 });
                             }
@@ -337,7 +337,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10ProCamera.setLED(true, new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED开灯", e, "旧固件"));
+                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED on", e, "Legacy FW"));
                                     }
                                 });
                             }
@@ -349,7 +349,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10Pro.setLed(false, new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED关灯", e, "新固件"));
+                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED off", e, "FW 0.2.7+"));
                                     }
                                 });
                             }
@@ -358,7 +358,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10ProCamera.setLED(false, new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED关灯", e, "旧固件"));
+                                        printInfo(EnumInfoKey.LED, AppUtils.getSkyExceptionInfo("LED off", e, "Legacy FW"));
                                     }
                                 });
                             }
@@ -370,7 +370,7 @@ public class HomeActivityForJava extends AppCompatActivity {
     }
 
     /**
-     * 云台控制_相机控制
+     * 云台Control_相机Control
      */
     private void c10pCameraControl(boolean isCameraVer027AndAbove) {
         AppUtils.showC10pCameraControlDialog(this, new DialogInterface.OnClickListener() {
@@ -382,12 +382,12 @@ public class HomeActivityForJava extends AppCompatActivity {
                             c10ProCamera.getVersion(new CompletionCallbackWith<String>() {
                                 @Override
                                 public void onSuccess(String version) {
-                                    printInfo(EnumInfoKey.CameraVersion, "获取到相机版本号:" + version);
+                                    printInfo(EnumInfoKey.CameraVersion, "Camera version: " + version);
                                 }
 
                                 @Override
                                 public void onFailure(SkyException p0) {
-                                    printInfo(EnumInfoKey.CameraVersion, "获取到相机版本号:" + p0);
+                                    printInfo(EnumInfoKey.CameraVersion, "Camera version: " + p0);
                                 }
                             });
                         }
@@ -413,7 +413,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10Pro.takePicture(new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.TakePicture, AppUtils.getSkyExceptionInfo("拍照", e, "新固件"));
+                                        printInfo(EnumInfoKey.TakePicture, AppUtils.getSkyExceptionInfo("Take Picture", e, "FW 0.2.7+"));
                                     }
                                 });
                             }
@@ -423,7 +423,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10ProCamera.takePicture(new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.TakePicture, AppUtils.getSkyExceptionInfo("拍照", e, "旧固件"));
+                                        printInfo(EnumInfoKey.TakePicture, AppUtils.getSkyExceptionInfo("Take Picture", e, "Legacy FW"));
                                     }
                                 });
                             }
@@ -435,7 +435,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10Pro.startRecordVideo(new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("开始录像", e, "新固件"));
+                                        printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("Start recording", e, "FW 0.2.7+"));
                                     }
                                 });
                             }
@@ -445,7 +445,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10ProCamera.startRecordVideo(new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("开始录像", e, "旧固件"));
+                                        printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("Start recording", e, "Legacy FW"));
                                     }
                                 });
                             }
@@ -457,7 +457,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10Pro.stopRecordVideo(new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("停止录像", e, "新固件"));
+                                        printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("Stop recording", e, "FW 0.2.7+"));
                                     }
                                 });
                             }
@@ -467,7 +467,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10ProCamera.stopRecordVideo(new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("停止录像", e, "旧固件"));
+                                        printInfo(EnumInfoKey.RecordVideo, AppUtils.getSkyExceptionInfo("Stop recording", e, "Legacy FW"));
                                     }
                                 });
                             }
@@ -479,7 +479,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10Pro.setTime(System.currentTimeMillis(), new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.CameraTime, AppUtils.getSkyExceptionInfo("时间设置", e, "新固件"));
+                                        printInfo(EnumInfoKey.CameraTime, AppUtils.getSkyExceptionInfo("Set time", e, "FW 0.2.7+"));
                                     }
                                 });
                             }
@@ -489,34 +489,34 @@ public class HomeActivityForJava extends AppCompatActivity {
                                 c10ProCamera.setTime(System.currentTimeMillis(), new CompletionCallback() {
                                     @Override
                                     public void onResult(SkyException e) {
-                                        printInfo(EnumInfoKey.CameraTime, AppUtils.getSkyExceptionInfo("时间设置", e, "旧固件"));
+                                        printInfo(EnumInfoKey.CameraTime, AppUtils.getSkyExceptionInfo("Set time", e, "Legacy FW"));
                                     }
                                 });
                             }
                         }
                         break;
-                    case 8:// 航向命令，右，速度30
+                    case 8:// Yaw command, right, speed 30
                         if (c10Pro != null) {
-                            //c10Pro.controlYaw(3f);// 方法一 接口
-                            c10Pro.writeData("#TPUG2WGSY1E75".getBytes());// 方法二 协议
+                            //c10Pro.controlYaw(3f);// Method 1: API
+                            c10Pro.writeData("#TPUG2WGSY1E75".getBytes());// Method 2: protocol command
                         }
                         break;
-                    case 9:// 航向命令，左，速度-30
+                    case 9:// Yaw command, left, speed -30
                         if (c10Pro != null) {
-                            //c10Pro.controlYaw(-3f);// 方法一 接口
-                            c10Pro.writeData("#TPUG2wGSYE276".getBytes());// 方法二 协议
+                            //c10Pro.controlYaw(-3f);// Method 1: API
+                            c10Pro.writeData("#TPUG2wGSYE276".getBytes());// Method 2: protocol command
                         }
                         break;
-                    case 10:// 俯仰命令，上，速度30
+                    case 10:// Pitch command, up, speed 30
                         if (c10Pro != null) {
-                            //c10Pro.controlPitch(3f);// 方法一 接口
-                            c10Pro.writeData("#TPUG2WGSP1E6C".getBytes());// 方法二 协议
+                            //c10Pro.controlPitch(3f);// Method 1: API
+                            c10Pro.writeData("#TPUG2WGSP1E6C".getBytes());// Method 2: protocol command
                         }
                         break;
-                    case 11:// 俯仰命令，下，速度-30
+                    case 11:// Pitch command, down, speed -30
                         if (c10Pro != null) {
-                            //c10Pro.controlPitch(-3f);// 方法一 接口
-                            c10Pro.writeData("#TPUG2WGSPE26D".getBytes());// 方法二 协议
+                            //c10Pro.controlPitch(-3f);// Method 1: API
+                            c10Pro.writeData("#TPUG2WGSPE26D".getBytes());// Method 2: protocol command
                         }
                         break;
                 }
@@ -546,7 +546,7 @@ public class HomeActivityForJava extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         infoLiveData.removeObservers(this);
-        //断开遥控器连接（如果不断开，程序还在运行的时候，其他程序会出端口占用情况）
+        //Disconnect RC connection to release ports while app is running
         RCSDKManager.INSTANCE.disconnectRC();
         KeyManager.INSTANCE.cancelListen(keySignalQualityListener);
         Pipeline p = this.pipeline;

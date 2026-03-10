@@ -8,10 +8,10 @@ import com.skydroid.rcsdk.common.error.SkyException;
 import com.skydroid.rcsdk.key.RemoteControllerKey;
 
 /**
- * @author 咔一下
+ * @author skydroid
  * @date 2024/4/3 13:11
  * @email 1501020210@qq.com
- * @describe 采集遥控器通道值工具类
+ * @describe Utility to collect RC channel values
  */
 public class ReadRCButtonHelper {
 

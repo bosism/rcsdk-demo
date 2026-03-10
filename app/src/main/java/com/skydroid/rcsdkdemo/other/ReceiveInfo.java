@@ -3,7 +3,7 @@ package com.skydroid.rcsdkdemo.other;
 import android.text.TextUtils;
 
 /**
- * HomeActivity要显示的接收信息
+ * HomeActivity display information model
  * Created by ljb on 2024.06.13.
  */
 public class ReceiveInfo {
