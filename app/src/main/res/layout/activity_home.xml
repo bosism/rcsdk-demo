@@ -149,6 +149,11 @@
                     android:id="@+id/btn_rc_buttons"
                     style="@style/smallButton"
                     android:text="Custom RC Channels" />
+
+                <Button
+                    android:id="@+id/btn_manual_control_demo"
+                    style="@style/smallButton"
+                    android:text="MAVLink Manual Control Demo" />
         </LinearLayout>
     </ScrollView>
 

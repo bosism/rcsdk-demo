@@ -37,6 +37,7 @@
 <!--        </activity>-->
 
         <activity android:name=".CustomRCButtonsActivity"/>
+        <activity android:name=".ManualControlDemoActivity"/>
 
     </application>
 

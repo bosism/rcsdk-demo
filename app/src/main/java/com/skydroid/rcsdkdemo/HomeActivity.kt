@@ -257,6 +257,9 @@ class HomeActivity: AppCompatActivity() {
         findViewById<View>(R.id.btn_rc_buttons).setOnClickListener {
             startActivity(Intent(this,CustomRCButtonsActivity::class.java))
         }
+        findViewById<View>(R.id.btn_manual_control_demo).setOnClickListener {
+            startActivity(Intent(this, ManualControlDemoActivity::class.java))
+        }
         findViewById<View>(R.id.btn_clear).setOnClickListener {
             mReceiveInfo.cleatInfo()
             tvInfo?.text = ""

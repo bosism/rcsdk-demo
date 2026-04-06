@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Prototype mode: sample RC channels every 100 ms, render the selected axes live, and publish MAVLink MANUAL_CONTROL over TCP or UDP sockets."
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_calibration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Loading RC metadata…" />
+
+        <RadioGroup
+            android:id="@+id/rg_transport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_transport_tcp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TCP 5760" />
+
+            <RadioButton
+                android:id="@+id/rb_transport_udp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="UDP 14550" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_local_port"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="4"
+                android:hint="Local port"
+                android:inputType="number"
+                android:text="14550" />
+
+            <EditText
+                android:id="@+id/et_remote_host"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="2"
+                android:ems="10"
+                android:hint="Remote IP / host"
+                android:inputType="text"
+                android:text="Indoor.local" />
+
+            <EditText
+                android:id="@+id/et_remote_port"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:ems="4"
+                android:hint="Remote port"
+                android:inputType="number"
+                android:text="14550" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_target_system"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="3"
+                android:hint="Target sysid"
+                android:inputType="number"
+                android:text="1" />
+
+            <CheckBox
+                android:id="@+id/cb_positive_throttle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="2"
+                android:checked="true"
+                android:text="Throttle as 0..1000" />
+
+            <Button
+                android:id="@+id/btn_refresh_metadata"
+                style="@style/smallButton"
+                android:layout_marginStart="8dp"
+                android:text="Refresh RC" />
+
+            <Button
+                android:id="@+id/btn_toggle_streaming"
+                style="@style/smallButton"
+                android:layout_marginStart="8dp"
+                android:text="Start Sending" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Channel mapping (1-based RC channels -> MANUAL_CONTROL axes)" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_pitch_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="2"
+                android:hint="x/pitch"
+                android:inputType="number"
+                android:text="2" />
+
+            <EditText
+                android:id="@+id/et_roll_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:ems="2"
+                android:hint="y/roll"
+                android:inputType="number"
+                android:text="1" />
+
+            <EditText
+                android:id="@+id/et_throttle_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:ems="2"
+                android:hint="z/thrust"
+                android:inputType="number"
+                android:text="3" />
+
+            <EditText
+                android:id="@+id/et_yaw_channel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:ems="2"
+                android:hint="r/yaw"
+                android:inputType="number"
+                android:text="4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Yaw / Throttle"
+                    android:textAlignment="center"
+                    android:textStyle="bold" />
+
+                <com.skydroid.rcsdkdemo.StickIndicatorView
+                    android:id="@+id/view_yaw_throttle"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Roll / Pitch"
+                    android:textAlignment="center"
+                    android:textStyle="bold" />
+
+                <com.skydroid.rcsdkdemo.StickIndicatorView
+                    android:id="@+id/view_roll_pitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_manual_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Status: waiting" />
+
+        <TextView
+            android:id="@+id/tv_pipeline_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Link: idle" />
+
+        <TextView
+            android:id="@+id/tv_packet_stats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TX packets: 0" />
+
+        <TextView
+            android:id="@+id/tv_axes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textIsSelectable="true" />
+
+        <TextView
+            android:id="@+id/tv_raw_channels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+
+</ScrollView>
