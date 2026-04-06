@@ -71,10 +71,10 @@ class HomeActivity: AppCompatActivity() {
         tvInfo = findViewById(R.id.tv_info)
         etData = findViewById(R.id.et_data)
         infoLiveData.observe(this) { str -> tvInfo?.text = str }
-        // TODO 初始化SDK,初始化一次即可;
+        // TODO Initialize SDK once.
         RCSDKManager.initSDK(this, object : SDKManagerCallBack {
             override fun onRcConnected() {
-                // Create communication pipeline(内部有断开重连机制，只需要调用一次Connect即可)
+                // Create communication pipeline (with reconnect retry built in; call connect once)
                 // Telemetry pipeline fails to connect when no receiver is connected;
                 val pipeline = PipelineManager.createPipeline(Uart.UART0)
                 pipeline!!.onCommListener = getCommListener(0, "Telemetry pipeline")
@@ -139,14 +139,14 @@ class HomeActivity: AppCompatActivity() {
             }
 
             override fun onDisconnect() {
-                log("$tag 断开Connect")
+                log("$tag disconnected")
             }
 
             override fun onReadData(bytes: ByteArray) {
                 if(type == 0){
-                    log("$tag 收到长度${bytes.size},,, 数据 "+ String(bytes))
+                    log("$tag received length ${bytes.size}, data: ${String(bytes)}")
                     // Telemetry pipeline
-                    printInfo(EnumInfoKey.DataTransmission, "数传：${if (isDataHex) String2ByteArrayUtils.bytes2Hex(bytes) else String(bytes)}")
+                    printInfo(EnumInfoKey.DataTransmission, "Telemetry data：${if (isDataHex) String2ByteArrayUtils.bytes2Hex(bytes) else String(bytes)}")
                 }
             }
         }
@@ -166,11 +166,11 @@ class HomeActivity: AppCompatActivity() {
         findViewById<View>(R.id.btn_get_control_mode).setOnClickListener { // Get RC stick mode
             KeyManager.get(RemoteControllerKey.KeyControlMode, object : CompletionCallbackWith<ControlMode> {
                 override fun onSuccess(controlMode: ControlMode) {
-                    printInfo(EnumInfoKey.GetControlMode, "Get stick模式：" + controlMode.name)
+                    printInfo(EnumInfoKey.GetControlMode, "Get stick mode: " + controlMode.name)
                 }
 
                 override fun onFailure(e: SkyException) {
-                    printInfo(EnumInfoKey.GetControlMode, "Get stick模式失败：$e")
+                    printInfo(EnumInfoKey.GetControlMode, "Get stick mode failed: $e")
                 }
             })
         }
@@ -178,9 +178,9 @@ class HomeActivity: AppCompatActivity() {
             //Get RC channel values
             when (RCSDKManager.getDeviceType()) {
                 DeviceType.H16 -> {
-                    //防止反复监听
+                    // Avoid registering repeated listeners
                     KeyManager.cancelListen(keyH16ChannelsListener)
-                    //H16/H16Pro channel values are LISTEN mode; listener will keep receiving updates until removed
+                    // H16/H16Pro channel values are LISTEN mode; listener will keep receiving updates until removed
                     KeyManager.listen(RemoteControllerKey.KeyH16Channels, keyH16ChannelsListener)
                 }
                 //H12/H12Pro/H30 channel values use GET mode and need explicit request each time
@@ -224,10 +224,10 @@ class HomeActivity: AppCompatActivity() {
                 }
             }
         }
-        // Signal Strength 取值范围: 0-100%
+        // Signal strength range: 0-100%
         findViewById<View>(R.id.btn_get_signal).setOnClickListener {
             when (RCSDKManager.getDeviceType()) {
-                DeviceType.H12 ->                         //H12的H12 signal strength uses GET mode and needs explicit request each time
+                DeviceType.H12 ->                         // H12 signal strength uses GET mode and needs explicit request each time
                     KeyManager.get(AirLinkKey.KeyH12SignalQuality, object : CompletionCallbackWith<Int> {
                         override fun onSuccess(integer: Int) {
                             printInfo(EnumInfoKey.Signal, "H12 signal strength: $integer %")
@@ -238,9 +238,9 @@ class HomeActivity: AppCompatActivity() {
                         }
                     })
                 else -> {
-                    //防止反复监听
+                    // Avoid registering repeated listeners
                     KeyManager.cancelListen(keySignalQualityListener)
-                    //Other RC signal values are LISTEN mode and keep streaming after listener registration until removed
+                    // Other RC signal values are LISTEN mode and keep streaming after listener registration until removed
                     KeyManager.listen(
                             AirLinkKey.KeySignalQuality,
                             keySignalQualityListener
@@ -312,7 +312,7 @@ class HomeActivity: AppCompatActivity() {
     }
 
     /**
-     * 云台Control_相机Control
+     * Gimbal control + camera control
      */
     private fun c10pCameraControl(isCameraVer027AndAbove: Boolean) {
         AppUtils.showC10pCameraControlDialog(this@HomeActivity) { _, p1 ->
@@ -406,22 +406,22 @@ class HomeActivity: AppCompatActivity() {
                     // c10Pro?.controlYaw(3f)// Method 1: API
                     // c10Pro?.writeData("#TPUG2wGSY1E75".toByteArray())// Method 2: protocol
 
-                    c10Pro?.writeData("#TPUG2wGSY6469".toByteArray())// Method 2: protocol 速度 100
+                    c10Pro?.writeData("#TPUG2wGSY6469".toByteArray())// Method 2: protocol speed 100
                 }
                 9 -> {// Yaw command, left, speed -30
                     // c10Pro?.controlYaw(-3f)// Method 1: API
                     //  c10Pro?.writeData("#TPUG2wGSYE276".toByteArray())// Method 2: protocol
-                    c10Pro?.writeData("#TPUG2wGSY9C7B".toByteArray())// Method 2: protocol 速度 100
+                    c10Pro?.writeData("#TPUG2wGSY9C7B".toByteArray())// Method 2: protocol speed 100
                 }
                 10 -> {// Pitch command, up, speed 30
                     // c10Pro?.controlPitch(3f)// Method 1: API
                     // c10Pro?.writeData("#TPUG2wGSP1E6C".toByteArray())// Method 2: protocol
-                    c10Pro?.writeData("#TPUG2wGSP6460".toByteArray())// Method 2: protocol 速度 100
+                    c10Pro?.writeData("#TPUG2wGSP6460".toByteArray())// Method 2: protocol speed 100
                 }
                 11 -> {// Pitch command, down, speed -30
                     // c10Pro?.controlPitch(-3f)// Method 1: API
                     // c10Pro?.writeData("#TPUG2wGSPE26D".toByteArray())// Method 2: protocol
-                    c10Pro?.writeData("#TPUG2wGSP9C72".toByteArray())// Method 2: protocol 速度 100
+                    c10Pro?.writeData("#TPUG2wGSP9C72".toByteArray())// Method 2: protocol speed 100
                 }
             }
         }
@@ -447,7 +447,7 @@ class HomeActivity: AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         infoLiveData.removeObservers(this)
-        //断开Remote ControllerConnect（如果不断开，程序还在运行的时候，其他程序会出端口占用情况）
+        // Disconnect remote controller connect (if not disconnected, other apps may fail to open needed ports)
         RCSDKManager.disconnectRC()
         KeyManager.cancelListen(keySignalQualityListener)
         val p = pipeline

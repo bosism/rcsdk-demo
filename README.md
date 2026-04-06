@@ -1,338 +1,338 @@
-Release Notes
+Update Log
 ```
 v1.8.4
 Bug fixes     
-1.H16Get不到ChannelSetParameters
+1. Channel setting parameters cannot be obtained from H16.
 
 v1.8.3
 Bug fixes     
-1.G系列GetVersion号偶尔崩溃问题
-2.H12上Get感量报错问题
-3.其他Bug
+1. G series occasionally crashes when retrieving version number.
+2. Error in obtaining sensitivity on H12
+3. Other bugs
 
 v1.8.1
-New Features
-1.G系列新Upload模式接口
+New features
+1. G-series new upload mode interface
     AirLinkKey.KeyGLinkSpeedMode
-        GLinkSpeedMode.UPLOAD:Upload模式
-        GLinkSpeedMode.NORMAL:CloseUpload模式
+        GLinkSpeedMode.UPLOAD: Upload mode
+        GLinkSpeedMode.NORMAL: Disable upload mode.
 Bug fixes     
-1.HandleG系列Pairingfailed时没有恢复原来的PairingStatus
-2.HandleG系列ConnectStatusError问题
+1. When the G-series frequency pairing fails, the original frequency pairing state is not restored.
+2. Troubleshooting G-series connection status errors
 
 v1.8.0
-New Features
-1.SupportsG30
-2.PayloadManagerNewcreateXXXPayload方法
-3.物理Button控制Gimbal功能-New选项:Down/Center/Up、Down/Center
-4.Debug打印开关--RCSDKManager.setDebug
+New features
+1. Supports G30
+2. The `createXXXPayload` method has been added to `PayloadManager`.
+3. Physical button control of pan/tilt function - New options: Down/Return to Center/Up, Down/Return to Center
+4. Debug printing switch -- RCSDKManager.setDebug
 
 Bug fixes
-1.C20CustomRemote ControllerButtonLED控制
-2.Serial Port通讯BUG（调用RCSDKManager.disconnectRC()，后重新ConnectRemote Controller会导致Serial PortConnect直接Disconnect）
+1. C20 Customizable Remote Control Button LED Control
+2. Serial communication bug (calling RCSDKManager.disconnectRC() and then reconnecting the remote control will cause the serial connection to be directly disconnected).
 
-Optimization
-1.Pipeline/Payload多次Connect重复Listen问题--目前修改为只会Listen一次
-2.OptimizationGimbal控制速度
-3.SetMAC的Pairing方式接口Parameters修改
-4.RCSDKManager.disconnectRC()调用后无法重新Connect问题
-5.RCSDKManager.disconnectRC()ClosePayloadManager/PipelineManager中的Connect--目前修改为不ClosePayloadManager/PipelineManager中的Connect
+optimization
+1. Issue with repeated listening during multiple Pipeline/Payload connections -- Currently modified to only listen once.
+2. Optimize gimbal control speed
+3. Configure MAC pairing mode interface parameters
+4. Issue with failure to reconnect after calling RCSDKManager.disconnectRC()
+5. RCSDKManager.disconnectRC() closes connections in PayloadManager/PipelineManager -- Currently modified to not close connections in PayloadManager/PipelineManager.
 
 v1.7.9
-1.Bug fixes
-    G系列GetSignalStrength偶尔Data卡死不刷新问题
-2.New接口
-    AirLink.KeySkySetAutoMCSDuration:Duration自适应MCS(G系列)
-  通用Gimbal相机控制接口
+1. Bug fixes
+    G-series signal strength acquisition occasionally freezes and fails to refresh data.
+2. Added interface
+    AirLink.KeySkySetAutoMCSDuration: Adaptive MCS (G series) over duration
+  Universal gimbal camera control interface
     PayloadManager.getXXXPayload(PayloadType.COMMON,5000,"192.168.144.108",5000) as CommonPayload?
     
 v1.7.8
-1.G系列Pairing时间改为30s
-2.NewG系列退出Pairing模式接口
-    RemoteControllerKey.KeyRequestStopPair(StopPairing，G系列有效)
-3.Close调试Log
+1. The frequency pairing time for the G series has been changed to 30 seconds.
+2. Added an interface for exiting frequency pairing mode on the G series.
+    RemoteControllerKey.KeyRequestStopPair (Stops frequency pairing; valid for G series)
+3. Disable debug logging
     
 v1.7.7
-1.Fixed1.7.6部分场景下Pairing无响应问题
-2.New Key
-    RemoteControllerKey.KeyButtonToneAndLongPress(按键音和长按Set，SupportsG系列Remote ControllerMCU固件1.3及以上。可Refer toDevice助手2.9.5)
-    RemoteControllerKey.KeyButtonSaveValue(掉电SaveButton值，SupportsG系列Remote ControllerMCU固件1.3及以上。可Refer toDevice助手2.9.5)
-    RemoteControllerKey.KeyRollerMode(滚轮模式，SupportsG系列Remote ControllerMCU固件1.3及以上。可Refer toDevice助手2.9.5)
-    RemoteControllerKey.KeyMixedControlAndNoReturnCenter(混控和油门死区Set。SupportsG系列Remote ControllerMCU固件1.3及以上，可Refer toDevice助手2.9.5)
-    RemoteControllerKey.KeyButtonLockMode(自锁模式，SupportsG系列Remote ControllerMCU固件1.3及以上。可Refer toDevice助手2.9.5)
+1. Fixed the issue of no frequency response in some scenarios in version 1.7.6.
+2. Add Key
+    RemoteControllerKey.KeyButtonToneAndLongPress (Key tone and long press settings, supports G series remote control MCU firmware 1.3 and above. See Device Assistant 2.9.5 for reference.)
+    RemoteControllerKey.KeyButtonSaveValue (Power-off save button value, supports G-series remote control MCU firmware 1.3 and above. See Device Assistant 2.9.5 for reference.)
+    RemoteControllerKey.KeyRollerMode (Roller mode, supports G-series remote control MCU firmware 1.3 and above. See Device Assistant 2.9.5 for reference.)
+    RemoteControllerKey.KeyMixedControlAndNoReturnCenter (Mixed control and throttle dead zone settings. Supports G-series remote control MCU firmware 1.3 and above; see Device Assistant 2.9.5 for reference.)
+    RemoteControllerKey.KeyButtonLockMode (Self-locking mode, supports G-series remote control MCU firmware 1.3 and above. See Device Assistant 2.9.5 for reference.)
 
 v1.7.6
-1.SupportsG系列射频固件20250402Pairing
-2.G系列接口稳定性
-3.TCPConnect收到FIN时回调onDisconnect
+1. Supports frequency pairing with G-series RF firmware 20250402
+2. G-series interface stability
+3. The onDisconnect callback is invoked when a FIN packet is received in a TCP connection.
 
 v1.7.4
-1.Bug fixes
-    *部分情况下在G系列Remote Controller中崩溃问题
+1. Bug fixes
+    * Crashing issue in some cases on G-series remote controls
 
 v1.7.3
-1.G12/G20Telemetry pipeline修改为UDP（需要更新20250110及以后的Android系统Version）
-2.Bug fixes
-    部分情况下Custom遥控Button工具类可能引发阻塞问题
+1. Modify the G12/G20 data transmission pipeline to UDP (requires Android system version update 20250110 and later).
+2. Bug fixes
+    In some cases, custom remote control button utility classes may cause blocking issues.
     
 v1.7.2
-1.Bug fixes
-    部分Remote Controller(H12Pro、G12、G20)偶尔SignalDisplayError问题
-2.New Key
-    915模块使能(SupportsG20)
+1. Bug fixes
+    Occasionally, some remote controls (H12Pro, G12, G20) experience signal display errors.
+2. Add Key
+    915 module enabled (supports G20)
     RemoteControllerKey.KeyModule915Enable
     
 v1.7.1
-1.Bug fixes
+1. Bug fixes
 
 v1.6.8
-1.FixedG12、G20Telemetry pipeline内存泄漏问题
+1. Fixed memory leak issue in G12 and G20 data transmission pipelines.
 
 v1.6.6
-1.G20Remote Controller
-2.New Key
-    AirLinkKey.KeyRCSetReTxCount(Configure地面端重传次数,提升链路可靠性,SupportsG12、G20)
-    AirLinkKey.KeySkySetReTxCount(Configure天空端重传次数,提升链路可靠性,SupportsG12、G20)
-    AirLinkKey.KeySetAutoMCS(自适应MCS,可提升上行速度,SupportsG12、G20)
+1. G20 remote control
+2. Add Key
+    AirLinkKey.KeyRCSetReTxCount (Configures the number of retransmissions at the ground end, improving link reliability; supports G12 and G20)
+    AirLinkKey.KeySkySetReTxCount (Configures the number of retransmissions at the sky end, improving link reliability; supports G12 and G20)
+    AirLinkKey.KeySetAutoMCS (Adaptive MCS, improves uplink speed, supports G12 and G20)
 
 v1.6.5
-1.Bug fixes
-    H20Remote ControllerGet不到Signal百分比问题
+1. Bug fixes
+    H20 remote control not receiving signal percentage issue
 
 v1.6.4
-1.G12Remote Controller
-2.Bug fixes
-    部分情况下KeyManager会阻塞300ms的问题
+1. G12 remote control
+2. Bug fixes
+    In some cases, KeyManager may block for 300ms.
     
 v1.6.3
-1.Bug fixes
-    GetRemote ControllerChannel指令
+1. Bug fixes
+    Get remote control channel commands
     
 v1.6.2
-1.New Key：
-    AirLinkKey.KeyRCVersion(Remote Controller端无线模块Version号,目前SupportsH20,H30)
-    AirLinkKey.KeySkyVersion(天空端端无线模块Version号,目前SupportsH20,H30)
-    AirLinkKey.KeySkyMCUVersion(天空端MUCVersion号,目前SupportsH30)
-    AirLinkKey.KeyRawSignalQuality(原始SignalData,目前SupportsH16/H12Pro/H20/H30)
-2.SDKVersion号Get
-3.FixedH20波特率SetError问题
-4.底层请求逻辑Optimization*
+1. Add Key:
+    AirLinkKey.KeyRCVersion (Remote control wireless module version number, currently supports H20 and H30)
+    AirLinkKey.KeySkyVersion (SkyLink wireless module version number, currently supports H20 and H30)
+    AirLinkKey.KeySkyMCUVersion (Sky-side MUC version number, currently supports H30)
+    AirLinkKey.KeyRawSignalQuality (Raw signal data, currently supports H16/H12Pro/H20/H30)
+2. Obtaining the SDK version number
+3. Fixed H20 baud rate setting error.
+4. Optimization of underlying request logic*
 
 v1.5.2
-1.C12无级变倍
+1. C12 continuously variable zoom
     C12::addZoomRatios
     C12::subtractZoomRatios
-2.H20Remote ControllerCustomButton波轮控制Default反向
-3.C12Gimbal控制New接口
-    同时控制Pitch偏航：C12::controlYawPitch（需要Gimbal固件0.5及以上）
+2. H20 remote control customizable buttons and pulsator control default to reverse.
+3. Added interface for C12 PTZ control
+    Simultaneously control pitch and yaw: C12::controlYawPitch (requires gimbal firmware 0.5 or higher)
 
 v1.5.2
-1.C12无级变倍
+1. C12 continuously variable zoom
     C12::addZoomRatios
     C12::subtractZoomRatios
-2.H20Remote ControllerCustomButton波轮控制Default反向
-3.C12Gimbal控制New接口
-    同时控制Pitch偏航：C12::controlYawPitch（需要Gimbal固件0.5及以上）
+2. H20 remote control customizable buttons and pulsator control default to reverse.
+3. Added interface for C12 PTZ control
+    Simultaneously control pitch and yaw: C12::controlYawPitch (requires gimbal firmware 0.5 or higher)
 
 v1.5.0
-1.NewSDK工具类GetRemote Controller型号方法
+1. Added a method to retrieve the remote control model in the SDK utility class.
 com.skydroid.rcsdk.utils.RCSDKUtils
 
-v1.4.9 
-1.Fixed部分情况下Take picture阻塞的bug
-2.FixedH20Serial Port0、Serial Port1相反问题
-3.H30数传通讯DefaultUsageUDP通讯
+v1.4.9
+1. Fixed a bug that caused camera capture to be blocked in some cases.
+2. Fixed the issue of H20 serial port 0 and serial port 1 being reversed.
+3. H30 data transmission communication uses UDP communication by default.
 
 v1.4.7
-1.Fixed部分H16数传接收多次问题
-2.C10Pro OSDSet
+1. Fixed an issue where some H16 data transmissions received multiple times.
+2. C10Pro OSD Settings
 
 v1.4.5
-1.C12Gimbal相机
-2.C10ProGimbal相机（建议UsageC10Pro类代替C10ProCamera类与C10ProGimbal类，C10Pro相机固件需要v0.2.7及以上才SupportsC10Pro类，v0.2.7以前UsageC10ProCamera类与C10ProGimbal类）
-3.NewRemote ControllerCustomButton事件工具类（详细Usage方法请查阅相关代码：CustomRCButtonsActivity）
-4.Bug fixes
-    disconnectRC崩溃问题等
+1. C12 gimbal camera
+2. C10Pro gimbal camera (It is recommended to use the C10Pro class instead of the C10ProCamera class and C10ProGimbal class. The C10Pro camera firmware needs to be v0.2.7 or above to support the C10Pro class. For versions earlier than v0.2.7, use the C10ProCamera class and C10ProGimbal class.)
+3. Added a utility class for custom button events on the remote control (please refer to the relevant code for detailed usage: CustomRCButtonsActivity).
+4. Bug fixes
+    disconnectRC crash issues, etc.
 
 v1.3.4
-1.New Key：
-    AirLinkKey.KeyH20Bandwidth(Set/GetH20Remote Controller带宽)
+1. Add Key:
+    AirLinkKey.KeyH20Bandwidth (Sets/Gets the H20 remote control bandwidth)
 
 v1.3.3
-1.EC10Remote Controller
+1. EC10 remote control
 
 v1.3.2
-1.C20 LED开关
+1. C20 LED Switch
 
 v1.3.1
-1.OptimizationTCP通讯重连机制
-2.调整Remote Controller协议超时时间（100ms）
+1. Optimize TCP communication reconnection mechanism
+2. Adjust the remote control protocol timeout (100ms)
 
 v1.3.0
-1.New Key：
-    RemoteControllerKey.KeyModel(GetRemote Controller固件型号)
-    RemoteControllerKey.KeyVersion(GetRemote Controller固件Version号)
-2.OptimizationCPU占用
-3.OptimizationUDP通讯过滤规则
-4.Optimization混淆规则,防止与其他第三方库冲突
+1. Add Key:
+    RemoteControllerKey.KeyModel(Get remote controller firmware model)
+    RemoteControllerKey.KeyVersion(gets the remote controller firmware version number)
+2. Optimize CPU usage
+3. Optimize UDP communication filtering rules
+4. Optimize obfuscation rules to prevent conflicts with other third-party libraries.
 
 v1.2.1
-1.FixedH20SignalStrengthError问题
-2.C10/C10Pro/C20Gimbal控制New角度控制方法
-3.调整C10/C10Pro/C20Gimbal速度控制Parameters(请Refer to文档C10/C10Pro/C20Gimbal控制章节)
-4.SupportsSerial Port双轴Gimbal相机控制
+1. Fixed H2O signal strength error issue.
+2. Added angle control method for C10/C10Pro/C20 gimbal control
+3. Adjust the speed control parameters of the C10/C10Pro/C20 PTZ (please refer to the C10/C10Pro/C20 PTZ Control section of the document).
+4. Supports serial port dual-axis pan-tilt camera control
 
 v1.1.0
-SupportsH20Remote Controller
+Supports H20 remote control
 
 v0.9.7
-SupportsC20Gimbal相机
+Supports C20 gimbal camera
 
 v0.8.5
-1.Fixed同时多个TCPConnect时阻塞问题
-2.FixedPipelineManager,PayloadManagerConnect不上时无法Close问题
+1. Fixed the blocking issue when multiple TCP connections are active simultaneously.
+2. Fixed the issue where PipelineManager and PayloadManager could not be closed when the connection failed.
 
 v0.8.3
-1.New云卓配件管理（C10、三体相机等）
-2.FixedUDPPipelineConnectStatusError问题
-3.New Key:
-    AirLinkKey.KeyH16RawSignalQuality(GetH16原始Signal值DBM)
+1. Added Yunzhuo accessory management (C10, Three-Body Camera, etc.)
+2. Fixed the UDPPipeline connection status error issue.
+3. Add Key:
+    AirLinkKey.KeyH16RawSignalQuality (gets the raw signal value DBM of H16)
 
 v0.7.1
-SupportsH30Remote Controller
+Supports H30 remote control
 
 v0.6
-SupportsH16Remote Controller
+Supports H16 remote control
 
 v0.1
-发布第一版
+First version released
 ```
 
-# Demo 工程
+# Demo Project
 
-Download或者克隆Git上的AndroidExample代码工程:https://gitee.com/skydroid/rcsdk-demo
+Download or clone the Android sample code project on Git: https://gitee.com/skydroid/rcsdk-demo
 
 <font color=blue>
-Usage Notes:<br>
-1.Please ensure其他应用(包含助手、地面站)处于StopCloseStatus,避免端口占用导致Data链路failed;<br>
-2.GetStick杆量值,无法主动上报,请求一次Get一次,推荐至少100msRead一次;<br>
-3.Telemetry pipeline,未Connect 接收机 时,Telemetry pipeline Connectfailed;<br>
+Usage precautions:<br>
+1. Please ensure that other applications (including the assistant and ground station) are stopped or closed to avoid port conflicts that could cause data link failures;
+2. The joystick movement value cannot be actively reported; it must be retrieved only once per request. It is recommended to read the value at least once every 100ms.
+3. Data transmission pipeline connection fails when the receiver is not connected;
 </font>
 
 <br>
 <br>
-Below isH12Pro+S1pro+C12Pro的测试效果图:
+The following are test results of H12Pro+S1pro+C12Pro:
 
 ![image](https://gitee.com/skydroid/rcsdk-demo/raw/master/image/rcsdk_demo_1.png)
 ![image](https://gitee.com/skydroid/rcsdk-demo/raw/master/image/rcsdk_demo_2.png)
 
 
-# RCSDK目前Supports的Remote Controller产品
-H12、H12Pro、H16/H16Pro、H30、H20、G12、G20、G30
+# Remote control products currently supported by RCSDK
+H12, H12Pro, H16/H16Pro, H30, H20, G12, G20, G30
 
-# RCSDK架构体系概述
-移动应用程序一般通过下图所示的几个主要类来访问RCSDK：
+# RCSDK Architecture Overview
+Mobile applications typically access the RCSDK through the main classes shown in the diagram below:
 ![image](https://gitee.com/skydroid/rcsdk-demo/raw/master/image/rcsdk.png)
 
-- RCSDKManager： RCSDK工具包的入口类，管理RCSDK的初始化，反初始化，Connect，以及Listen硬件产品的Connect事件。
-- KeyManager： RCSDKUsage了以Key为基础元素的ParametersSet和ParametersGet功能接口
-- PipelineManager：与第三方DeviceData传输的入口
-- PayloadManager：控制云卓相关配件(C10、三体相机等)的入口
+- RCSDKManager: The entry point class for the RCSDK toolkit, managing the initialization, deinitialization, and connection of the RCSDK, as well as listening for connection events of hardware products.
+- KeyManager: The RCSDK uses a parameter setting and retrieval interface based on keys as the basic element.
+- PipelineManager: The entry point for data transfer with third-party devices.
+- PayloadManager: The entry point for controlling Yunzhuo-related accessories (C10, Tri-Body Camera, etc.).
 
 
-# blank project集成 SDK
-This guide介绍如何将 RCSDK-Demo 中的 RCSDK包移植到用户的blank project中
+# Integrating SDK into a Blank Project
+This guide explains how to port the RCSDK package from RCSDK-Demo to your blank project.
 
 ```
-This guide中Usage的 Android Studio Version为 Android Studio Chipmunk | 2021.2.1 Patch 1
+This guide uses Android Studio Chipmunk | 2021.2.1 Patch 1.
 
-SDK所需权限
+SDK permissions required
 <uses-permission android:name="android.permission.INTERNET" />
 
-KotlinVersion为：1.6.10
+The Kotlin version is 1.6.10.
 
-混淆
+Confusion
 -keep class com.skydroid.**{*;}
 ```
-- ### 导入SDK AAR包
+- ### Import SDK AAR package
 
 ```
 rcsdk-v1.8.3.aar
-h16_airlink.aar //H16Telemetry模块 minSdk 24
+h16_airlink.aar //H16 image transmission module minSdk 24
 ```
 
-- ### 修改build.gradle(app) 文件
-在 dependencies 项里添加SDK包
+- ### Modify the build.gradle (app) file
+Add the SDK package to the dependencies section.
 ```
     implementation files("libs/rcsdk-v1.8.3.aar")
-    implementation files('libs/h16_airlink.aar')//可选,H16Remote ControllerTelemetry模块,如果不是H16Remote Controller,无需导入,该模块minSdk为24
+    implementation files('libs/h16_airlink.aar') //Optional, H16 remote control image transmission module. If it's not an H16 remote control, no need to import. This module's minSdk is 24.
 ```
 
-- ### 修改 AndroidManifest.xml 文件
+- ### Modify the AndroidManifest.xml file
 
-参照 Demo 的 AndroidManifest.xml添加SDK 需要的最基础权限
+Refer to the AndroidManifest.xml file in the demo to add the most basic permissions required by the SDK.
 ```
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-- ### 初始化RCSDK
-在UsageSDK各组件之前初始化context信息;  
-初始化一次即可;  
-推荐在Application中初始化;
+- ### Initialize RCSDK
+Initialize context information before using any SDK components;  
+Initialization only needs to be done once;  
+It is recommended to initialize it in the Application class;
 ```
 RCSDKManager.initSDK(this,object :SDKManagerCallBack{
             override fun onRcConnectFail(e: SkyException?) {
-                //Connectfailed
+                //Connection failed
             }
 
             override fun onRcConnected() {
-                //DeviceConnect
+                //Device connection
             }
 
             override fun onRcDisconnect() {
-                //DeviceDisconnectConnect
+                //Device disconnected
             }
         })
 ```
 
-- ### ConnectRemote Controller
+- ### Connect remote control
 ```
 RCSDKManager.connectToRC()
 ```
 
-- ### DisconnectRemote Controller
-注意：不Usage时需要DisconnectConnect，否则会一直占用端口
+- ### Disconnect the remote control
+Note: You need to disconnect when not in use, otherwise the port will be occupied indefinitely.
 ```
 RCSDKManager.disconnectRC()
 ```
 
 # KeyManager
-Remote ControllerParametersSet、Get功能接口
+Remote control parameter setting and acquisition function interface
 
 - ### SET
 ```
-//SetRemote Controller控制模式
+//Set remote control mode
 KeyManager.set(RemoteControllerKey.KeyControlMode, ControlMode.JP) {
                         e ->
                     if (e == null){
-                        log("SetStick模式Success") //success
+                        log("Successfully set joystick mode") //success
                     }else{
-                        log("SetStick模式failed：${e}") } //fail
+                        log("Failed to set joystick mode: ${e}") } //fail
                     }
 ```
 
 - ### GET
 ```
-GetRemote Controller控制模式
-KeyManager.get(RemoteControllerKey.KeyControlMode,object :
+Get remote control mode
+KeyManager.get(RemoteControllerKey.KeyControlMode,object:
                     CompletionCallbackWith<ControlMode> {
                     override fun onSuccess(result: ControlMode?) {
-                        //GetSuccess
+                        Successfully obtained
                         log(result)
                     }
 
                     override fun onFailure(e: SkyException?) {
-                        //Getfailed
+                        //Failed to retrieve
                         log(e)
                     }
                 })
@@ -340,13 +340,13 @@ KeyManager.get(RemoteControllerKey.KeyControlMode,object :
 
 - ### ACTION
 ```
-Remote ControllerPairing
+Remote control frequency pairing
 KeyManager.action(RemoteControllerKey.KeyRequestPairing){
                 e ->
                 if (e == null){
-                    log("PairingSuccess") //success
+                    log("Frequency pairing successful") //success
                 }else{
-                    log("Pairingfailed：${e}") //fail
+                    log("Frequency pairing failed: ${e}") //fail
                 }
             }
 ```
@@ -355,231 +355,231 @@ KeyManager.action(RemoteControllerKey.KeyRequestPairing){
 ```
 var keySignalQualityListener = KeyListener<Int>{
         oldValue, newValue ->
-        Log.e(TAG,"SignalStrength:${oldValue},${newValue}")
+        Log.e(TAG,"Signal strength:${oldValue},${newValue}")
     }
     
-//ListenH12ProSignalStrength (取值Range: 0-100%)
+// Monitor H12Pro signal strength (value range: 0-100%)
 KeyManager.listen(AirLinkKey.KeySignalQuality,keySignalQualityListener)
 
-//取消ListenH12ProSignalStrength
+//Cancel monitoring H12Pro signal strength
 KeyManager.cancelListen(keySignalQualityListener)
 ```
 
 # PipelineManager
-与第三方Device通讯接口
+Communication interface with third-party devices
 
-- ### 与第三方Device(例如飞控)通讯
+- ### Communication with third-party devices (e.g., flight controllers)
 ```
-//Create通讯管道
+// Create a communication pipe
 pipeline = PipelineManager.createPipeline()
 pipeline?.let {
-    //SetListen
+    //Set up listener
     it.onCommListener = object : CommListener{
         override fun onConnectSuccess() {
-            log("管道ConnectSuccess")
+            log("Pipe connection successful")
         }
 
         override fun onConnectFail(e: SkyException?) {
-            log("管道Connectfailed${e}")
+            log("Pipe connection failed ${e}")
         }
 
         override fun onDisconnect() {
-            log("管道DisconnectConnect")
+            log("Pipe disconnected")
         }
 
         override fun onReadData(data: ByteArray?) {
-            //第三方DeviceSend的Data
+            //Data sent by a third-party device
         }
 
     }
-    //Connect通讯管道
+    //Connect communication pipe
     PipelineManager.connectPipeline(it)
 }
 
-//SendData到第三方Device
+//Send data to a third-party device
 pipeline?.let {
     it.writeData(bytes)
 }
 
-//Disconnect通讯管道
+//Disconnect communication channel
 pipeline?.let {
     PipelineManager.disconnectPipeline(it)
 }
 ```
 
-CustomCreate通讯管道方法
+Custom method for creating communication pipes
 ```
-//根据Remote Controller类型Create通讯管道
+// Create a communication pipeline based on the remote control type
 PipelineManager.createPipeline(DeviceType.H12Pro)
 
-//CreateCustomSerial Port通讯管道
+// Create a custom serial communication pipe
 PipelineManager.createSerialPipeline("/dev/ttyHS1",921600)
 
-//CreateUDP通讯管道
-//Parameters1:本地端口号;Parameters2:远程接收端IP;Parameters3:远程接收端端口号
+// Create a UDP communication pipe
+//Parameter 1: Local port number; Parameter 2: Remote receiver IP address; Parameter 3: Remote receiver port number
 PipelineManager.createUDPPipeline(14550,"192.168.144.10",14550)
 
-//CreateTCP通讯管道
+// Create a TCP communication pipe
 PipelineManager.createTCPPipeline("192.168.144.101",14550)
 
-//CreateSerial Port0通讯管道
+// Create a serial port 0 communication pipe
 PipelineManager.createPipeline(Uart.UART0)
 
-//CreateSerial Port1通讯管道
+// Create a communication pipe for serial port 1
 PipelineManager.createPipeline(Uart.UART1)
 
-//CreateG12G20通讯管道(适用于G12、G20)
+// Create a G12/G20 communication pipe (applicable to G12 and G20)
 PipelineManager.createG12G20Pipeline()
 
 ```
 
 # Key
 ### RemoteControllerKey
-- ##### Remote ControllerStick模式
+- ##### Remote control joystick mode
 ```
     /**
-     * Remote ControllerStick模式
-     * Access
+     * Remote control joystick mode
+     Access Method
      * SET,GET
-     * SupportsALL
-     */
+     * Supports ALL
+     /
     val KeyControlMode: KeyInfo<ControlMode> = KeyInfo.Builder<ControlMode>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H12StickChannelSet
+- ##### H12 Joystick Channel Settings
 ```
     /**
-     * H12Channel
-     * Access
+     * H12 channel
+     Access Method
      * SET,GET
-     * SupportsH12
-     */
+     * Supports H12
+     /
     val KeyH12ChannelSettings: KeyInfo<H12ChannelSettings> = KeyInfo.Builder<H12ChannelSettings>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### StickChannelSet
+- ##### Joystick Channel Settings
 ```
     /**
-     * ChannelSet
-     * Access
+     * Channel Settings
+     Access Method
      * SET,GET
-     * SupportsH12Pro/H16/H30/H20/G12/G20/G30
-     */
+     * Supports H12Pro/H16/H30/H20/G12/G20/G30
+     /
     val KeyChannelSettings: KeyInfo<ChannelSettings> = KeyInfo.Builder<ChannelSettings>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### Remote ControllerPairing
+- ##### Remote control frequency pairing
 ```
     /**
-     * Remote ControllerPairing
-     * Access
+     * Remote control frequency pairing
+     Access Method
      * ACTION
-     * SupportsALL
-     */
+     * Supports ALL
+     /
     val KeyRequestPairing: KeyInfo<EmptyMsg> = KeyInfo.Builder<EmptyMsg>()
         .canAction(true)
 ```
 
-- ##### Remote Controller序列号
+- ##### Remote control serial number
 ```
     /**
-     * Remote Controller序列号
-     * Access
+     * Remote control serial number
+     Access Method
      * GET
-     * SupportsALL
-     */
+     * Supports ALL
+     /
     val KeySerialNumber: KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
 ```
 
-- ##### Remote ControllerStick感量
+- ##### Remote control joystick sensitivity
 ```
     /**
-     * Remote ControllerStick感量
-     * Access
+     * Remote control joystick sensitivity
+     Access Method
      * GET
-     * SupportsH12/H12Pro/H30/H20/G12/G20/G30
-     */
+     * Supports H12/H12Pro/H30/H20/G12/G20/G30
+     /
     val KeyChannels: KeyInfo<IntArray> = KeyInfo.Builder<IntArray>()
         .canGet(true)
 ```
 
-- ##### H16Remote ControllerStick感量
+- ##### H16 Remote Control Joystick Sensitivity
 ```
     /**
-     * H16Remote ControllerStick感量
-     * Access
+     * H16 remote control joystick sensitivity
+     Access Method
      * LISTEN
-     * SupportsH16
-     */
+     * Supports H16
+     /
     val KeyH16Channels: KeyInfo<IntArray> = KeyInfo.Builder<IntArray>()
         .canListen(true)
 ```
 
-- ##### 教练模式
+- ##### Coach Mode
 ```
     /**
-     * 教练模式
-     * Access
+     Coach Mode
+     Access Method
      * SET,GET
-     * SupportsH12Pro/H16/H30
-     */
+     * Supports H12Pro/H16/H30
+     /
     val KeyCoachMode: KeyInfo<CoachMode> = KeyInfo.Builder<CoachMode>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### CustomData
+- ##### Custom Data
 ```
     /**
-     * CustomData 200byte
-     * Access
-     * GET,SET
-     * SupportsALL
-     */
+     * Custom data 200 bytes
+     Access Method
+     * GET, SET
+     * Supports ALL
+     /
     val KeyCustomData: KeyInfo<ByteArray> = KeyInfo.Builder<ByteArray>()
         .canGet(true)
         .canSet(true)
 ```
 
-- ##### Remote Controller型号
+- ##### Remote control model
 ```
     /**
-     * Remote Controller型号
-     * Access
+     * Remote control model
+     Access Method
      * GET
-     * SupportsALL
-     */
+     * Supports ALL
+     /
     val KeyModel:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
 ```
 
-- ##### Remote ControllerVersion
+- ##### Remote Control Version
 ```
     /**
-     * Remote ControllerVersion
-     * Access
+     * Remote control version
+     Access Method
      * GET
-     * SupportsALL
-     */
+     * Supports ALL
+     /
     val KeyVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
 ```
 
-- ##### 915模块使能
+- ##### 915 Module Enable
 ```
     /**
-     * 控制915模块使能
-     * Access
+     * Enable the 915 control module
+     Access Method
      * SET,GET
-     * SupportsG20
-     */
+     * Supports G20
+     /
     val KeyModule915Enable:KeyInfo<Boolean> = KeyInfo.Builder<Boolean>()
         .canSet(true)
         .canGet(true)
@@ -587,55 +587,55 @@ PipelineManager.createG12G20Pipeline()
 
 ### AirLinkKey
 
-- ##### 接收机Serial Port0波特率
+- ##### Receiver serial port 0 baud rate
 ```
     /**
-     * Telemetry接收机Serial Port0波特率
-     * Access
+     * Image transmission receiver serial port at 0 baud rate
+     Access Method
      * SET,GET
-     * SupportsH12Pro/G12/G20/G30
-     */
+     * Supports H12Pro/G12/G20/G30
+     /
     val KeyUart0BaudRate:KeyInfo<UartBaudRate> = KeyInfo.Builder<UartBaudRate>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H12Pro接收机RCChannel失控保护值
+- ##### H12Pro Receiver RC Channel Uncontrolled Protection Value
 ```
     /**
-     * 接收机RCChannel失控保护值
-     * Access
+     * Receiver RC channel runaway protection value
+     Access Method
      * SET,GET
-     * SupportsH12Pro
-     */
+     * Supports H12Pro
+     /
     val KeyLostSBUSValues:KeyInfo<LostSBUSValues> = KeyInfo.Builder<LostSBUSValues>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### 接收机Signal质量(原始Data)
+- ##### Receiver Signal Quality (Raw Data)
 ```
     /**
-     * 接收机Signal质量(原始Data)
-     * Access
+     * Receiver signal quality (raw data)
+     Access Method
      * LISTEN
-     * SupportsH16/H12Pro/H20/H30/G12/G20/G30
-     */
+     * Supports H16/H12Pro/H20/H30/G12/G20/G30
+     /
     val KeyRawSignalQuality:KeyInfo<String> = KeyInfo.Builder<String>()
         .canListen(true)
-    Get的Data格式如下：
-        G系列
+    The data obtained is in the following format:
+        G series
             {
-                "dev_connect": false, //ConnectStatus
-	            "ap_ldpc_err": "0", //Remote Controller-交织块中解码Error的LDPC块个数所占的比例
-	            "ap_ldpc_num": "0", //Remote Controller-解码Error的帧个数比例
-	            "ap_snr": "0", //Remote Controller-SNR
-	            "ap_gain_a": "0", //Remote Controller-A路天线接收SignalStrength
-	            "ap_gain_b": "0", //Remote Controller-B路天线接收SignalStrength
-	            "ap_tx_mcs": "0", //Remote Controller-发射MCS
-	            "ap_tx_power": "0", //Remote Controller-Send功率
-	            "ap_tx_chan": "0", //Remote Controller-发射信道
-	            "ap_tx_freq_khz": "0", //Remote Controller-Send频段
+                "dev_connect": false, // Connection status
+	            "ap_ldpc_err": "0", // The proportion of LDPC blocks with decoding errors in the remote control interleaving block.
+	            "ap_ldpc_num": "0", // Percentage of frames with decoding errors on the remote control
+	            "ap_snr": "0", //Remote control -SNR
+	            "ap_gain_a": "0", // Signal strength received by remote control's A-channel antenna
+	            "ap_gain_b": "0", //Signal strength received by remote control's B-channel antenna
+	            "ap_tx_mcs": "0", //Remote controller - Transmitting MCS
+	            "ap_tx_power": "0", //Remote control - transmit power
+	            "ap_tx_chan": "0", //Remote controller - transmission channel
+	            "ap_tx_freq_khz": "0", //Remote control - transmit frequency band
 	            "ap_lfs_2g_band_chan_snr": "0",
 	            "ap_lfs_2g_band_gain_a": "0",
 	            "ap_lfs_2g_band_gain_b": "0",
@@ -644,15 +644,15 @@ PipelineManager.createG12G20Pipeline()
 	            "ap_lfs_5g_band_gain_b": "0",
 	            "ap_main_loc": "0",
 	            "ap_sync_num": "0",
-	            "dev_ldpc_err": "0", //接收机-交织块中解码Error的LDPC块个数所占的比例
-	            "dev_ldpc_num": "0", //接收机-解码Error的帧个数比例
-	            "dev_snr": "0", //接收机-SNR
-	            "dev_gain_a": "0", //接收机-A路天线接收SignalStrength
-	            "dev_gain_b": "0", //接收机-B路天线接收SignalStrength
-	            "dev_tx_mcs": "0", //接收机-发射MCS
-	            "dev_tx_power": "0", //接收机-Send功率
-	            "dev_tx_chan": "0", //接收机-发射信道
-	            "dev_tx_freq_khz": "0", //接收机-Send频段
+	            "dev_ldpc_err": "0", // The proportion of LDPC blocks with decoding errors in the receiver-interleaved block.
+	            "dev_ldpc_num": "0", // Percentage of frames with decoding errors at the receiver
+	            "dev_snr": "0", // Receiver-SNR
+	            "dev_gain_a": "0", // Receiver-A antenna signal strength
+	            "dev_gain_b": "0", // Receiver signal strength received by antenna B
+	            "dev_tx_mcs": "0", // Receiver-Transmitter MCS
+	            "dev_tx_power": "0", // Receiver-transmit power
+	            "dev_tx_chan": "0", // Receiver-transmit channel
+	            "dev_tx_freq_khz": "0", // Receiver-transmit frequency band
 	            "dev_lfs_2g_band_chan_snr": "0",
 	            "dev_lfs_2g_band_gain_a": "0",
 	            "dev_lfs_2g_band_gain_b": "0",
@@ -662,339 +662,339 @@ PipelineManager.createG12G20Pipeline()
 	            "dev_sync_num": "0",
 	            "acs_chan": 0,
 	            "work_chan": 0,
-	            "signal": 0 //根据Remote Controller-SNR计算出来的用于Refer to的Signal质量百分比（Remote ControllerSNR<=0:Signal质量为0；Remote ControllerSNR>=16:Signal质量为100）
+	            "signal": 0 // The percentage of signal quality used for reference, calculated based on the remote control's SNR (remote control SNR <= 0: signal quality is 0; remote control SNR >= 16: signal quality is 100).
             }
 ```
 
-- ##### 接收机Signal质量
+- ##### Receiver signal quality
 ```
     /**
-     * 接收机Signal质量
-     * Access
+     * Receiver signal quality
+     Access Method
      * LISTEN
-     * SupportsH12Pro/H16/H30/H20/G12/G20
-     */
+     * Supports H12Pro/H16/H30/H20/G12/G20
+     /
     val KeySignalQuality:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canListen(true)
 ```
 
-- ##### H12接收机Signal质量
+- ##### H12 Receiver Signal Quality
 ```
     /**
-     * H12接收机Signal质量
-     * Access
+     * H12 receiver signal quality
+     Access Method
      * GET
-     * OnlySupportsH12
-     */
+     * H12 only
+     /
     val KeyH12SignalQuality:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canGet(true)
 ```
 
-- ##### H12接收机选项Set
+- ##### H12 Receiver Options Settings
 ```
     /**
-     * 接收机选项Set
-     * Access
+     * Receiver option settings
+     Access Method
      * SET,GET
-     * OnlySupportsH12
-     */
+     * H12 only
+     /
     val KeyReceiverOptions: KeyInfo<ReceiverOptions> = KeyInfo.Builder<ReceiverOptions>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H16接收机Serial Port0波特率
+- ##### H16 receiver serial port 0 baud rate
 ```
     /**
-     * H16接收机Serial Port0波特率
-     * Access
+     * H16 receiver serial port at 0 baud rate
+     Access Method
      * SET,GET
-     * OnlySupportsH16
-     */
+     * H16 only
+     /
     val KeyH16Uart0BaudRate:KeyInfo<UartBaudRate> = KeyInfo.Builder<UartBaudRate>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H16接收机Serial Port1波特率
+- ##### H16 receiver serial port 1 baud rate
 ```
     /**
-     * H16接收机Serial Port1波特率
-     * Access
+     * H16 receiver serial port 1 baud rate
+     Access Method
      * SET,GET
-     * OnlySupportsH16
-     */
+     * H16 only
+     /
     val KeyH16Uart1BaudRate:KeyInfo<UartBaudRate> = KeyInfo.Builder<UartBaudRate>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H16接收机Signal质量
-从1.1.0Version起，推荐UsageKeySignalQuality
+- ##### H16 Receiver Signal Quality
+Starting with version 1.1.0, KeySignalQuality is recommended.
 ```
     /**
-     * H16接收机Signal质量
-     * Access
+     * H16 receiver signal quality
+     Access Method
      * LISTEN
-     * OnlySupportsH16
-     */
+     * H16 only
+     /
     val KeyH16SignalQuality:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canListen(true)
 ```
 
-- ##### H16接收机Signal质量(原始Data)
+- ##### H16 Receiver Signal Quality (Raw Data)
 ```
     /**
-     * H16接收机Signal质量(原始Data)
-     * Access
+     * H16 receiver signal quality (raw data)
+     Access Method
      * LISTEN
-     * OnlySupportsH16
-     */
+     * H16 only
+     /
     val KeyH16RawSignalQuality:KeyInfo<String> = KeyInfo.Builder<String>()
         .canListen(true)
 ```
 
-- ##### H30接收机Signal质量
-从1.1.0Version起，推荐UsageKeySignalQuality
+- ##### H30 Receiver Signal Quality
+Starting with version 1.1.0, KeySignalQuality is recommended.
 ```
     /**
-     * H30接收机Signal质量
-     * Access
+     * H30 receiver signal quality
+     Access Method
      * LISTEN
-     * OnlySupportsH30
-     */
+     * Only H30 is supported
+     /
     val KeyH30SignalQuality:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canListen(true)
 ```
 
-- ##### H30接收机Serial Port波特率
+- ##### H30 Receiver Serial Port Baud Rate
 ```
     /**
-     * H30接收机Serial Port波特率
-     * Access
+     * H30 receiver serial port baud rate
+     Access Method
      * SET,GET
-     * OnlySupportsH30
-     */
+     * Only H30 is supported
+     /
     val KeyH30UartBaudRate:KeyInfo<H30UartBaudRate> = KeyInfo.Builder<H30UartBaudRate>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H20接收机Serial Port0波特率
+- ##### H20 receiver serial port 0 baud rate
 ```
     /**
-     * H20接收机Serial Port0波特率
-     * Access
+     * H20 receiver serial port at 0 baud rate
+     Access Method
      * SET,GET
-     * OnlySupportsH20
-     */
+     * H2O only
+     /
     val KeyH20Uart0BaudRate:KeyInfo<H20UartBaudRate> = KeyInfo.Builder<H20UartBaudRate>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H20接收机Serial Port1波特率
+- ##### H20 receiver serial port 1 baud rate
 ```
     /**
-     * H20接收机Serial Port1波特率
-     * Access
+     * H20 receiver serial port 1 baud rate
+     Access Method
      * SET,GET
-     * OnlySupportsH20
-     */
+     * H2O only
+     /
     val KeyH20Uart1BaudRate:KeyInfo<H20UartBaudRate> = KeyInfo.Builder<H20UartBaudRate>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### H20接收机Serial Port1波特率
+- ##### H20 receiver serial port 1 baud rate
 ```
     /**
-     * H20带宽Set
-     * Access
+     * H2O bandwidth settings
+     Access Method
      * SET,GET
-     * OnlySupportsH20
-     * Bandwidth.ul：上行带宽
-     * Bandwidth.dl：下行带宽
-     */
+     * H2O only
+     * Bandwidth.ul: Uplink bandwidth
+     * Bandwidth.dl: Downlink bandwidth
+     /
     val KeyH20Bandwidth:KeyInfo<Bandwidth> = KeyInfo.Builder<Bandwidth>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### Remote Controller无线模块Version
+- ##### Remote Control Wireless Module Version
 ```
     /**
-     * Remote Controller无线模块Version
-     * Access
+     * Remote control wireless module version
+     Access Method
      * GET
-     * SupportsG12/G20/G30/H30/H20
-     */
+     * Supports G12/G20/G30/H30/H20
+     /
     val KeyRCVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
 ```
 
-- ##### 天空端无线模块Version
+- ##### Sky-end Wireless Module Version
 ```
     /**
-     * 天空端无线模块Version
-     * Access
+     * Sky-end wireless module version
+     Access Method
      * GET
-     * SupportsG12/G20/G30/H30/H20
-     */
+     * Supports G12/G20/G30/H30/H20
+     /
     val KeySkyVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
 ```
 
-- ##### 天空端MCUVersion
+- ##### SkyEnd MCU Version
 ```
     /**
-     * 天空端MCUVersion
-     * Access
+     * Sky-end MCU version
+     Access Method
      * GET
-     * SupportsH30
-     */
+     * Supports H30
+     /
     val KeySkyMCUVersion:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)
 ```
 
-- ##### 地面端重传次数(G系列)
+- ##### Number of retransmissions at the ground end (G series)
 ```
     /**
-     * 地面端Set重传次数,Default6次，重启后失效(恢复Default6次)
-     * SetRange:0-500  0:表示重传到对,保证了链路的可靠性
-     * Access
+     * The ground terminal sets the number of retransmissions, which defaults to 6. This setting is lost after a restart (to restore the default of 6 retransmissions).
+     * Setting range: 0-500 0: Indicates retransmission to the correct pair, ensuring link reliability.
+     Access Method
      * SET
-     * SupportsG12/G20/G30
-     */
+     * Supports G12/G20/G30
+     /
     val KeyRCSetReTxCount:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canSet(true)
 ```
 
 
-- ##### 天空端重传次数(G系列)
+- ##### Number of retransmissions from the Sky terminal (G series)
 ```
     /**
-     * 天空端Set重传次数,Default6次，重启后失效(恢复Default6次)
-     * SetRange:0-500  0:表示重传到对,保证了链路的可靠性
-     * Access
+     * The retransmission count is set on the Sky platform, defaulting to 6 times. This setting is lost after a restart (to restore the default of 6 times).
+     * Setting range: 0-500 0: Indicates retransmission to the correct pair, ensuring link reliability.
+     Access Method
      * SET
-     * SupportsG12/G20/G30
-     */
+     * Supports G12/G20/G30
+     /
     val KeySkySetReTxCount:KeyInfo<Int> = KeyInfo.Builder<Int>()
         .canSet(true)
 ```
 
-- ##### 自适应MCS(G系列)
+- ##### Adaptive MCS (G Series)
 ```
     /**
-     * 注意* 该接口不要和KeySkySetAutoMCSDuration接口混合用
-     * 自适应MCS
-     * 开启后可提提升上行速度,重启后失效
-     * 适用于Upload文件,Upload前开启,Upload完成Close
-     * Access
+     *Note* This interface should not be used in conjunction with the KeySkySetAutoMCSDuration interface.
+     * Adaptive MCS
+     * Enabling this feature can improve upload speed; the effect will be lost after a restart.
+     * Applicable to file uploads. Enable before uploading and disable after uploading.
+     Access Method
      * SET
-     * SupportsG12/G20/G30
-     */
+     * Supports G12/G20/G30
+     /
     val KeySetAutoMCS:KeyInfo<Boolean> = KeyInfo.Builder<Boolean>()
         .canSet(true)
 ```
 
-- ##### Duration自适应MCS(G系列)
+- ##### Duration-based Adaptive MCS (G Series)
 ```
     /**
-     * 注意* 该接口不要和KeySetAutoMCS接口混合用
-     * Duration自适应MCS
-     * 开启后可提提升上行速度,Duration有效
-     * 适用于Upload文件,Upload前开启,Upload完成Close
-     * Access
+     *Note* This interface should not be used in conjunction with the KeySetAutoMCS interface.
+     * Adaptive MCS over Duration
+     * When activated, it can increase upload speed; effective for the duration of the activation.
+     * Applicable to file uploads. Enable before uploading and disable after uploading.
+     Access Method
      * SET
-     * SupportsG12/G20/G30
-     * UsageDescription：
-     * 当SetDuraton为6s,Remote Controller将进入自适应MCS持续6s，如果在第4s时，再次SetDuraton为6s。接收机将重新计时。
-     * 文件Upload过程中可定时Send，文件Upload完成后StopSend。该接口可防止程序不小心崩溃，Remote Controller还处于自适应MCS模式的情况。
-     */
+     * Supports G12/G20/G30
+     * Instructions for use:
+     * When the duration is set to 6 seconds, the remote control will enter adaptive MCS for 6 seconds. If the duration is set to 6 seconds again at the 4th second, the receiver will reset the timer.
+     * File uploads can be scheduled at intervals, and will stop once the upload is complete. This interface prevents accidental program crashes while the remote control is still in adaptive MCS mode.
+     /
     val KeySkySetAutoMCSDuration:KeyInfo<SetAutoAndDuration> = KeyInfo.Builder<SetAutoAndDuration>()
         .canSet(true)
         
 ```
 
-- ##### MAC地址(G系列)
+- ##### MAC Address (G Series)
 ```
     /**
-     * MAC地址
-     * Access
+     MAC address
+     Access Method
      * GET
-     * SupportsG12/G20/G30
-     */
+     * Supports G12/G20/G30
+     /
     val KeyMAC:KeyInfo<String> = KeyInfo.Builder<String>()
         .canGet(true)   
 ```
 
-- ##### 射频开关(G系列)
+- ##### Radio Frequency Switches (G Series)
 ```
     /**
-     * Set射频开关
-     * Access
+     * Configure RF switch
+     Access Method
      * SET,GET
-     * SupportsG12/G20/G30
-     */
+     * Supports G12/G20/G30
+     /
     val KeyRCRFEnable:KeyInfo<Boolean> = KeyInfo.Builder<Boolean>()
         .canSet(true)
         .canGet(true)
 ```
 
-- ##### SetMAC的Pairing方式(G系列)
+- ##### Setting the MAC pairing method (G series)
 ```
     /**
-     * SetMAC的Pairing方式
-     * Access
+     * Configure MAC frequency pairing method
+     Access Method
      * SET
-     * SupportsG12/G20/G30
-     */
+     * Supports G12/G20/G30
+     /
     val KeyRequestPairingAtSetMac:KeyInfo<String> = KeyInfo.Builder<String>()
         .canSet(true)
 ```
 
-- ##### Upload模式(G系列)
+- ##### Upload Mode (G Series)
 ```
     /**
-     * G系列Upload/Download模式
-     * Access
+     * G-series upload/download mode
+     Access Method
      * GET/SET
-     * SupportsG12/G20/G30
-     */
+     * Supports G12/G20/G30
+     /
     val KeyGLinkSpeedMode:KeyInfo<GLinkSpeedMode> = KeyInfo.Builder<GLinkSpeedMode>()
         .canSet(true)
         .canGet(true)
         
-    //OpenUpload模式
+    //Open upload mode
     KeyManager.set(AirLinkKey.KeyGLinkSpeedMode,GLinkSpeedMode.UPLOAD){
         if(it == null){
-            //Success
+            //success
         }else{
-            //failed
+            //fail
         }
     }
-    //CloseUpload模式
+    //Disable upload mode
     KeyManager.set(AirLinkKey.KeyGLinkSpeedMode,GLinkSpeedMode.NORMAL){
         if(it == null){
-            //Success
+            //success
         }else{
-            //failed
+            //fail
         }
     }
 ```
 
 # PayloadManager
-云卓相关配件通讯接口
+Yunzhuo related accessories communication interface
 ```
-//C10相机控制
+//C10 Camera Control
 val c10 = PayloadManager.getTCPPayload(PayloadType.C10, "192.168.144.108", 5000) as C10?
-//内部已经实现重连机制，无需再实现
+//The internal reconnection mechanism is already implemented, so it does not need to be implemented again.
 if (c10 != null) {
     c10.setCommListener(object : CommListener {
         override fun onConnectSuccess() {
-             log("C10ConnectSuccess")
+             log("C10 connection successful")
         }
 
         override fun onConnectFail(e: SkyException) {
@@ -1002,7 +1002,7 @@ if (c10 != null) {
         }
 
         override fun onDisconnect() {
-            log("C10DisconnectConnect")
+            log("C10 Disconnection")
         }
 
         override fun onReadData(bytes: ByteArray) {
@@ -1010,453 +1010,453 @@ if (c10 != null) {
         }
     })
     
-    //ConnectC10相机
+    //Connect C10 camera
     PayloadManager.connectPayload(c10)
 }
 
-//控制C10One-touchCenter
+//Control C10 to return to center with one key
 c10.akey(AKey.MID)
 
-//DisconnectC10相机Connect
+//Disconnect C10 camera
 PayloadManager.disconnectPayload(c10)
 ```
 
-### 三体相机(Serial Port版)控制
+### Three-Body Camera (Serial Port Version) Control
 ```
-//Get三体相机(Serial Port版)
-//Get实例后需要调用Connect方法才能控制
+//Get the Three-Body camera (serial port version)
+//After obtaining the instance, you need to call the connection method to control it.
 val threeBodyCamera = PayloadManager.getSerialPortPayload(PayloadType.THREE_BODY_CAMERA, "/dev/ttyHS0", 4000000) as ThreeBodyCamera?
  
-//Take picture
+//Photograph
 threeBodyCamera?.snapshot()
 
-//StartRecording
+//Start recording
 threeBodyCamera?.toggleReCord(true)
 
-//结束Recording
+//End recording
 threeBodyCamera?.toggleReCord(false)
 
-//切换LED
+//Switch LED
 threeBodyCamera?.toggleLED()
 
-//同步时间（要在收到帧Data后再调用才有效）
+// Synchronize time (this is only effective if called after receiving frame data)
 threeBodyCamera?.setTime(System.currentTimeMillis())
 ```
 
-### 双轴Gimbal相机(Serial Port版)控制
+### Dual-axis pan-tilt camera (serial port version) control
 ```
  val dualAxisGimbalCamera = PayloadManager.getSerialPortPayload(PayloadType.DUAL_AXIS_GIMBAL_CAMERA,"/dev/ttyHS0",4000000) as DualAxisGimbalCamera
 
-//One-touch控制
-//Down
+One-click control
+//down
 dualAxisGimbalCamera?.akey(AKey.DOWN)
-//Center
+// Return to center
 dualAxisGimbalCamera?.akey(AKey.MID)
-//Up
+//up
 dualAxisGimbalCamera?.akey(AKey.TOP)
 
-//控制Pitch
-//Up
+//Control pitch
+//up
 dualAxisGimbalCamera?.controlPitch(true)
-//Down
+//down
 dualAxisGimbalCamera?.controlPitch(false)
 
-//同步时间（要在收到帧Data后再调用才有效）
+// Synchronize time (this is only effective if called after receiving frame data)
 dualAxisGimbalCamera?.setTime(System.currentTimeMillis())
 ```
 
-### 旧款三体相机(网口版)控制
+### Control of the old Three-Body Camera (Network Port Version)
 ```
-//Get三体相机(网口版)
-//Get实例后需要调用Connect方法才能控制
+//Get the Three-Body Camera (Network Port Version)
+//After obtaining the instance, you need to call the connection method to control it.
 val threeBodyCamera2 = PayloadManager.getTCPPayload(PayloadType.THREE_BODY_CAMERA2, "192.168.144.108", 5001) as ThreeBodyCamera2?
 
-//切换LED
+//Switch LED
 threeBodyCamera2?.toggleLED()
 threeBodyCamera2?.toggleLED(boolean)
 
 ```
 
-### C10Gimbal相机控制
+### C10 Gimbal Camera Control
 ```
-//GetC10Gimbal相机
-//Get实例后需要调用Connect方法才能控制
+//Get C10 gimbal camera
+//After obtaining the instance, you need to call the connection method to control it.
 val c10 = PayloadManager.getTCPPayload(PayloadType.C10, "192.168.144.108", 5000) as C10?
 
-//One-touch控制
-//Down
+One-click control
+//down
 c10?.akey(AKey.DOWN)
-//Center
+// Return to center
 c10?.akey(AKey.MID)
-//Up
+//up
 c10?.akey(AKey.TOP)
         
-//Take picture
+//Photograph
 c10?.takePicture()
 
-//StartRecording
+//Start recording
 c10?.startRecordVideo()
         
-//StopRecording
+//Stop recording
 c10?.stopRecordVideo()
 
-//速度控制偏航，-63.5 ~ +63.5，单位°/s 负数Left，正数Right
+//Speed ​​control yaw, -63.5 ~ +63.5, unit °/s. Negative numbers indicate left, positive numbers indicate right.
 c10?.controlYaw(1f)
         
-//速度控制Pitch，-63.5 ~ +63.5，单位°/s 负数Down，正数Up
+//Speed ​​controls pitch, -63.5 ~ +63.5, unit: °/s. Negative numbers indicate downward movement, positive numbers indicate upward movement.
 c10?.controlPitch(-1f)
 
-//控制偏航角度, -150.00 ~ +150.00，单位°
+//Control yaw angle, -150.00 ~ +150.00, unit °
 c10?.gotoYaw(30f)
 
-//控制Pitch角度，-90.00 ~ +90.00，单位°
+//Control pitch angle, -90.00 ~ +90.00, unit °
 c10?.gotoPitch(-90f)
 ```
 
-### C20相机控制
+### C20 Camera Control
 ```
-//GetC20相机
-//Get实例后需要调用Connect方法才能控制
+//Get C20 camera
+//After obtaining the instance, you need to call the connection method to control it.
 val c20Camera = PayloadManager.getTCPPayload(PayloadType.C20_CAMERA, "192.168.144.108", 8100) as C20Camera?
 
-//Take picture
+//Photograph
 c20Camera?.takePicture()
-//StartRecording
+//Start recording
 c20Camera?.startRecordVideo()
-//StopRecording
+//Stop recording
 c20Camera?.stopRecordVideo()
 
-//变倍变焦
-//Start变倍
+// Zoom
+//Start doubling
 c20Camera?.startZoomIn()
 c20Camera?.startZoomOut()
-//Start变焦
+//Start zooming
 c20Camera?.startFucusFar()
 c20Camera?.startFucusNear()
-//Stop变倍变焦
+//Stop zooming
 c20Camera?.stopZoomOrFucus()
 
-//日夜模式
-//Set
+//Day/Night Mode
+//set up
 c20Camera?.setDayNightMode()
-//查询
+//Query
 c20Camera?.getDayNightMode()
 
-//翻转
-//Set
+// Flip
+//set up
 c20Camera?.setFlip()
-//查询
+//Query
 c20Camera?.setFlip()
 
-See interface docs for
+For more interface details, please see
 com.skydroid.rcsdk.common.payload.C20Camera
 
 ```
 
-### C20Gimbal控制
+### C20 PTZ Control
 ```
-//GetC20Gimbal
-//Get实例后需要调用Connect方法才能控制
+//Get C20 gimbal
+//After obtaining the instance, you need to call the connection method to control it.
 val c20Gimbal = PayloadManager.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000) as C20Gimbal?
 
-//One-touch控制
-//Down
+One-click control
+//down
 c20Gimbal?.akey(AKey.DOWN)
-//Center
+// Return to center
 c20Gimbal?.akey(AKey.MID)
-//Up
+//up
 c20Gimbal?.akey(AKey.TOP)
 
-//速度控制偏航，-63.5 ~ +63.5，单位°/s 负数Left，正数Right
+//Speed ​​control yaw, -63.5 ~ +63.5, unit °/s. Negative numbers indicate left, positive numbers indicate right.
 c20Gimbal?.controlYaw(1f)
         
-//速度控制Pitch，-63.5 ~ +63.5，单位°/s 负数Down，正数Up
+//Speed ​​controls pitch, -63.5 ~ +63.5, unit: °/s. Negative numbers indicate downward movement, positive numbers indicate upward movement.
 c20Gimbal?.controlPitch(-1f)
 
-//控制偏航角度, -150.00 ~ +150.00，单位°
+//Control yaw angle, -150.00 ~ +150.00, unit °
 c20Gimbal?.gotoYaw(30f)
 
-//控制Pitch角度，-90.00 ~ +90.00，单位°
+//Control pitch angle, -90.00 ~ +90.00, unit °
 c20Gimbal?.gotoPitch(-90f)
 
-//切换LED
+//Switch LED
 c20Gimbal?.toggleLED()
 c20Gimbal?.toggleLED(boolean)
 
 ```
 
-### C10Pro相机/新款三体相机控制（0.2.7以下固件）
+### C10Pro Camera/New Three-Body Camera Control (Firmware below 0.2.7)
 ```
-//GetC10Pro相机
-//Get实例后需要调用Connect方法才能控制
+//Get C10 Pro camera
+//After obtaining the instance, you need to call the connection method to control it.
 val c10ProCamera = PayloadManager.getUDPPayload(PayloadType.C10PRO_CAMERA,12580,"192.168.144.108",12580) as C10ProCamera?
 
-//Take picture
+//Photograph
 c10ProCamera?.takePicture()
-CommandExample:"AT+AZ -p2\r\n"
+Command example: "AT+AZ -p2\r\n"
 
-//StartRecording
+//Start recording
 c10ProCamera?.startRecordVideo()
-CommandExample:"AT+AZ -p0\r\n"
+Command example: "AT+AZ -p0\r\n"
 
-//StopRecording
+//Stop recording
 c10ProCamera?.stopRecordVideo()
-CommandExample:"AT+AZ -p1\r\n"
+Command example: "AT+AZ -p1\r\n"
 
-//同步时间
+//Synchronize time
 c10ProCamera?.setTime()
 
-//GetVersion号
+//Get version number
 c10ProCamera?.getVersion()
-CommandExample:"AT+INFO\r\n"
+Command example: "AT+INFO\r\n"
 
-//SetLED（针对新款三体相机有效）
+//Set LED (effective for the new Three-Body camera)
 c10ProCamera?.setLED()
-CommandExample:开 "AT+LED -e1\r\n";关 "AT+LED -e0\r\n"
+Command examples: Turn on "AT+LED -e1\r\n"; Turn off "AT+LED -e0\r\n"
 
-See interface docs for
+For more interface details, please see
 com.skydroid.rcsdk.common.payload.C10ProCamera
 
 ```
 
-### C10ProGimbal控制（0.2.7以下固件）
+### C10Pro Gimbal Control (Firmware below 0.2.7)
 ```
-//GetC10ProGimbal
-//Get实例后需要调用Connect方法才能控制
+//Get C10Pro gimbal
+//After obtaining the instance, you need to call the connection method to control it.
 val c10ProGimbal = PayloadManager.getUDPPayload(PayloadType.C10PRO_GIMBAL, 5000, "192.168.144.108", 5000) as C10ProGimbal?
 
-//One-touch控制
-//Down
+One-click control
+//down
 c10ProGimbal?.akey(AKey.DOWN)
-//Center
+// Return to center
 c10ProGimbal?.akey(AKey.MID)
-//Up
+//up
 c10ProGimbal?.akey(AKey.TOP)
 
-//速度控制偏航，-63.5 ~ +63.5，单位°/s 负数Left，正数Right
+//Speed ​​control yaw, -63.5 ~ +63.5, unit °/s. Negative numbers indicate left, positive numbers indicate right.
 c10ProGimbal?.controlYaw(3f)
-CommandExample:"#TPUG2wGSY1E75"
+Command example: "#TPUG2wGSY1E75"
 c10ProGimbal?.controlYaw(-3f)
-CommandExample:"#TPUG2wGSYE276"
+Command example: "#TPUG2wGSYE276"
 
-//速度控制Pitch，-63.5 ~ +63.5，单位°/s 负数Down，正数Up
+//Speed ​​controls pitch, -63.5 ~ +63.5, unit: °/s. Negative numbers indicate downward movement, positive numbers indicate upward movement.
 c10ProGimbal?.controlPitch(3f)
-CommandExample:"#TPUG2wGSP1E6C"
+Command example: "#TPUG2wGSP1E6C"
 c10ProGimbal?.controlPitch(-3f)
-CommandExample:"#TPUG2wGSPE26D"
+Command example: "#TPUG2wGSPE26D"
 
-//控制偏航角度, -150.00 ~ +150.00，单位°
+//Control yaw angle, -150.00 ~ +150.00, unit °
 c10ProGimbal?.gotoYaw(30f)
 
-//控制Pitch角度，-90.00 ~ +90.00，单位°
+//Control pitch angle, -90.00 ~ +90.00, unit °
 c10ProGimbal?.gotoPitch(-90f)
 
 ```
 
-### C10ProGimbal相机/新款三体相机控制（0.2.7及以上固件）
+### C10Pro Gimbal Camera/New Three-Body Camera Control (Firmware 0.2.7 and above)
 ```
-//GetC10ProGimbal相机
-//Get实例后需要调用Connect方法才能控制
+//Get C10Pro gimbal camera
+//After obtaining the instance, you need to call the connection method to control it.
 c10p = PayloadManager.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000) as C10Pro?
 
-//One-touch控制
-//Down
+One-click control
+//down
 c10p?.akey(AKey.DOWN)
-//Center
+// Return to center
 c10p?.akey(AKey.MID)
-//Up
+//up
 c10p?.akey(AKey.TOP)
 
-//速度控制偏航，-63.5 ~ +63.5，单位°/s 负数Left，正数Right
+//Speed ​​control yaw, -63.5 ~ +63.5, unit °/s. Negative numbers indicate left, positive numbers indicate right.
 c10p?.controlYaw(3f)
-CommandExample:"#TPUG2wGSY1E75"
+Command example: "#TPUG2wGSY1E75"
 c10p?.controlYaw(-3f)
-CommandExample:"#TPUG2wGSYE276"
+Command example: "#TPUG2wGSYE276"
   
-//速度控制Pitch，-63.5 ~ +63.5，单位°/s 负数Down，正数Up
+//Speed ​​controls pitch, -63.5 ~ +63.5, unit: °/s. Negative numbers indicate downward movement, positive numbers indicate upward movement.
 c10p?.controlPitch(3f)
-CommandExample:"#TPUG2wGSP1E6C"
+Command example: "#TPUG2wGSP1E6C"
 c10p?.controlPitch(-3f)
-CommandExample:"#TPUG2wGSPE26D"
+Command example: "#TPUG2wGSPE26D"
 
-//控制偏航角度, -150.00 ~ +150.00，单位°
+//Control yaw angle, -150.00 ~ +150.00, unit °
 c10p?.gotoYaw(30f)
 
-//控制Pitch角度，-90.00 ~ +90.00，单位°
+//Control pitch angle, -90.00 ~ +90.00, unit °
 c10p?.gotoPitch(-90f)
 
-//Take picture
+//Photograph
 c10p?.takePicture(callBack:CompletionCallback?)
-CommandExample:"#TPUD2wCAP013E"
+Command example: "#TPUD2wCAP013E"
 
-//StartRecording
+//Start recording
 c10p?.startRecordVideo(callBack:CompletionCallback?)
-CommandExample:"#TPUD2wREC0144"
+Command example: "#TPUD2wREC0144"
 
-//结束Recording
+//End recording
 c10p?.stopRecordVideo(callBack:CompletionCallback?)
-CommandExample:"#TPUD2wREC0043"
+Command example: "#TPUD2wREC0043"
 
-//GetRecordingStatus
+//Get recording status
 c10p?.getRecordVideoState(callBack: CompletionCallbackWith<Boolean>)
-CommandExample:"#TPUD2rREC003E"
+Command example: "#TPUD2rREC003E"
 
-//同步时间（需要在出图后Set才有效）
+//Synchronization time (must be set after outputting the drawing to take effect)
 c10p?.setTime(time:Long,callBack:CompletionCallback?)
 
-//SetosdDisplay/Close
+//Set OSD to show/hide
 c10p?.setOSD(boolean: Boolean,callBack: CompletionCallback?)
 
-//Get相机Version号
+//Get camera version number
 c10p?.getCameraVersion(callBack: CompletionCallbackWith<String>)
-CommandExample:"#TPUD2rVER0051"
+Command example: "#TPUD2rVER0051"
 
-//Set/Read视频输出Parameters
+//Set/Read video output parameters
 c10p?.setVideoConfig()
 c10p?.getVideoConfig()
 
-//LED开关（针对新款三体相机有效）
+//LED switch (effective for the new Three-Body camera)
 c10p?.setLed(onOrOff:Boolean,callBack: CompletionCallback?)
 ```
 
-### C12Gimbal相机控制
+### C12 Gimbal Camera Control
 ```
-//GetC12Gimbal相机
-//Get实例后需要调用Connect方法才能控制
+//Get C12 gimbal camera
+//After obtaining the instance, you need to call the connection method to control it.
 c12 = PayloadManager.getUDPPayload(PayloadType.C12,5000,"192.168.144.108",5000) as C12?
 
-//One-touch控制
-//Down
+One-click control
+//down
 c12?.akey(AKey.DOWN)
-//Center
+// Return to center
 c12?.akey(AKey.MID)
-//Up
+//up
 c12?.akey(AKey.TOP)
 
-//速度控制偏航，-63.5 ~ +63.5，单位°/s 负数Left，正数Right
+//Speed ​​control yaw, -63.5 ~ +63.5, unit °/s. Negative numbers indicate left, positive numbers indicate right.
 c12?.controlYaw(1f)
         
-//速度控制Pitch，-63.5 ~ +63.5，单位°/s 负数Down，正数Up
+//Speed ​​controls pitch, -63.5 ~ +63.5, unit: °/s. Negative numbers indicate downward movement, positive numbers indicate upward movement.
 c12?.controlPitch(-1f)
 
-//控制偏航角度, -150.00 ~ +150.00，单位°
+//Control yaw angle, -150.00 ~ +150.00, unit °
 c12?.gotoYaw(30f)
 
-//控制Pitch角度，-90.00 ~ +90.00，单位°
+//Control pitch angle, -90.00 ~ +90.00, unit °
 c12?.gotoPitch(-90f)
 
-//Set倍率 0-4  0:原图,1-4:变倍
+//Set the magnification 0-4 0: Original image, 1-4: Zoom
 c12?.setZoomRatios(value:Int,callBack: CompletionCallback?)
 
-//Set伪彩
-//    WHITE_HOT,白热
-//    SEPIA,辉金
-//    IRONBOW,铁红
-//    RAINBOW,彩虹
-//    NIGHT,微光
-//    AURORA,极光
-//    RED_HOT,红热
-//    JUNGLE,从林
-//    MEDICAL,医疗
-//    BLACK_HOT,黑热
-//    GLORY_HOT;金红
+//Set false color
+// WHITE_HOT, White Heat
+// SEPIA, Huijin
+// IRONBOW, Iron Red
+// RAINBOW, Rainbow
+// NIGHT, Glimmer
+// AURORA, Aurora
+// RED_HOT, Red Hot
+// JUNGLE, from the forest
+// MEDICAL, Medical
+// BLACK_HOT, Black Hot
+// GLORY_HOT;Golden Red
 c12?.setThermalPalette(palette: ThermalPalette, callBack: CompletionCallback?)
 
-//Take picture
+//Photograph
 c12?.takePicture(callBack:CompletionCallback?)
 
-//StartRecording
+//Start recording
 c12?.startRecordVideo(callBack:CompletionCallback?)
 
-//结束Recording
+//End recording
 c12?.stopRecordVideo(callBack:CompletionCallback?)
 
-//GetRecordingStatus
+//Get recording status
 c12?.getRecordVideoState(callBack: CompletionCallbackWith<Boolean>)
 
-//同步时间（需要在出图后Set才有效）
+//Synchronization time (must be set after outputting the drawing to take effect)
 c12?.setTime(time:Long,callBack:CompletionCallback?)
 
-//Get相机Version号
+//Get camera version number
 c12?.getCameraVersion(callBack: CompletionCallbackWith<String>)
 
 ```
 
-### 通用Gimbal相机控制
+### General-purpose gimbal camera control
 ```
-通用的相机/Gimbal，包含了所有的控制协议，需要开发者自己判断是否Supports控制
-Supports：C10，C10Pro，C11，C12，C13，电子Gimbal(C01)，三体网口相机，单双轴网口相机
-Connect方式：根据相机类型自行判断
+A generic camera/gimbal includes all control protocols; developers need to determine whether they support these protocols themselves.
+Supports: C10, C10Pro, C11, C12, C13, electronic gimbal (C01), three-body network camera, single/dual-axis network camera
+Connection method: Determine based on camera type.
 
-以下UsageC12进行测试
-//Get实例后需要调用Connect方法才能控制
+The following tests are performed using C12.
+//After obtaining the instance, you need to call the connection method to control it.
 val c12:CommonPayload? = PayloadManager.getUDPPayload(PayloadType.COMMON,5000,"192.168.144.108",5000) as CommonPayload?
 
-//One-touch控制
-//Down
+One-click control
+//down
 c12?.akey(AKey.DOWN)
-//Center
+// Return to center
 c12?.akey(AKey.MID)
-//Up
+//up
 c12?.akey(AKey.TOP)
 
-//速度控制偏航，-63.5 ~ +63.5，单位°/s 负数Left，正数Right
+//Speed ​​control yaw, -63.5 ~ +63.5, unit °/s. Negative numbers indicate left, positive numbers indicate right.
 c12?.controlYaw(1f)
         
-//速度控制Pitch，-63.5 ~ +63.5，单位°/s 负数Down，正数Up
+//Speed ​​controls pitch, -63.5 ~ +63.5, unit: °/s. Negative numbers indicate downward movement, positive numbers indicate upward movement.
 c12?.controlPitch(-1f)
 
-//控制偏航角度, -150.00 ~ +150.00，单位°
+//Control yaw angle, -150.00 ~ +150.00, unit °
 c12?.gotoYaw(30f)
 
-//控制Pitch角度，-90.00 ~ +90.00，单位°
+//Control pitch angle, -90.00 ~ +90.00, unit °
 c12?.gotoPitch(-90f)
 
-//Set伪彩
-//    WHITE_HOT,白热
-//    SEPIA,辉金
-//    IRONBOW,铁红
-//    RAINBOW,彩虹
-//    NIGHT,微光
-//    AURORA,极光
-//    RED_HOT,红热
-//    JUNGLE,从林
-//    MEDICAL,医疗
-//    BLACK_HOT,黑热
-//    GLORY_HOT;金红
+//Set false color
+// WHITE_HOT, White Heat
+// SEPIA, Huijin
+// IRONBOW, Iron Red
+// RAINBOW, Rainbow
+// NIGHT, Glimmer
+// AURORA, Aurora
+// RED_HOT, Red Hot
+// JUNGLE, from the forest
+// MEDICAL, Medical
+// BLACK_HOT, Black Hot
+// GLORY_HOT;Golden Red
 c12?.setThermalPalette(palette: ThermalPalette, callBack: CompletionCallback?)
 
-//Take picture
+//Photograph
 c12?.takePicture(callBack:CompletionCallback?)
 
-//StartRecording
+//Start recording
 c12?.startRecordVideo(callBack:CompletionCallback?)
 
-//结束Recording
+//End recording
 c12?.stopRecordVideo(callBack:CompletionCallback?)
 
-//GetRecordingStatus
+//Get recording status
 c12?.getRecordVideoState(callBack: CompletionCallbackWith<Boolean>)
 
-//同步时间（需要在出图后Set才有效）
+//Synchronization time (must be set after outputting the drawing to take effect)
 c12?.setTime(time:Long,callBack:CompletionCallback?)
 
-//Get相机Version号
+//Get camera version number
 c12?.getCameraVersion(callBack: CompletionCallbackWith<String>)
 
 ```
 
-# 工具类
-#### CustomRemote ControllerButton(Remote ControllerChannelCustom/波轮控制/Stick控制)
+# Utility Class
+#### Customize remote control buttons (customize remote control channels/pivot wheel control/joystick control)
 com.skydroid.rcsdk.common.button.ButtonHelper
 ```
-详细Usage方法Refer to
+For detailed usage instructions, please refer to [link/reference].
 CustomRCButtonsActivity
 ```
 
 #### RCSDKUitls
 com.skydroid.rcsdk.utils.RCSDKUitls
 ```
-getDeviceType GetRemote Controller型号
-getVersion GetSDKVersion号
+getDeviceType retrieves the remote control model.
+getVersion retrieves the SDK version number.
 ```

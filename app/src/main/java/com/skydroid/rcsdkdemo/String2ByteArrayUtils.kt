@@ -117,7 +117,7 @@ object String2ByteArrayUtils {
     }
 
     /**
-     * 16进制字符串 转换为对应的 byte数组
+     * Convert a hexadecimal string to the corresponding byte array.
      */
     fun hex2Bytes(hex: String?): ByteArray? {
         var hex = hex
@@ -127,7 +127,7 @@ object String2ByteArrayUtils {
         hex = hex.replace(" ", "")
         val hexChars = hex.toCharArray()
         val bytes =
-            ByteArray(hexChars.size / 2) // 如果 hex 中的字符不是偶数个, 则忽略最后一个
+            ByteArray(hexChars.size / 2) // Ignore trailing single char if hex length is odd
         for (i in bytes.indices) {
             bytes[i] =
                 ("" + hexChars[i * 2] + hexChars[i * 2 + 1]).toInt(16).toByte()
@@ -136,8 +136,8 @@ object String2ByteArrayUtils {
     }
 
     /**
-     * byte转int类型
-     * 如果byte是负数，则转出的int型是正数
+     * Convert byte to Int.
+     * If the byte is negative, return the unsigned integer value.
      * @param b
      * @return
      */
@@ -155,7 +155,7 @@ object String2ByteArrayUtils {
         }
 
     fun numToHex8(b: Int): String {
-        return String.format("%04x", b) //2表示需要两个16进制数
+        return String.format("%04x", b) // Use two hex digits
     }
 
     fun int2Hex(i: Int): String? {

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author 咔一下
+ * @author skydroid
  * @date 2024/4/3 10:15
  * @email 1501020210@qq.com
  * @describe Custom remote controller buttons
@@ -96,7 +96,7 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
         c10pButtonHelper.addListener(buttonHandlerListener);
         customButtonHelper.addListener(buttonHandlerListener);
 
-        //Remote controller custom button utility-启用
+        // Remote controller custom button utility enable
         c10pButtonHelper.start();
         customButtonHelper.start();
 
@@ -128,7 +128,7 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
         //Configure button channels
         List<ButtonConfig> c10pConfigs = new ArrayList<>();
         //Configuration for H12Pro
-        //Channel 11 (H12Pro G roller): gimbal yaw  HandleButtonMode有2种类型 -- ALWAYS:持续调用,适用于摇杆控制云台。CHANGE:通道值变化才调用,适用一键控制，拍照，录像等
+        // Channel 11 (H12Pro G roller): gimbal yaw. HandleButtonMode has two modes -- ALWAYS: continuous calls (best for joystick control), CHANGE: call on channel value change (one-key actions, photo, video, etc.)
         c10pConfigs.add(new ButtonConfig(10,ButtonAction.GIMBAL_YAW,HandleButtonMode.ALWAYS));
         //Channel 12 (H12Pro H roller): gimbal pitch
         c10pConfigs.add(new ButtonConfig(11,ButtonAction.GIMBAL_PITCH,HandleButtonMode.ALWAYS));
@@ -138,10 +138,10 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
         c10pConfigs.add(new ButtonConfig(9,ButtonAction.GIMBAL_DOWN,HandleButtonMode.CHANGE));
 
         /*
-        //创建默认配置
-        //H12Pro channels 11/12 control gimbal；
-        //H16,H30 13、14通道控制云台；
-        //H20 14通道控制云台，7通道拍照
+        // Default configuration examples
+        // H12Pro channels 11/12 control gimbal
+        // H16/H30 channels 13/14 control gimbal
+        // H20 channel 14 controls gimbal, channel 7 triggers photo
         List<ButtonConfig> defConfigs = ButtonHelper.Companion.createDefaultConfig();
         */
 
@@ -150,9 +150,9 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
 
         //Custom events for H12Pro
         List<ButtonConfig> customButtonConfigs = new ArrayList<>();
-        //6通道（H12Pro A按钮）-自定义0
+        // Channel 6 (H12Pro A button) - custom action 0
         customButtonConfigs.add(new ButtonConfig(5,ButtonAction.CUSTOM_0,HandleButtonMode.CHANGE));
-        //7通道（H12Pro F拨杆）-自定义1
+        // Channel 7 (H12Pro F lever) - custom action 1
         customButtonConfigs.add(new ButtonConfig(6,ButtonAction.CUSTOM_1,HandleButtonMode.CHANGE));
         //Custom button event handler
         ButtonHandler buttonHandler = new ButtonHandler() {
@@ -198,7 +198,7 @@ public class CustomRCButtonsActivity extends AppCompatActivity {
         if (readRCButtonHelper != null) {
             readRCButtonHelper.stop();
         }
-        //Remote controller custom button utility-关闭
+        // Remote controller custom button utility stop
         ButtonHelper c10pButtonHelper = this.c10pButtonHelper;
         ButtonHelper customButtonHelper = this.customButtonHelper;
         if (c10pButtonHelper != null){

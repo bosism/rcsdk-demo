@@ -38,7 +38,7 @@ import java.util.Arrays;
  * @email 1501020210@qq.com
  * @describe
  * <p>
- * 加入C10Pro 新Legacy FW 相机Control;UI重新整理; by ljb on 2024.06.13.
+ * Added C10Pro new legacy FW camera control and UI refresh; by ljb on 2024.06.13.
  */
 public class HomeActivityForJava extends AppCompatActivity {
     public static final String TAG = "HomeActivityForJava";
@@ -62,12 +62,12 @@ public class HomeActivityForJava extends AppCompatActivity {
     private EditText etData = null;
 
     private Pipeline pipeline = null;
-    private C10Pro c10Pro = null;// 适用于0.2.7及以上固件 相机Control + 全版本的云台Control
-    private C10ProCamera c10ProCamera = null;// 适用于0.2.7以下固件 相机Control
-    // TODO 注意:
-    // TODO 使用时,请确保其他应用(包含助手、地面站)处于停止关闭状态,避免端口占用导致数据链路失败;
-    // TODO Get channel values值,No push updates; request each time, at least every 100ms;
-    // TODO Telemetry pipeline fails when receiver is not connected;
+    private C10Pro c10Pro = null;// Camera control for firmware 0.2.7+, gimbal control for all versions
+    private C10ProCamera c10ProCamera = null;// Camera control for firmware below 0.2.7
+    // TODO Notes:
+    // TODO When using this, ensure other apps (assistant, ground station, etc.) are closed or stopped so ports are free.
+    // TODO Channel values are not pushed; request each time at least every 100ms.
+    // TODO Telemetry pipeline fails when receiver is not connected.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +80,11 @@ public class HomeActivityForJava extends AppCompatActivity {
                 tvInfo.setText(str);
             }
         });
-        // TODO 初始化SDK,初始化一次即可;
+        // TODO Initialize SDK once only.
         RCSDKManager.INSTANCE.initSDK(this, new SDKManagerCallBack() {
             @Override
             public void onRcConnected() {
-                //Create communication pipeline(内部有断开重连机制，只需要调用一次Connect即可)
+                // Create communication pipeline (reconnect enabled; call connect only once).
                 // Telemetry pipeline fails when receiver is not connected;
                 Pipeline pipeline = PipelineManager.INSTANCE.createPipeline(Uart.UART0);
                 pipeline.setOnCommListener(getCommListener(0, "Telemetry pipeline"));
@@ -103,7 +103,7 @@ public class HomeActivityForJava extends AppCompatActivity {
 
             }
         });
-        RCSDKManager.INSTANCE.setMainThreadCallBack(true); //Set在主线程回调
+        RCSDKManager.INSTANCE.setMainThreadCallBack(true); // callback on main thread
         //Connect to RC
         RCSDKManager.INSTANCE.connectToRC();
 
@@ -116,7 +116,7 @@ public class HomeActivityForJava extends AppCompatActivity {
         // C20 gimbal
 //        C20Gimbal c20Gimbal = (C20Gimbal)PayloadManager.INSTANCE.getTCPPayload(PayloadType.C20_GIMBAL, "192.168.144.108", 5000);
 
-        //C10Pro相机Control（或新三体相机网口版）
+        // C10Pro camera control (or new three-body camera Ethernet version)
         c10Pro = (C10Pro) PayloadManager.INSTANCE.getUDPPayload(PayloadType.C10PRO,5000,"192.168.144.108",5000);
         // Internal reconnect is already handled
         if (c10Pro != null){
@@ -130,7 +130,7 @@ public class HomeActivityForJava extends AppCompatActivity {
             PayloadManager.INSTANCE.connectPayload(c10ProCamera);
         }
         initTestView();
-        setTitle("RCSDK_Demo_V" + RCSDKUtils.getVersion() + " java版  Device:" +RCSDKUtils.getDeviceType() );
+        setTitle("RCSDK_Demo_V" + RCSDKUtils.getVersion() + " Java  Device:" + RCSDKUtils.getDeviceType());
     }
 
     private CommListener getCommListener(int type, String tag) {
@@ -147,15 +147,15 @@ public class HomeActivityForJava extends AppCompatActivity {
 
             @Override
             public void onDisconnect() {
-                log(tag + " 断开Connect");
+                log(tag + " disconnected");
             }
 
             @Override
             public void onReadData(byte[] bytes) {
                 if (type == 0) {
-                    log(tag + " 收到长度 " + bytes.length + " ,,, 数据 " + new String(bytes));
+                    log(tag + " received length " + bytes.length + ", data " + new String(bytes));
                     // Telemetry pipeline
-                    printInfo(EnumInfoKey.DataTransmission, "数传：" + new String(bytes));
+                    printInfo(EnumInfoKey.DataTransmission, "Telemetry: " + new String(bytes));
                 }
             }
         };
@@ -196,7 +196,7 @@ public class HomeActivityForJava extends AppCompatActivity {
 
                     @Override
                     public void onFailure(SkyException e) {
-                        printInfo(EnumInfoKey.GetControlMode,"Get stick mode失败：" + e);
+                printInfo(EnumInfoKey.GetControlMode,"Get stick mode failed: " + e);
                     }
                 });
             }
@@ -209,11 +209,11 @@ public class HomeActivityForJava extends AppCompatActivity {
                     case H16:
                         //Avoid repeated listener registration
                         KeyManager.INSTANCE.cancelListen(keyH16ChannelsListener);
-                        //H16/H16Pro的channel values为LISTEN方式,Set监听器后，会一直回调，直到取消监听
+                        // H16/H16Pro channel values are LISTEN mode; listener will keep reporting until cancelled.
                         KeyManager.INSTANCE.listen(RemoteControllerKey.INSTANCE.getKeyH16Channels(), keyH16ChannelsListener);
                         break;
                     default:
-                        //H12/H12Pro/H30channel values为GET方式，需要主动请求，Request once each time
+                        // H12/H12Pro/H30 channel values are GET mode; must request each time.
                         KeyManager.INSTANCE.get(RemoteControllerKey.INSTANCE.getKeyChannels(), new CompletionCallbackWith<int[]>() {
                             @Override
                             public void onSuccess(int[] value) {
@@ -222,20 +222,20 @@ public class HomeActivityForJava extends AppCompatActivity {
 
                             @Override
                             public void onFailure(SkyException e) {
-                                printInfo(EnumInfoKey.Channels,"Get stick values失败：" + e);
+                                printInfo(EnumInfoKey.Channels,"Get stick values failed: " + e);
                             }
                         });
                         break;
                 }
             }
         });
-        // Signal Strength 取值范围: 0-100%
+        // Signal strength range: 0-100%
         findViewById(R.id.btn_get_signal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (RCSDKManager.INSTANCE.getDeviceType()){
                     case H12:
-                        //H12的Signal Strength为GET方式，需要主动请求，Request once each time
+                        // H12 signal strength uses GET mode; request once each time.
                         KeyManager.INSTANCE.get(AirLinkKey.INSTANCE.getKeyH12SignalQuality(), new CompletionCallbackWith<Integer>() {
                             @Override
                             public void onSuccess(Integer integer) {
@@ -244,7 +244,7 @@ public class HomeActivityForJava extends AppCompatActivity {
 
                             @Override
                             public void onFailure(SkyException e) {
-                                printInfo(EnumInfoKey.Signal,"H12 signal strengthGet failed：" + e);
+                                printInfo(EnumInfoKey.Signal,"H12 signal strength get failed: " + e);
                             }
                         });
                         break;
@@ -252,7 +252,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                     default:
                         //Avoid repeated listener registration
                         KeyManager.INSTANCE.cancelListen(keySignalQualityListener);
-                        //除了H12,其他Remote Controller的Signal Strength为LISTEN方式,Set监听器后，会一直回调，直到取消监听
+                        // Except H12, other RC signal strength values are LISTEN mode and stream after listener is set.
                         KeyManager.INSTANCE.listen(AirLinkKey.INSTANCE.getKeySignalQuality(),keySignalQualityListener);
                         break;
                 }
@@ -293,7 +293,7 @@ public class HomeActivityForJava extends AppCompatActivity {
                 }
                 String temp = etData.getText().toString();
                 if (TextUtils.isEmpty(temp)) {
-                    Toast.makeText(getApplicationContext(), "请输入要Send的字符!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter text to send.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 HomeActivityForJava.this.pipeline.writeData(temp.getBytes());
@@ -370,7 +370,7 @@ public class HomeActivityForJava extends AppCompatActivity {
     }
 
     /**
-     * 云台Control_相机Control
+     * Gimbal Control + Camera Control
      */
     private void c10pCameraControl(boolean isCameraVer027AndAbove) {
         AppUtils.showC10pCameraControlDialog(this, new DialogInterface.OnClickListener() {
