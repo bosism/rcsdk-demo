@@ -42,7 +42,7 @@ class ManualControlDemoActivity : AppCompatActivity() {
     private val uiHandler = Handler(Looper.getMainLooper())
     private val sendIntervalMs = 100L
     private val heartbeatIntervalMs = 1000L
-    private val encoder = MavlinkV1Encoder(systemId = 255, componentId = 190)
+    private val encoder = MavlinkV1Encoder(systemId = 255, componentId = 191)
     private val defaultCalibration = AxisCalibration()
     private val transportExecutor: ExecutorService = Executors.newSingleThreadExecutor()
 
@@ -324,7 +324,7 @@ class ManualControlDemoActivity : AppCompatActivity() {
     }
 
     private fun currentTransportConfig(): TransportConfig? {
-        val localPort = parseInt(etLocalPort.text?.toString(), 14550)
+        val localPort = parseInt(etLocalPort.text?.toString(), 14560)
         val remoteHost = etRemoteHost.text?.toString()?.trim().orEmpty()
         val remotePort = parseInt(etRemotePort.text?.toString(), transportMode.defaultPort)
         if (remoteHost.isBlank()) {
@@ -496,7 +496,7 @@ class ManualControlDemoActivity : AppCompatActivity() {
 
     private enum class TransportMode(val defaultPort: Int) {
         TCP(5760),
-        UDP(14550),
+        UDP(14560),
     }
 
     private data class TransportConfig(

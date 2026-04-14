@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="UDP 14550" />
+                android:text="UDP 14560" />
         </RadioGroup>
 
         <LinearLayout
@@ -57,7 +57,7 @@
                 android:ems="4"
                 android:hint="Local port"
                 android:inputType="number"
-                android:text="14550" />
+                android:text="14560" />
 
             <EditText
                 android:id="@+id/et_remote_host"
@@ -68,7 +68,7 @@
                 android:ems="10"
                 android:hint="Remote IP / host"
                 android:inputType="text"
-                android:text="Indoor.local" />
+                android:text="raspberrypi.local" />
 
             <EditText
                 android:id="@+id/et_remote_port"
@@ -79,7 +79,7 @@
                 android:ems="4"
                 android:hint="Remote port"
                 android:inputType="number"
-                android:text="14550" />
+                android:text="14560" />
         </LinearLayout>
 
         <LinearLayout
